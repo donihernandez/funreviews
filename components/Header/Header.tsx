@@ -1,8 +1,13 @@
+import type { FC } from 'react';
 import { Flex, Heading, chakra, Container } from '@chakra-ui/react';
-import { FC } from 'react';
+
+import { useBreakpoints } from '../../hooks';
 import { DesktopMenu } from './DesktopMenu';
+import { MobileMenu } from './MobileMenu';
 
 const Header: FC = () => {
+  const { isSmallerThanDesktop } = useBreakpoints();
+
   return (
     <Flex
       bg="#2d3142"
@@ -11,7 +16,10 @@ const Header: FC = () => {
       alignItems="center"
     >
       <Container maxW={{ base: '100vw', lg: '80vw' }}>
-        <Flex alignItems="center">
+        <Flex
+          alignItems="center"
+          justifyContent={['space-between', null, 'flex-start']}
+        >
           <Heading
             color="#ffffff"
             fontFamily="Lato"
@@ -21,7 +29,7 @@ const Header: FC = () => {
           >
             Stream<chakra.span color="#ef8354">Flix</chakra.span>
           </Heading>
-          <DesktopMenu />
+          {isSmallerThanDesktop ? <MobileMenu /> : <DesktopMenu />}
         </Flex>
       </Container>
     </Flex>

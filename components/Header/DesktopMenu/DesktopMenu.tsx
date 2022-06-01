@@ -1,28 +1,16 @@
+import type { FC } from 'react';
 import { Flex, Link } from '@chakra-ui/react';
 
-const DesktopMenu = () => {
-  const links = [
-    {
-      name: 'Home',
-      href: '/',
-    },
-    {
-      name: 'Movies',
-      href: '/movies',
-    },
-    {
-      name: 'TV Shows',
-      href: '/tv-shows',
-    },
-  ];
+import links from '../links';
 
+const DesktopMenu: FC = () => {
   const linkStyles = {
     _hover: {
       textDecoration: 'none',
       color: '#ef8354',
     },
     fontFamily: 'Nunito',
-    fontSize: '20px',
+    fontSize: '18px',
     fontWeight: '600',
     color: '#ffffff',
     textDecoration: 'none',

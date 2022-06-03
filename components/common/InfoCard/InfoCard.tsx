@@ -1,29 +1,29 @@
 import type { FC } from 'react';
 import { Box, Flex, Heading, HStack, Text, chakra } from '@chakra-ui/react';
-import { COLORS } from '../../../styles/theme';
 import { StarIcon } from '@chakra-ui/icons';
+
 import { Badge } from '../Badge';
+import { COLORS } from '../../../styles/theme';
+
+import styles from './InfoCard.module.css';
 
 const InfoCard: FC = () => {
   return (
     <Box
-      h="344px"
-      w="224px"
+      className={styles.reflect}
+      h="437px"
+      w="285px"
       backgroundColor={`rgba(0,0,0,0.5)`}
       backgroundImage="url('/movies.webp')"
       backgroundRepeat="no-repeat"
       backgroundSize="cover"
       backgroundPosition="center"
-      borderRadius="15px"
       overflow="hidden"
     >
       <Flex
-        borderRadius="10px"
         overflow="hidden"
         direction="column"
         justifyContent="flex-end"
-        backdropFilter="auto"
-        backdropBlur="2px"
         padding="20px"
         bg="rgba(0,0,0,0.5)"
         h="full"

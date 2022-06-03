@@ -5,20 +5,22 @@ import { Search2Icon } from '@chakra-ui/icons';
 import { COLORS } from '../../../styles/theme';
 
 const commonStyles = {
-  bg: COLORS.secondary,
+  bg: 'transparent',
   color: COLORS.white,
   borderRadius: '0',
   border: '3px solid',
-  borderColor: COLORS.primary,
+  fontSize: '18px',
+  fontFamily: 'Nunito',
+  borderColor: COLORS.white,
 };
 
 const Filters: FC = () => {
   return (
     <Select
-      h="50px"
+      h="70px"
       maxW="200px"
       borderRight="1px solid"
-      borderRightColor={COLORS.primary}
+      borderRightColor={COLORS.white}
       {...commonStyles}
     >
       <option value="movies">Movies</option>
@@ -31,7 +33,7 @@ const SearchInput = () => {
   return (
     <InputGroup>
       <Input
-        h="50px"
+        h="70px"
         w="full"
         borderLeft="none"
         _placeholder={{
@@ -40,7 +42,7 @@ const SearchInput = () => {
         {...commonStyles}
         placeholder="Search movies, tv shows...."
       />
-      <InputRightElement h="50px" color={COLORS.white}>
+      <InputRightElement h="70px" color={COLORS.white}>
         <Search2Icon />
       </InputRightElement>
     </InputGroup>

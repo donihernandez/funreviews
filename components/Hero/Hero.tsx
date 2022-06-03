@@ -1,16 +1,23 @@
-import { Flex } from '@chakra-ui/react';
-import { InfoCard } from '../common/InfoCard';
+import { Box, Container } from '@chakra-ui/react';
 import { SearchBar } from '../common/SearchBar';
+import { Featured } from './Featured';
+import { Welcome } from './Welcome';
 
 const Hero = () => {
   return (
-    <Flex w="full" mt="15px" direction="column">
-      <SearchBar />
-
-      <Flex h="full" w="full">
-        <InfoCard />
-      </Flex>
-    </Flex>
+    <Box
+      w="full"
+      bgImage="/bg.jpg"
+      bgRepeat="no-repeat"
+      bgSize="cover"
+      h="full"
+    >
+      <Container maxW={{ base: '100vw', lg: '80vw' }} maxH="200vh">
+        <Welcome />
+        <SearchBar />
+        <Featured />
+      </Container>
+    </Box>
   );
 };
 

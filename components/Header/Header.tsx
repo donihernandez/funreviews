@@ -12,10 +12,14 @@ const Header: FC = () => {
 
   return (
     <Flex
-      bg={COLORS.primary}
+      // bg={COLORS.primary}
+      bg="transparent"
+      top={0}
+      left={0}
       height={{ base: '70px', lg: '90px' }}
-      position="sticky"
+      position="fixed"
       alignItems="center"
+      w="full"
     >
       <Container maxW={{ base: '100vw', lg: '80vw' }}>
         <Flex
@@ -29,7 +33,7 @@ const Header: FC = () => {
             fontWeight="800"
             mr="50px"
           >
-            Stream<chakra.span color={COLORS.orange}>Flix</chakra.span>
+            Fun<chakra.span color={COLORS.orange}>Reviews</chakra.span>
           </Heading>
           {isSmallerThanDesktop ? <MobileMenu /> : <DesktopMenu />}
         </Flex>

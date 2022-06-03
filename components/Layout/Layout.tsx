@@ -10,7 +10,7 @@ const Layout: FC<ILayoutProps> = ({ children }) => {
   return (
     <>
       <Header />
-      <Container maxW={{ base: '100vw', lg: '80vw' }}>{children}</Container>
+      {children}
     </>
   );
 };

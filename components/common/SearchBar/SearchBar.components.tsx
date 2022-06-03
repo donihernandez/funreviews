@@ -26,7 +26,7 @@ const Filters: FC = () => {
       h="70px"
       maxW={['100%', null, '200px']}
       borderRight={[null, null, '1px solid']}
-      borderBottom={['1px solid', null, null]}
+      borderBottom={['1px solid', null, '3px solid']}
       borderRightColor={COLORS.white}
       {...commonStyles}
     >
@@ -43,7 +43,7 @@ const SearchInput = () => {
         h="70px"
         w="full"
         borderLeft={[null, null, 'none']}
-        borderBottom={['1px solid', null, null]}
+        borderBottom={['1px solid', null, '3px solid']}
         _placeholder={{
           color: COLORS.white,
         }}
@@ -68,7 +68,7 @@ const SearchButton: FC = () => {
       variant="outline"
       borderRadius="0"
       border="3px solid"
-      borderLeft={[null, null, 'none']}
+      borderLeft={['3px solid', null, 'none']}
       borderColor={COLORS.white}
       color={COLORS.white}
     >

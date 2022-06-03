@@ -41,7 +41,7 @@ const MobileMenu: FC = () => {
         finalFocusRef={btnRef}
       >
         <DrawerOverlay />
-        <DrawerContent bg={COLORS.primary}>
+        <DrawerContent bg={COLORS.primary} zIndex="9999">
           <DrawerCloseButton size="30px" padding="20px" color={COLORS.white} />
           <DrawerHeader></DrawerHeader>
           <DrawerBody>

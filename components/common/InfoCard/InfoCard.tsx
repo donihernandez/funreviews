@@ -9,7 +9,7 @@ const InfoCard: FC = () => {
   return (
     <Box
       h="437px"
-      w="285px"
+      w="full"
       backgroundColor={`rgba(0,0,0,0.5)`}
       backgroundImage="url('/movies.webp')"
       backgroundRepeat="no-repeat"

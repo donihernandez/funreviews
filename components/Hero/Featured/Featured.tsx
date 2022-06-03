@@ -1,18 +1,20 @@
-import { Button, Flex } from '@chakra-ui/react';
+import { Button, Flex, SimpleGrid } from '@chakra-ui/react';
 import { InfoCard } from '../../common/InfoCard';
 
 const Featured = () => {
   return (
     <Flex direction="column" padding="100px 0" h="full" w="full">
-      <Flex
-        direction={['column', null, 'row']}
-        justifyContent={['center', 'space-between']}
+      <SimpleGrid
+        columns={[1, 2, 3, 4]}
+        gap={6}
+        alignItems="center"
+        justifyContent="center"
       >
         <InfoCard />
         <InfoCard />
         <InfoCard />
         <InfoCard />
-      </Flex>
+      </SimpleGrid>
       <Flex justifyContent="center" w="full">
         <Button
           mt="50px"

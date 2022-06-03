@@ -24,8 +24,9 @@ const Filters: FC = () => {
   return (
     <Select
       h="70px"
-      maxW="200px"
-      borderRight="1px solid"
+      maxW={['100%', null, '200px']}
+      borderRight={[null, null, '1px solid']}
+      borderBottom={['1px solid', null, null]}
       borderRightColor={COLORS.white}
       {...commonStyles}
     >
@@ -41,7 +42,8 @@ const SearchInput = () => {
       <Input
         h="70px"
         w="full"
-        borderLeft="none"
+        borderLeft={[null, null, 'none']}
+        borderBottom={['1px solid', null, null]}
         _placeholder={{
           color: COLORS.white,
         }}
@@ -66,7 +68,7 @@ const SearchButton: FC = () => {
       variant="outline"
       borderRadius="0"
       border="3px solid"
-      borderLeft="none"
+      borderLeft={[null, null, 'none']}
       borderColor={COLORS.white}
       color={COLORS.white}
     >

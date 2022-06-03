@@ -5,13 +5,6 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <link
-            rel="preload"
-            href="/fonts/Primal.otf"
-            as="font"
-            type="font/otf"
-            crossOrigin="anonymous"
-          />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link
             rel="preconnect"

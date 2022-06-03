@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 
 import links from '../links';
+import { COLORS } from '../../../styles/theme';
 
 import { HamburguerButton } from './HamburgerButton';
 
@@ -21,12 +22,12 @@ const MobileMenu: FC = () => {
   const linkStyles = {
     _hover: {
       textDecoration: 'none',
-      color: '#ef8354',
+      color: COLORS.orange,
     },
     fontFamily: 'Nunito',
     fontSize: '25px',
     fontWeight: '600',
-    color: '#ffffff',
+    color: COLORS.white,
     textDecoration: 'none',
   };
 
@@ -40,8 +41,8 @@ const MobileMenu: FC = () => {
         finalFocusRef={btnRef}
       >
         <DrawerOverlay />
-        <DrawerContent bg="#2d3142">
-          <DrawerCloseButton size="30px" padding="20px" color="#ffffff" />
+        <DrawerContent bg={COLORS.primary}>
+          <DrawerCloseButton size="30px" padding="20px" color={COLORS.white} />
           <DrawerHeader></DrawerHeader>
           <DrawerBody>
             <Flex

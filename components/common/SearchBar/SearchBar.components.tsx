@@ -1,5 +1,11 @@
 import type { FC } from 'react';
-import { Input, InputGroup, InputRightElement, Select } from '@chakra-ui/react';
+import {
+  Button,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Select,
+} from '@chakra-ui/react';
 import { Search2Icon } from '@chakra-ui/icons';
 
 import { COLORS } from '../../../styles/theme';
@@ -49,4 +55,23 @@ const SearchInput = () => {
   );
 };
 
-export { Filters, SearchInput };
+const SearchButton: FC = () => {
+  return (
+    <Button
+      _hover={{
+        bg: 'transparent',
+        color: COLORS.orange,
+      }}
+      h="70px"
+      variant="outline"
+      borderRadius="0"
+      border="3px solid"
+      borderLeft="none"
+      borderColor={COLORS.white}
+      color={COLORS.white}
+    >
+      Search
+    </Button>
+  );
+};
+export { Filters, SearchInput, SearchButton };

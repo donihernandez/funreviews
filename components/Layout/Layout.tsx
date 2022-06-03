@@ -1,4 +1,3 @@
-import { Container } from '@chakra-ui/react';
 import type { FC } from 'react';
 import { Header } from '../Header';
 

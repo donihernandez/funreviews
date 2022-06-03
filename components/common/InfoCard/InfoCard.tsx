@@ -5,12 +5,9 @@ import { StarIcon } from '@chakra-ui/icons';
 import { Badge } from '../Badge';
 import { COLORS } from '../../../styles/theme';
 
-import styles from './InfoCard.module.css';
-
 const InfoCard: FC = () => {
   return (
     <Box
-      className={styles.reflect}
       h="437px"
       w="285px"
       backgroundColor={`rgba(0,0,0,0.5)`}

@@ -15,6 +15,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Lint
-        run: npm lint
+        run: npx lint-staged
       - name: Test
         run: npm test

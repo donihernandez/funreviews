@@ -60,17 +60,25 @@ const SearchInput = () => {
 const SearchButton: FC = () => {
   return (
     <Button
+      _active={{
+        bg: 'transparent',
+        borderColor: COLORS.primary,
+      }}
       _hover={{
         bg: 'transparent',
         color: COLORS.orange,
+        borderColor: COLORS.orange,
       }}
       h="70px"
+      mt={[null, '50px']}
+      w={['full', null, '200px']}
       variant="outline"
       borderRadius="0"
       border="3px solid"
-      borderLeft={['3px solid', null, 'none']}
+      transition="all 0.3s ease-in-out"
       borderColor={COLORS.white}
       color={COLORS.white}
+      fontSize={['14px', '18px']}
     >
       Search
     </Button>

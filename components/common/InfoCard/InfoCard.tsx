@@ -1,22 +1,55 @@
-import type { FC } from 'react';
-import { Box, Flex, Heading, HStack, Text, chakra } from '@chakra-ui/react';
+import { FC, useState } from 'react';
+import {
+  Box,
+  Flex,
+  Heading,
+  HStack,
+  Text,
+  chakra,
+  Button,
+} from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 
 import { Badge } from '../Badge';
 import { COLORS } from '../../../styles/theme';
 
-const InfoCard: FC = () => {
+interface IInfoCardProps {
+  height: string;
+}
+
+const InfoCard: FC<IInfoCardProps> = ({ height = '437px' }) => {
+  const [opacity, setOpacity] = useState(0);
+
   return (
     <Box
-      h="437px"
+      h={height}
       w="full"
+      position="relative"
       backgroundColor={`rgba(0,0,0,0.5)`}
       backgroundImage="url('/movies.webp')"
       backgroundRepeat="no-repeat"
       backgroundSize="cover"
       backgroundPosition="center"
       overflow="hidden"
+      onMouseEnter={() => setOpacity(1)}
+      onMouseLeave={() => setOpacity(0)}
     >
+      <Button
+        _hover={{
+          bg: COLORS.secondary,
+        }}
+        borderRadius="0"
+        position="absolute"
+        top="50%"
+        left="30%"
+        opacity={opacity}
+        bg={COLORS.orange}
+        color={COLORS.white}
+        cursor="pointer"
+      >
+        Read More
+      </Button>
+
       <Flex
         overflow="hidden"
         direction="column"

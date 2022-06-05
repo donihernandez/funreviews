@@ -14,7 +14,7 @@ import { Badge } from '../Badge';
 import { COLORS } from '../../../styles/theme';
 
 interface IInfoCardProps {
-  height: string;
+  height?: string;
 }
 
 const InfoCard: FC<IInfoCardProps> = ({ height = '437px' }) => {

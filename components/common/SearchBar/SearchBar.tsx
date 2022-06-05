@@ -3,9 +3,11 @@ import { Filters, SearchButton, SearchInput } from './SearchBar.components';
 
 const SearchBar = () => {
   return (
-    <Flex w="full" direction={['column', null, 'row']}>
-      <Filters />
-      <SearchInput />
+    <Flex direction="column">
+      <Flex w={['100%', null, '800px']} direction={['column', null, 'row']}>
+        <Filters />
+        <SearchInput />
+      </Flex>
       <SearchButton />
     </Flex>
   );

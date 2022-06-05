@@ -5,7 +5,7 @@ import { COLORS } from '../../../styles/theme';
 
 const Welcome: FC = () => {
   return (
-    <Flex direction="column" m="200px 0 80px 0" w={['100%', null, '600px']}>
+    <Flex direction="column" m="200px 0 80px 0" w={['100%', null, '800px']}>
       <Heading
         fontSize={['6xl', null, '8xl']}
         fontFamily="Lato"

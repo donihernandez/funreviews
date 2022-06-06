@@ -1,16 +1,16 @@
 const links = [
-  {
-    name: 'Home',
-    href: '/',
-  },
-  {
-    name: 'Movies',
-    href: '/movies',
-  },
-  {
-    name: 'TV Shows',
-    href: '/tv-shows',
-  },
+    {
+        href: '/',
+        name: 'Home',
+    },
+    {
+        href: '/movies',
+        name: 'Movies',
+    },
+    {
+        href: '/tv-shows',
+        name: 'TV Shows',
+    },
 ];
 
 export default links;

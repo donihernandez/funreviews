@@ -3,11 +3,11 @@ import { useRef } from 'react';
 import type { FC } from 'react';
 
 import {
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerOverlay,
+    Drawer,
+    DrawerBody,
+    DrawerCloseButton,
+    DrawerContent,
+    DrawerOverlay,
 } from '@chakra-ui/react';
 
 import links from '../links';
@@ -16,52 +16,60 @@ import { COLORS } from '../../../styles/theme';
 import { HamburguerButton } from './HamburgerButton';
 
 const MobileMenu: FC = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = useRef<HTMLButtonElement>(null);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const btnRef = useRef<HTMLButtonElement>(null);
 
-  const linkStyles = {
-    _hover: {
-      textDecoration: 'none',
-      color: COLORS.orange,
-    },
-    fontFamily: 'Nunito',
-    fontSize: '25px',
-    fontWeight: '600',
-    color: COLORS.white,
-    textDecoration: 'none',
-  };
+    const linkStyles = {
+        _hover: {
+            color: COLORS.orange,
+            textDecoration: 'none',
+        },
+        color: COLORS.white,
+        fontFamily: 'Nunito',
+        fontSize: '25px',
+        fontWeight: '600',
+        textDecoration: 'none',
+    };
 
-  return (
-    <>
-      <HamburguerButton onClick={onOpen} ref={btnRef} />
-      <Drawer
-        isOpen={isOpen}
-        placement="right"
-        onClose={onClose}
-        finalFocusRef={btnRef}
-      >
-        <DrawerOverlay />
-        <DrawerContent bg={COLORS.primary} zIndex="9999">
-          <DrawerCloseButton size="30px" padding="20px" color={COLORS.white} />
-          <DrawerHeader></DrawerHeader>
-          <DrawerBody>
-            <Flex
-              direction="column"
-              alignItems="center"
-              justifyContent="space-evenly"
-              h="full"
+    return (
+        <>
+            <HamburguerButton onClick={onOpen} ref={btnRef} />
+            <Drawer
+                finalFocusRef={btnRef}
+                isOpen={isOpen}
+                onClose={onClose}
+                placement="right"
             >
-              {links.map((link) => (
-                <Link key={link.name} href={link.href} {...linkStyles}>
-                  {link.name}
-                </Link>
-              ))}
-            </Flex>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
-    </>
-  );
+                <DrawerOverlay />
+                <DrawerContent bg={COLORS.primary} zIndex="9999">
+                    <DrawerCloseButton
+                        color={COLORS.white}
+                        padding="20px"
+                        size="30px"
+                    />
+                    <DrawerHeader></DrawerHeader>
+                    <DrawerBody>
+                        <Flex
+                            alignItems="center"
+                            direction="column"
+                            h="full"
+                            justifyContent="space-evenly"
+                        >
+                            {links.map(link => (
+                                <Link
+                                    href={link.href}
+                                    key={link.name}
+                                    {...linkStyles}
+                                >
+                                    {link.name}
+                                </Link>
+                            ))}
+                        </Flex>
+                    </DrawerBody>
+                </DrawerContent>
+            </Drawer>
+        </>
+    );
 };
 
 export { MobileMenu };

@@ -1,16 +1,41 @@
-import { Box, Container } from '@chakra-ui/react';
-import { SearchBar } from '../common/SearchBar';
+import { Box, Container, Flex, Image } from '@chakra-ui/react';
+
+import { useBreakpoints } from '@/hooks';
+import { SearchBar } from '@/components/common/SearchBar';
+
 import { Welcome } from './Welcome';
 
 const Hero = () => {
-  return (
-    <Box w="full" bg="#000" bgRepeat="no-repeat" bgSize="cover" h="full">
-      <Container maxW={{ base: '100vw', lg: '80vw' }} minH="100vh" h="full">
-        <Welcome />
-        <SearchBar />
-      </Container>
-    </Box>
-  );
+    const { isSmallerThanDesktop } = useBreakpoints();
+
+    return (
+        <Box bg="#000" bgRepeat="no-repeat" bgSize="cover" h="full" w="full">
+            <Container
+                h="full"
+                maxW={{ base: '300vw', lg: '80vw' }}
+                minH="100vh"
+            >
+                <Flex
+                    alignItems="center"
+                    justifyContent="space-between"
+                    w="full"
+                >
+                    <Flex direction="column">
+                        <Welcome />
+                        <SearchBar />
+                    </Flex>
+                    {!isSmallerThanDesktop && (
+                        <Image
+                            alt="Like"
+                            height="500px"
+                            src="/likes.webp"
+                            w="500px"
+                        />
+                    )}
+                </Flex>
+            </Container>
+        </Box>
+    );
 };
 
 export { Hero };

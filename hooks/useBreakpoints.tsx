@@ -1,11 +1,11 @@
 import { useMediaQuery } from '@chakra-ui/react';
 
 const useBreakpoints = () => {
-  const [isSmallerThanDesktop] = useMediaQuery(['(max-width: 768px)']);
+    const [isSmallerThanDesktop] = useMediaQuery(['(max-width: 768px)']);
 
-  return {
-    isSmallerThanDesktop,
-  };
+    return {
+        isSmallerThanDesktop,
+    };
 };
 
 export { useBreakpoints };

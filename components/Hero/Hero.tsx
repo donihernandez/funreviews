@@ -1,6 +1,7 @@
 import { Box, Container, Flex, Image } from '@chakra-ui/react';
 
 import { useBreakpoints } from '../../hooks';
+
 import { SearchBar } from '../common/SearchBar';
 
 import { Welcome } from './Welcome';

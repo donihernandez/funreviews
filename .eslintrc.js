@@ -5,6 +5,7 @@ module.exports = {
         commonjs: true,
         es2021: true,
         node: true,
+        jest: true,
     },
     extends: [
         'eslint:recommended',
@@ -22,7 +23,13 @@ module.exports = {
         ecmaVersion: 12,
         sourceType: 'module',
     },
-    plugins: ['react'],
+    plugins: [
+        'react',
+        'testing-library',
+        'react-hooks',
+        'prettier',
+        'eslint-plugin-cypress',
+    ],
     rules: {
         // Possible errors
         'no-console': 'warn',
@@ -110,4 +117,13 @@ module.exports = {
             version: 'detect',
         },
     },
+    overrides: [
+        {
+            files: [
+                '**/__tests__/**/*.[jt]s?(x)',
+                '**/?(*.)+(spec|test).[jt]s?(x)',
+            ],
+            extends: ['plugin:testing-library/react'],
+        },
+    ],
 };

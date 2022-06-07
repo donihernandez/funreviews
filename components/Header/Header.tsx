@@ -5,7 +5,7 @@ import { useBreakpoints } from '../../hooks';
 import { DesktopMenu } from './DesktopMenu';
 import { MobileMenu } from './MobileMenu';
 
-import { COLORS } from '../../styles/theme';
+import { COLORS } from '@/styles/theme';
 
 const Header: FC = () => {
     const { isSmallerThanDesktop } = useBreakpoints();

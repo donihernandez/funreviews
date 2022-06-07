@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 
-import { Badge } from '../Badge';
+import { Badge } from '../../../components/common/Badge';
 import { COLORS } from '../../../styles/theme';
 
 interface IInfoCardProps {

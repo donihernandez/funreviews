@@ -1,7 +1,7 @@
 import { Box, Container, Flex, Image } from '@chakra-ui/react';
 
-import { useBreakpoints } from '@/hooks';
-import { SearchBar } from '@/components/common/SearchBar';
+import { useBreakpoints } from '../../hooks';
+import { SearchBar } from '../common/SearchBar';
 
 import { Welcome } from './Welcome';
 
@@ -9,7 +9,14 @@ const Hero = () => {
     const { isSmallerThanDesktop } = useBreakpoints();
 
     return (
-        <Box bg="#000" bgRepeat="no-repeat" bgSize="cover" h="full" w="full">
+        <Box
+            bg="#000"
+            bgRepeat="no-repeat"
+            bgSize="cover"
+            h="full"
+            paddingBottom={['0', null, '100px']}
+            w="full"
+        >
             <Container
                 h="full"
                 maxW={{ base: '300vw', lg: '80vw' }}

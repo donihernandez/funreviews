@@ -9,6 +9,7 @@ const Welcome: FC = () => {
             <Heading
                 as="h1"
                 color={COLORS.white}
+                data-testid="welcome-heading"
                 fontFamily="Lato"
                 fontSize={['6xl', null, '8xl']}
             >

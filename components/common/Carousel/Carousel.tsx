@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef } from 'react';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { MotionBox } from '../MotionBox';
 
 interface ICarouselProps {
     children: React.ReactNode;
@@ -26,19 +26,21 @@ const Carousel: FC<ICarouselProps> = ({ children }) => {
     }, []);
 
     return (
-        <motion.div
+        <MotionBox
             ref={carouselRef}
             style={carouselStyle}
             whileTap={{ cursor: 'grabbing' }}
         >
-            <motion.div
+            <MotionBox
                 drag="x"
                 dragConstraints={{ left: -width, right: 0 }}
+                dragPropagation={true}
+                dragTransition={{ bounceDamping: 10, bounceStiffness: 500 }}
                 style={innerCarouselStyle}
             >
                 {children}
-            </motion.div>
-        </motion.div>
+            </MotionBox>
+        </MotionBox>
     );
 };
 

@@ -1,14 +1,10 @@
-import { Box, Container, Flex, Image } from '@chakra-ui/react';
-
-import { useBreakpoints } from '../../hooks';
+import { Box, Container, Flex } from '@chakra-ui/react';
 
 import { SearchBar } from '../common/SearchBar';
 
 import { Welcome } from './Welcome';
 
 const Hero = () => {
-    const { isSmallerThanDesktop } = useBreakpoints();
-
     return (
         <Box
             bg="#000"
@@ -32,14 +28,6 @@ const Hero = () => {
                         <Welcome />
                         <SearchBar />
                     </Flex>
-                    {!isSmallerThanDesktop && (
-                        <Image
-                            alt="Like"
-                            height="500px"
-                            src="/likes.webp"
-                            w="500px"
-                        />
-                    )}
                 </Flex>
             </Container>
         </Box>

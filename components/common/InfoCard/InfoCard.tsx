@@ -17,9 +17,10 @@ import { MotionBox } from '../MotionBox';
 
 interface IInfoCardProps {
     height?: string;
+    item?: any;
 }
 
-const InfoCard: FC<IInfoCardProps> = ({ height = '437px' }) => {
+const InfoCard: FC<IInfoCardProps> = ({ height = '437px', item }) => {
     const [opacity, setOpacity] = useState(0);
 
     return (

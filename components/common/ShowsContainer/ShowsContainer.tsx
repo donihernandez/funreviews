@@ -1,4 +1,4 @@
-import { Container, Flex, Heading, HStack, Link, Text } from '@chakra-ui/react';
+import { Container, Flex, Heading, Link } from '@chakra-ui/react';
 import { FC, useState } from 'react';
 
 import { COLORS } from '@/styles/theme';
@@ -6,6 +6,10 @@ import { Carousel } from '../Carousel';
 import { InfoCard } from '../InfoCard';
 import { MotionBox } from '../MotionBox';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
+import { Loading } from '../Loading';
+import { Filters } from '../Filters';
+import { useQuery } from 'react-query';
+import { getMovieGenres } from '@/api/movies/queries';
 
 interface IShowsContainer {
     title: string;
@@ -13,6 +17,7 @@ interface IShowsContainer {
     filters: string[];
     items: any;
     link: string;
+    isLoading: boolean;
 }
 
 const ShowsContainer: FC<IShowsContainer> = ({
@@ -21,7 +26,7 @@ const ShowsContainer: FC<IShowsContainer> = ({
     filters,
     items,
     link,
-    ...props
+    isLoading,
 }) => {
     const variants = {
         hide: {
@@ -32,7 +37,11 @@ const ShowsContainer: FC<IShowsContainer> = ({
         },
     };
 
+    const { data: genres } = useQuery('genres', getMovieGenres);
+
     const [show, setShow] = useState(false);
+    const [filtered, setFiltered] = useState(items);
+    const [activeGenre, setActiveGenre] = useState('all');
 
     return (
         <Container h="full" maxW={{ base: '300vw', lg: '80vw' }} minH="100vh">
@@ -82,27 +91,16 @@ const ShowsContainer: FC<IShowsContainer> = ({
                     </Flex>
                 </Flex>
 
-                <HStack margin="20px 0 40px 0" spacing={4}>
-                    {filters.map((filter, index) => {
-                        return (
-                            <Text
-                                color="yellow.400"
-                                fontSize="18px"
-                                fontWeight="bold"
-                                key={index}
-                                textTransform="uppercase"
-                            >
-                                #{filter}
-                            </Text>
-                        );
-                    })}
-                </HStack>
+                <Filters
+                    activeGenre={activeGenre}
+                    filters={filters}
+                    genres={genres}
+                    items={items}
+                    setActiveGenre={setActiveGenre}
+                    setFiltered={setFiltered}
+                />
 
-                <Carousel>
-                    {items.map(item => {
-                        return <InfoCard item={item} key={item.id} />;
-                    })}
-                </Carousel>
+                {isLoading ? <Loading /> : <Carousel filtered={filtered} />}
             </Flex>
         </Container>
     );

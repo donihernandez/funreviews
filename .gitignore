@@ -35,3 +35,8 @@ yarn-error.log*
 *.tsbuildinfo
 
 .eslintcache
+
+cypress/support/
+cypress/fixtures/
+cypress/snapshots/
+cypress/downloads/

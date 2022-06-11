@@ -1,90 +1,118 @@
-import { FC, useState } from 'react';
-import {
-  Box,
-  Flex,
-  Heading,
-  HStack,
-  Text,
-  chakra,
-  Button,
-} from '@chakra-ui/react';
+import type { FC } from 'react';
+import { useState } from 'react';
+import { Box, Button, chakra, Flex, Heading, Text } from '@chakra-ui/react';
+
 import { StarIcon } from '@chakra-ui/icons';
 
-import { Badge } from '../Badge';
 import { COLORS } from '../../../styles/theme';
+import { MotionBox } from '../MotionBox';
+import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
+import { AnimatePresence } from 'framer-motion';
 
 interface IInfoCardProps {
-  height?: string;
+    height?: string;
+    width?: string;
+    item?: any;
 }
 
-const InfoCard: FC<IInfoCardProps> = ({ height = '437px' }) => {
-  const [opacity, setOpacity] = useState(0);
+const InfoCard: FC<IInfoCardProps> = ({
+    height = '437px',
+    width = '261px',
+    item,
+}) => {
+    const [opacity, setOpacity] = useState(0);
 
-  return (
-    <Box
-      h={height}
-      w="full"
-      position="relative"
-      backgroundColor={`rgba(0,0,0,0.5)`}
-      backgroundImage="url('/movies.webp')"
-      backgroundRepeat="no-repeat"
-      backgroundSize="cover"
-      backgroundPosition="center"
-      overflow="hidden"
-      onMouseEnter={() => setOpacity(1)}
-      onMouseLeave={() => setOpacity(0)}
-    >
-      <Button
-        _hover={{
-          bg: COLORS.secondary,
-        }}
-        borderRadius="0"
-        position="absolute"
-        top="50%"
-        left="30%"
-        opacity={opacity}
-        bg={COLORS.orange}
-        color={COLORS.white}
-        cursor="pointer"
-      >
-        Read More
-      </Button>
+    const size = IMAGE_CONFIG.poster_sizes.find(s => s === 'w342');
 
-      <Flex
-        overflow="hidden"
-        direction="column"
-        justifyContent="flex-end"
-        padding="20px"
-        bg="rgba(0,0,0,0.5)"
-        h="full"
-        w="full"
-      >
-        <HStack>
-          <Badge genre="suspense">Suspense</Badge>
-          <Badge genre="terror">Terror</Badge>
-        </HStack>
-        <Heading
-          as="h6"
-          fontFamily="Lato"
-          fontSize="15px"
-          textTransform="uppercase"
-          color={COLORS.white}
-          mt="10px"
-        >
-          Stranger Things 3
-        </Heading>
-        <Flex alignItems="center" mt="5px">
-          <StarIcon color="yellow.400" mr="5px" />
-          <Text fontFamily="Nunito" fontSize="12px" color={COLORS.white}>
-            <chakra.span fontSize="16px" fontWeight="800">
-              7.4
-            </chakra.span>
-            /10
-          </Text>
-        </Flex>
-      </Flex>
-    </Box>
-  );
+    const image = `${IMAGE_URL}${size}${item.poster_path}`;
+
+    return (
+        <AnimatePresence>
+            <MotionBox
+                animate={{
+                    opacity: 1,
+                }}
+                exit={{
+                    opacity: 0,
+                }}
+                initial={{
+                    opacity: 0,
+                }}
+                marginRight="15px"
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                /* @ts-ignore */
+                transition={{
+                    duration: 0.5,
+                    ease: 'easeInOut',
+                    type: 'spring',
+                }}
+            >
+                <Box
+                    backgroundColor={'rgba(0,0,0,0.5)'}
+                    backgroundImage={image}
+                    backgroundPosition="center"
+                    backgroundRepeat="no-repeat"
+                    backgroundSize="cover"
+                    h={height}
+                    onMouseEnter={() => setOpacity(1)}
+                    onMouseLeave={() => setOpacity(0)}
+                    overflow="hidden"
+                    pointerEvents="none"
+                    position="relative"
+                    width={width}
+                >
+                    <Button
+                        _hover={{
+                            bg: COLORS.secondary,
+                        }}
+                        bg={COLORS.orange}
+                        borderRadius="0"
+                        color={COLORS.white}
+                        cursor="pointer"
+                        left="30%"
+                        opacity={opacity}
+                        position="absolute"
+                        top="50%"
+                    >
+                        Read More
+                    </Button>
+
+                    <Flex
+                        bg="rgba(0,0,0,0.5)"
+                        direction="column"
+                        h="full"
+                        justifyContent="flex-end"
+                        padding="20px"
+                        w="full"
+                    >
+                        <Heading
+                            as="h6"
+                            color={COLORS.white}
+                            fontFamily="Lato"
+                            fontSize="15px"
+                            mt="10px"
+                            textTransform="uppercase"
+                        >
+                            {item.original_title || item.original_name}
+                        </Heading>
+                        <Flex alignItems="center" mt="5px">
+                            <StarIcon color="yellow.400" mr="5px" />
+                            <Text
+                                color={COLORS.white}
+                                fontFamily="Nunito"
+                                fontSize="12px"
+                            >
+                                <chakra.span fontSize="16px" fontWeight="800">
+                                    {item.vote_average}
+                                </chakra.span>
+                                /10
+                            </Text>
+                        </Flex>
+                    </Flex>
+                </Box>
+            </MotionBox>
+        </AnimatePresence>
+    );
 };
 
 export { InfoCard };

@@ -1,7 +1,9 @@
 module.exports = {
-  printWidth: 80,
-  semi: true,
-  singleQuote: true,
-  tabWidth: 2,
-  useTabs: false,
+    arrowParens: 'avoid',
+    singleQuote: true,
+    trailingComma: 'all',
+    tabWidth: 4,
+    endOfLine: 'auto',
+    importOrder: ['^@chakra-ui/(.*)$', '^[@/]', '^[./]'],
+    importOrderSeparation: true,
 };

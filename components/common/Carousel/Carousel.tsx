@@ -9,6 +9,7 @@ interface ICarouselProps {
 
 const Carousel: FC<ICarouselProps> = ({ filtered }) => {
     const [width, setWidth] = useState(0);
+    const [items, setItems] = useState(filtered);
     const carouselRef = useRef(null);
 
     const carouselStyle = {
@@ -21,6 +22,10 @@ const Carousel: FC<ICarouselProps> = ({ filtered }) => {
     };
 
     useEffect(() => {
+        if (items.length !== filtered.length) {
+            setWidth(0);
+        }
+
         setWidth(
             carouselRef.current.scrollWidth - carouselRef.current.offsetWidth,
         );

@@ -3,8 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "doppler setup -p streamflix -c dev && doppler run -- next dev",
-        "pre-commit:build": "doppler run -- next build",
+        "dev": "next dev",
         "build": "next build",
         "start": "next start",
         "lint": "next lint",

@@ -31,7 +31,7 @@ const Home: NextPage = () => {
     );
 };
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
     const queryClient = new QueryClient();
 
     await queryClient.prefetchQuery('upcoming', getUpcoming);
@@ -41,6 +41,7 @@ export async function getServerSideProps() {
         props: {
             dehydratedState: dehydrate(queryClient),
         },
+        revalidate: 30,
     };
 }
 

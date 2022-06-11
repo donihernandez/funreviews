@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "doppler setup -p streamflix -c dev && doppler run -- next dev",
         "pre-commit:build": "doppler run -- next build",
-        "build": "doppler run -- next build",
+        "build": "next build",
         "start": "next start",
         "lint": "next lint",
         "prepare": "husky install",

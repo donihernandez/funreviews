@@ -8,7 +8,7 @@ interface IBadgeProps {
 
 const Badge: FC<IBadgeProps> = ({ genre, children, ...props }) => {
     const getColor = () => {
-        switch (genre) {
+        switch (genre.toLowerCase()) {
             case 'suspense':
                 return {
                     bg: 'purple.500',
@@ -31,10 +31,10 @@ const Badge: FC<IBadgeProps> = ({ genre, children, ...props }) => {
                 };
             case 'action':
                 return {
-                    bg: 'blue.500',
+                    bg: 'red.500',
                     color: 'white',
                 };
-            case 'sci-fi':
+            case 'science fiction':
                 return {
                     bg: 'teal.500',
                     color: 'white',
@@ -43,6 +43,51 @@ const Badge: FC<IBadgeProps> = ({ genre, children, ...props }) => {
                 return {
                     bg: 'teal.500',
                     color: 'white',
+                };
+            case 'adventure':
+                return {
+                    bg: 'cyan.500',
+                    color: 'white',
+                };
+            case 'family':
+                return {
+                    bg: 'orange.500',
+                    color: 'white',
+                };
+            case 'mistery':
+                return {
+                    bg: 'white',
+                    color: 'blue.500',
+                };
+            case 'crime':
+                return {
+                    bg: 'white',
+                    color: 'red.500',
+                };
+            case 'thriller':
+                return {
+                    bg: 'white',
+                    color: 'green.500',
+                };
+            case 'horror':
+                return {
+                    bg: 'white',
+                    color: 'yellow.500',
+                };
+            case 'music':
+                return {
+                    bg: 'white',
+                    color: 'black',
+                };
+            case 'fantasy':
+                return {
+                    bg: 'white',
+                    color: 'purple.500',
+                };
+            case 'history':
+                return {
+                    bg: 'white',
+                    color: 'orange.500',
                 };
             default:
                 return {
@@ -59,7 +104,7 @@ const Badge: FC<IBadgeProps> = ({ genre, children, ...props }) => {
             color={getColor().color}
             fontFamily="Nunito"
             fontSize="12px"
-            padding="5px 7px"
+            w="full"
             {...props}
         >
             {children}

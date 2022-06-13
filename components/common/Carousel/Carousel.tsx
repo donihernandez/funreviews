@@ -9,7 +9,7 @@ interface ICarouselProps {
 
 const Carousel: FC<ICarouselProps> = ({ filtered }) => {
     const [width, setWidth] = useState(0);
-    const [items, setItems] = useState(filtered);
+    const [items] = useState(filtered);
     const carouselRef = useRef(null);
 
     const carouselStyle = {

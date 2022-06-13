@@ -1,5 +1,5 @@
 import { Container, Flex, Heading, Link } from '@chakra-ui/react';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { COLORS } from '@/styles/theme';
 import { Carousel } from '../Carousel';
@@ -9,6 +9,7 @@ import { Loading } from '../Loading';
 import { Filters } from '../Filters';
 import { useQuery } from 'react-query';
 import { getMovieGenres } from '@/api/movies/queries';
+import { getTvGenres } from '@/api/tv/queries';
 
 interface IShowsContainer {
     title: string;
@@ -17,6 +18,7 @@ interface IShowsContainer {
     items: any;
     link: string;
     isLoading: boolean;
+    type: 'movie' | 'tv';
 }
 
 const ShowsContainer: FC<IShowsContainer> = ({
@@ -26,6 +28,7 @@ const ShowsContainer: FC<IShowsContainer> = ({
     items,
     link,
     isLoading,
+    type,
 }) => {
     const variants = {
         hide: {
@@ -36,11 +39,24 @@ const ShowsContainer: FC<IShowsContainer> = ({
         },
     };
 
-    const { data: genres } = useQuery('genres', getMovieGenres);
+    const [genres, setGenres] = useState({
+        genres: [],
+    });
 
     const [show, setShow] = useState(false);
     const [filtered, setFiltered] = useState(items);
     const [activeGenre, setActiveGenre] = useState('all');
+
+    const { data: movieGenres } = useQuery('genres', getMovieGenres);
+    const { data: tvGenres } = useQuery('tvGenres', getTvGenres);
+
+    useEffect(() => {
+        if (type === 'movie') {
+            setGenres(movieGenres);
+        } else {
+            setGenres(tvGenres);
+        }
+    }, [movieGenres, tvGenres, type]);
 
     return (
         <Container h="full" maxW={{ base: '300vw', lg: '80vw' }}>

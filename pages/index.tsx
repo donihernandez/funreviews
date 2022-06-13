@@ -8,31 +8,45 @@ import { Hero } from '../components/Hero';
 import { getMovieGenres, getUpcoming } from '@/api/movies/queries';
 import { getGenres } from '../utils';
 import { getPopular, getTvGenres } from '@/api/tv/queries';
+import { useEffect, useState } from 'react';
 
 const Home: NextPage = () => {
-    const { data, isLoading } = useQuery('upcoming', getUpcoming);
+    const { data: upcomingMovies, isLoading } = useQuery(
+        'upcoming',
+        getUpcoming,
+    );
     const { data: movieGenres } = useQuery('genres', getMovieGenres);
     const { data: tvGenres } = useQuery('tvGenres', getTvGenres);
     const { data: popular } = useQuery('popular_tv', getPopular);
 
-    const moviesGenresToShow = getGenres(data?.results, movieGenres);
-    const tvGenresToShow = getGenres(popular?.results, tvGenres);
+    const [movieGenresList, setMovieGenresList] = useState([]);
+    const [tvGenresList, setTvGenresList] = useState([]);
+
+    useEffect(() => {
+        if (movieGenres) {
+            setMovieGenresList(getGenres(upcomingMovies?.results, movieGenres));
+        }
+        if (tvGenres) {
+            setTvGenresList(getGenres(popular?.results, tvGenres));
+        }
+    }, [movieGenres, upcomingMovies]);
 
     return (
         <Flex bg="#000" direction="column">
             <Hero />
             <ShowsContainer
-                filters={moviesGenresToShow}
+                filters={movieGenresList}
                 isLoading={isLoading}
-                items={data.results}
+                items={upcomingMovies.results}
                 link="/movies"
                 title="Upcoming Movies"
                 titleStyles={{
                     color: COLORS.white,
                 }}
+                type="movie"
             />
             <ShowsContainer
-                filters={tvGenresToShow}
+                filters={tvGenresList}
                 isLoading={isLoading}
                 items={popular.results}
                 link="/tv"
@@ -40,6 +54,7 @@ const Home: NextPage = () => {
                 titleStyles={{
                     color: COLORS.white,
                 }}
+                type="tv"
             />
         </Flex>
     );

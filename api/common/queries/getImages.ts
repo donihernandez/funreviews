@@ -1,5 +1,4 @@
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
-import axios from 'axios';
 
 const getImages = async (size: string, type: string, imageUrl: string) => {
     const getImageSize = () => {

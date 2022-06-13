@@ -3,7 +3,6 @@ import { FC, useState } from 'react';
 
 import { COLORS } from '@/styles/theme';
 import { Carousel } from '../Carousel';
-import { InfoCard } from '../InfoCard';
 import { MotionBox } from '../MotionBox';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { Loading } from '../Loading';
@@ -44,8 +43,8 @@ const ShowsContainer: FC<IShowsContainer> = ({
     const [activeGenre, setActiveGenre] = useState('all');
 
     return (
-        <Container h="full" maxW={{ base: '300vw', lg: '80vw' }} minH="100vh">
-            <Flex direction="column" h="full" padding="100px 0" w="full">
+        <Container h="full" maxW={{ base: '300vw', lg: '80vw' }}>
+            <Flex direction="column" h="full" padding="50px 0" w="full">
                 <Flex
                     alignItems="center"
                     justifyContent="space-between"

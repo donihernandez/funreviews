@@ -1,4 +1,4 @@
-import { Container, Flex, Heading, Link } from '@chakra-ui/react';
+import { Box, Flex, Heading, Link } from '@chakra-ui/react';
 import { FC, useEffect, useState } from 'react';
 
 import { COLORS } from '@/styles/theme';
@@ -10,12 +10,14 @@ import { Filters } from '../Filters';
 import { useQuery } from 'react-query';
 import { getMovieGenres } from '@/api/movies/queries';
 import { getTvGenres } from '@/api/tv/queries';
+import { Movie, Tv } from 'typings';
+import { useBreakpoints } from 'hooks';
 
 interface IShowsContainer {
     title: string;
     titleStyles: any;
     filters: string[];
-    items: any;
+    items: Movie[] | Tv[];
     link: string;
     isLoading: boolean;
     type: 'movie' | 'tv';
@@ -39,6 +41,8 @@ const ShowsContainer: FC<IShowsContainer> = ({
         },
     };
 
+    const { isSmallerThanDesktop } = useBreakpoints();
+
     const [genres, setGenres] = useState({
         genres: [],
     });
@@ -59,13 +63,14 @@ const ShowsContainer: FC<IShowsContainer> = ({
     }, [movieGenres, tvGenres, type]);
 
     return (
-        <Container h="full" maxW={{ base: '300vw', lg: '80vw' }}>
-            <Flex direction="column" h="full" padding="50px 0" w="full">
-                <Flex
-                    alignItems="center"
-                    justifyContent="space-between"
-                    w="full"
-                >
+        <Flex direction="column" h="full" padding="50px 0" w="full">
+            <Flex
+                alignItems="center"
+                justifyContent="space-between"
+                mb={4}
+                w="full"
+            >
+                <Box width={isSmallerThanDesktop ? '200px' : 'full'}>
                     <Heading
                         as="h2"
                         fontFamily="Nunito"
@@ -75,37 +80,39 @@ const ShowsContainer: FC<IShowsContainer> = ({
                     >
                         {title}
                     </Heading>
+                </Box>
 
-                    <Flex
-                        fontSize="18px"
-                        onMouseEnter={() => setShow(true)}
-                        onMouseLeave={() => setShow(false)}
-                    >
-                        <MotionBox>
-                            <Link
-                                _hover={{
-                                    color: COLORS.orange,
-                                    fontSize: '20px',
-                                    textDecoration: 'none',
-                                }}
-                                color={COLORS.white}
-                                href={link}
-                                mr="10px"
-                                transition="all 0.5s ease-in-out"
-                            >
-                                View All
-                            </Link>
-                        </MotionBox>
-
-                        <MotionBox
-                            animate={show ? 'show' : 'hide'}
-                            variants={variants}
+                <Flex
+                    fontSize="18px"
+                    onMouseEnter={() => setShow(true)}
+                    onMouseLeave={() => setShow(false)}
+                >
+                    <MotionBox>
+                        <Link
+                            _hover={{
+                                color: COLORS.orange,
+                                fontSize: '20px',
+                                textDecoration: 'none',
+                            }}
+                            color={COLORS.white}
+                            href={link}
+                            mr="10px"
+                            transition="all 0.5s ease-in-out"
                         >
-                            <ArrowForwardIcon color={COLORS.white} />
-                        </MotionBox>
-                    </Flex>
-                </Flex>
+                            View All
+                        </Link>
+                    </MotionBox>
 
+                    <MotionBox
+                        animate={show ? 'show' : 'hide'}
+                        variants={variants}
+                    >
+                        <ArrowForwardIcon color={COLORS.white} />
+                    </MotionBox>
+                </Flex>
+            </Flex>
+
+            {!isSmallerThanDesktop && (
                 <Filters
                     activeGenre={activeGenre}
                     filters={filters}
@@ -114,10 +121,10 @@ const ShowsContainer: FC<IShowsContainer> = ({
                     setActiveGenre={setActiveGenre}
                     setFiltered={setFiltered}
                 />
+            )}
 
-                {isLoading ? <Loading /> : <Carousel filtered={filtered} />}
-            </Flex>
-        </Container>
+            {isLoading ? <Loading /> : <Carousel filtered={filtered} />}
+        </Flex>
     );
 };
 

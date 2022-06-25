@@ -1,15 +1,22 @@
-import { FC, useCallback, useEffect, useRef } from 'react';
+import type { FC } from 'react';
+import { useEffect, useRef } from 'react';
 import { useState } from 'react';
+
+import { Movie, Tv } from 'typings';
 import { InfoCard } from '../InfoCard';
 import { MotionBox } from '../MotionBox';
 
 interface ICarouselProps {
-    filtered: any;
+    filtered: Movie[] | Tv[];
 }
 
 const Carousel: FC<ICarouselProps> = ({ filtered }) => {
     const [width, setWidth] = useState(0);
     const [items] = useState(filtered);
+    const [innerCarouselStyle, setInnerCarouselStyle] = useState({
+        display: 'flex',
+        x: 0,
+    });
     const carouselRef = useRef(null);
 
     const carouselStyle = {
@@ -17,15 +24,13 @@ const Carousel: FC<ICarouselProps> = ({ filtered }) => {
         overflow: 'hidden',
     };
 
-    const innerCarouselStyle = {
-        display: 'flex',
-    };
-
     useEffect(() => {
         if (items.length !== filtered.length) {
-            setWidth(0);
+            setInnerCarouselStyle(prev => ({
+                ...prev,
+                transform: 'translateX(0px)',
+            }));
         }
-
         setWidth(
             carouselRef.current.scrollWidth - carouselRef.current.offsetWidth,
         );
@@ -42,6 +47,7 @@ const Carousel: FC<ICarouselProps> = ({ filtered }) => {
                 dragConstraints={{ left: -width, right: 0 }}
                 dragPropagation={true}
                 dragTransition={{ bounceDamping: 10, bounceStiffness: 400 }}
+                initial={{ x: 0 }}
                 style={innerCarouselStyle}
             >
                 {filtered.map(item => {

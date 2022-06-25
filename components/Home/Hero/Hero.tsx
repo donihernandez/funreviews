@@ -1,6 +1,6 @@
 import { Box, Container, Flex } from '@chakra-ui/react';
 
-import { SearchBar } from '../common/SearchBar';
+import { SearchBar } from '../../common/SearchBar';
 
 import { Welcome } from './Welcome';
 

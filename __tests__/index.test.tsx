@@ -1,6 +1,6 @@
 /* eslint-disable sort-keys */
 import { render, screen } from '@testing-library/react';
-import { Hero } from '../components/Hero';
+import { Hero } from '../components/Home/Hero';
 
 beforeAll(() => {
     Object.defineProperty(window, 'matchMedia', {

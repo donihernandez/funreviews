@@ -41,8 +41,7 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx",
-    "components/Hero/P{\"-tsx"
+    "**/*.tsx"
   ],
   "exclude": [
     "node_modules"

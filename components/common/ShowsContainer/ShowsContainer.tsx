@@ -84,8 +84,10 @@ const ShowsContainer: FC<IShowsContainer> = ({
 
                 <Flex
                     fontSize="18px"
+                    justifyContent="flex-end"
                     onMouseEnter={() => setShow(true)}
                     onMouseLeave={() => setShow(false)}
+                    w="full"
                 >
                     <MotionBox>
                         <Link
@@ -123,7 +125,11 @@ const ShowsContainer: FC<IShowsContainer> = ({
                 />
             )}
 
-            {isLoading ? <Loading /> : <Carousel filtered={filtered} />}
+            {isLoading ? (
+                <Loading />
+            ) : (
+                <Carousel filtered={filtered} type={type} />
+            )}
         </Flex>
     );
 };

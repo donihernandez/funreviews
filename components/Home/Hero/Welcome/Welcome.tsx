@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { chakra, Flex, Heading, Image, Text } from '@chakra-ui/react';
 import { useBreakpoints } from 'hooks';
 
-import { COLORS } from '../../../styles/theme';
+import { COLORS } from '../../../../styles/theme';
 
 const Welcome: FC = () => {
     const { isSmallerThanDesktop } = useBreakpoints();
@@ -33,7 +33,12 @@ const Welcome: FC = () => {
                 </Text>
             </Flex>
             {!isSmallerThanDesktop && (
-                <Image alt="Like" height="500px" src="/likes.webp" w="500px" />
+                <Image
+                    alt="Like"
+                    height={['300px', null, '400px']}
+                    src="/likes.webp"
+                    w="500px"
+                />
             )}
         </Flex>
     );

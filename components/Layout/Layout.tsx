@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { Footer } from '../Footer';
 import { Header } from '../Header';
 
 interface ILayoutProps {
@@ -10,6 +11,7 @@ const Layout: FC<ILayoutProps> = ({ children }) => {
         <>
             <Header />
             {children}
+            <Footer />
         </>
     );
 };

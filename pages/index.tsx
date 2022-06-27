@@ -1,63 +1,12 @@
-import { Flex } from '@chakra-ui/react';
-import { dehydrate, QueryClient, useQuery } from 'react-query';
+import { dehydrate, QueryClient } from 'react-query';
 import type { NextPage } from 'next';
 
-import { ShowsContainer } from '@/components/common/ShowsContainer';
-import { COLORS } from '@/styles/theme';
-import { Hero } from '../components/Hero';
 import { getMovieGenres, getUpcoming } from '@/api/movies/queries';
-import { getGenres } from '../utils';
 import { getPopular, getTvGenres } from '@/api/tv/queries';
-import { useEffect, useState } from 'react';
+import { Home } from '@/components/Home';
 
-const Home: NextPage = () => {
-    const { data: upcomingMovies, isLoading } = useQuery(
-        'upcoming',
-        getUpcoming,
-    );
-    const { data: movieGenres } = useQuery('genres', getMovieGenres);
-    const { data: tvGenres } = useQuery('tvGenres', getTvGenres);
-    const { data: popular } = useQuery('popular_tv', getPopular);
-
-    const [movieGenresList, setMovieGenresList] = useState([]);
-    const [tvGenresList, setTvGenresList] = useState([]);
-
-    useEffect(() => {
-        if (movieGenres) {
-            setMovieGenresList(getGenres(upcomingMovies?.results, movieGenres));
-        }
-        if (tvGenres) {
-            setTvGenresList(getGenres(popular?.results, tvGenres));
-        }
-    }, [movieGenres, upcomingMovies]);
-
-    return (
-        <Flex bg="#000" direction="column">
-            <Hero />
-            <ShowsContainer
-                filters={movieGenresList}
-                isLoading={isLoading}
-                items={upcomingMovies.results}
-                link="/movies"
-                title="Upcoming Movies"
-                titleStyles={{
-                    color: COLORS.white,
-                }}
-                type="movie"
-            />
-            <ShowsContainer
-                filters={tvGenresList}
-                isLoading={isLoading}
-                items={popular.results}
-                link="/tv"
-                title="Popular TV Shows"
-                titleStyles={{
-                    color: COLORS.white,
-                }}
-                type="tv"
-            />
-        </Flex>
-    );
+const HomePage: NextPage = () => {
+    return <Home />;
 };
 
 export async function getStaticProps() {
@@ -76,4 +25,4 @@ export async function getStaticProps() {
     };
 }
 
-export default Home;
+export default HomePage;

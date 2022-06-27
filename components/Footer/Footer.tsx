@@ -1,7 +1,9 @@
+import type { FC } from 'react';
+
 import { Flex, Text } from '@chakra-ui/react';
 import { COLORS } from '@/styles/theme';
 
-const Footer = () => {
+const Footer: FC = () => {
     return (
         <Flex
             bg={COLORS.primary}

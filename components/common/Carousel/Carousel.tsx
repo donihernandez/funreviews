@@ -2,15 +2,16 @@ import type { FC } from 'react';
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 
-import { Movie, Tv } from 'typings';
+import { Movie, Tv, Video } from 'typings';
 import { InfoCard } from '../InfoCard';
 import { MotionBox } from '../MotionBox';
 
 interface ICarouselProps {
     filtered: Movie[] | Tv[];
+    type: 'movie' | 'tv';
 }
 
-const Carousel: FC<ICarouselProps> = ({ filtered }) => {
+const Carousel: FC<ICarouselProps> = ({ filtered, type }) => {
     const [width, setWidth] = useState(0);
     const [items] = useState(filtered);
     const [innerCarouselStyle, setInnerCarouselStyle] = useState({
@@ -51,7 +52,7 @@ const Carousel: FC<ICarouselProps> = ({ filtered }) => {
                 style={innerCarouselStyle}
             >
                 {filtered.map(item => {
-                    return <InfoCard item={item} key={item.id} />;
+                    return <InfoCard item={item} key={item.id} type={type} />;
                 })}
             </MotionBox>
         </MotionBox>

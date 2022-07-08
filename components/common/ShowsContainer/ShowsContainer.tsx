@@ -6,7 +6,7 @@ import { Carousel } from '../Carousel';
 import { MotionBox } from '../MotionBox';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { Loading } from '../Loading';
-import { Filters } from '../Filters';
+import { ShowsFilters } from './ShowsFilters';
 import { useQuery } from 'react-query';
 import { getMovieGenres } from '@/api/movies/queries';
 import { getTvGenres } from '@/api/tv/queries';
@@ -115,7 +115,7 @@ const ShowsContainer: FC<IShowsContainer> = ({
             </Flex>
 
             {!isSmallerThanDesktop && (
-                <Filters
+                <ShowsFilters
                     activeGenre={activeGenre}
                     filters={filters}
                     genres={genres}

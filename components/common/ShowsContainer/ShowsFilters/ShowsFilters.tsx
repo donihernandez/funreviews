@@ -17,7 +17,7 @@ interface Genres {
     }[];
 }
 
-const Filters: FC<IFiltersProps> = ({
+const ShowsFilters: FC<IFiltersProps> = ({
     filters,
     items,
     genres,
@@ -89,4 +89,4 @@ const Filters: FC<IFiltersProps> = ({
     );
 };
 
-export { Filters };
+export { ShowsFilters };

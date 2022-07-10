@@ -1,6 +1,5 @@
 import { FC, useMemo } from 'react';
 import { Button, Divider, Flex, Heading, Image, Text } from '@chakra-ui/react';
-import { Search2Icon, StarIcon } from '@chakra-ui/icons';
 
 import { COLORS } from '@/styles/theme';
 import { Badge } from '../../Badge';
@@ -8,6 +7,7 @@ import { Badge } from '../../Badge';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 
 import { useShowsContext } from 'contexts/ShowsContext';
+import { Search2Icon, StarIcon } from '@chakra-ui/icons';
 
 interface IShow {
     show: any;

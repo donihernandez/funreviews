@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 
-import { Movie, Tv, Video } from 'typings';
+import { Movie, Tv } from 'typings';
 import { InfoCard } from '../InfoCard';
 import { MotionBox } from '../MotionBox';
 

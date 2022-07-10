@@ -13,7 +13,12 @@ const NowPlaying = () => {
     );
 
     return (
-        <Container h="full" maxW={{ base: '300vw', lg: '80vw' }} minH="100vh">
+        <Container
+            h="full"
+            maxW={{ base: '300vw', lg: '80vw' }}
+            minH="100vh"
+            p="100px 0"
+        >
             <Heading
                 as="h2"
                 color={COLORS.white}

@@ -8,7 +8,7 @@ interface IBadgeProps {
 
 const Badge: FC<IBadgeProps> = ({ genre, children, ...props }) => {
     const getColor = () => {
-        switch (genre.toLowerCase()) {
+        switch (genre?.toLowerCase()) {
             case 'suspense':
                 return {
                     bg: 'purple.500',

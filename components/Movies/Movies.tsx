@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { Intro } from '../common/Intro';
 import { ShowsList } from '../common/ShowsList';
@@ -6,6 +6,8 @@ import { Wrapper } from '../common/Wrapper';
 
 import { getMovieGenres, getPopular } from '@/api/movies/queries';
 import { useShowsContext } from 'contexts/ShowsContext';
+import { Flex } from '@chakra-ui/react';
+import { Sidebar } from '../Sidebar';
 
 const Movies: FC = () => {
     const breadcrumbs = [
@@ -26,6 +28,7 @@ const Movies: FC = () => {
         'getPopular',
         getPopular,
     );
+
     const { data: genres, isSuccess: genresSuccess } = useQuery(
         'getGenres',
         getMovieGenres,
@@ -44,7 +47,10 @@ const Movies: FC = () => {
     return (
         <Wrapper>
             <Intro breadcrumbs={breadcrumbs} title="Movies" />
-            <ShowsList />
+            <Flex>
+                <ShowsList />
+                <Sidebar />
+            </Flex>
         </Wrapper>
     );
 };

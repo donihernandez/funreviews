@@ -6,6 +6,7 @@ import { COLORS } from '@/styles/theme';
 import { Badge } from '../../Badge';
 
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
+
 import { useShowsContext } from 'contexts/ShowsContext';
 
 interface IShow {
@@ -16,7 +17,9 @@ const Show: FC<IShow> = ({ show }) => {
     const badgeStyle = {
         ml: '5px',
     };
+
     const { genres } = useShowsContext();
+
     const date = new Date(show.release_date);
 
     const size = IMAGE_CONFIG.poster_sizes.find(s => s === 'w342');
@@ -24,11 +27,15 @@ const Show: FC<IShow> = ({ show }) => {
     const image = `${IMAGE_URL}${size}${show.poster_path}`;
 
     const getShowGenres = useMemo(() => {
-        return show.genre_ids.map(genre => {
-            const showGenre = genres.find(g => g.id === genre);
-            return showGenre.name;
-        });
-    }, []);
+        if (genres.length > 0) {
+            return show.genre_ids.map(genre => {
+                const showGenre = genres.find(g => g.id === genre);
+                return showGenre.name;
+            });
+        }
+
+        return [];
+    }, [genres]);
 
     return (
         <Flex alignItems="center" mt="15px">
@@ -54,17 +61,18 @@ const Show: FC<IShow> = ({ show }) => {
 
                 <Divider my={4} />
                 <Flex>
-                    {getShowGenres.map((genre: string, index: number) => {
-                        return (
-                            <Badge
-                                genre={genre.toLowerCase()}
-                                key={index}
-                                {...badgeStyle}
-                            >
-                                #{genre}
-                            </Badge>
-                        );
-                    })}
+                    {getShowGenres.length > 0 &&
+                        getShowGenres.map((genre: string, index: number) => {
+                            return (
+                                <Badge
+                                    genre={genre.toLowerCase()}
+                                    key={index}
+                                    {...badgeStyle}
+                                >
+                                    #{genre}
+                                </Badge>
+                            );
+                        })}
                 </Flex>
                 <Flex mt={5}>
                     <Button

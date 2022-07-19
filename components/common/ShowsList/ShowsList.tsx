@@ -12,7 +12,7 @@ import { Show } from './Show';
 import { useShowsContext } from 'contexts/ShowsContext';
 
 import { List, ShowsListContainer } from './ShowsList.components';
-import { getPopular } from '@/api/movies/queries';
+import { getPopular } from '_tmdb/movies/queries';
 import { COLORS } from '@/styles/theme';
 import { useState } from 'react';
 import { Loading } from '../Loading';
@@ -50,8 +50,7 @@ const ShowsList: FC = () => {
         }
         setIsLoading(false);
     };
-    console.log(shows);
-    console.log(isLoading);
+
     return (
         <ShowsListContainer>
             {totalPages > 0 && (

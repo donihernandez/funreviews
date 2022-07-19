@@ -19,7 +19,7 @@ import {
 } from './Slideshow.components';
 
 import { Movie } from 'typings';
-import { getVideos } from '@/api/movies/queries';
+import { getVideos } from '_tmdb/movies/queries';
 import { getTrailer } from 'utils';
 
 interface ISlideShowProps {

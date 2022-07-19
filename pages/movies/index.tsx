@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { dehydrate, QueryClient } from 'react-query';
 
 import { Movies } from '@/components/Movies';
-import { getMovieGenres, getPopular } from '@/api/movies/queries';
+import { getMovieGenres, getPopular } from '_tmdb/movies/queries';
 import { ShowsProvider } from 'contexts/ShowsContext';
 
 const MoviesPage: NextPage = () => {

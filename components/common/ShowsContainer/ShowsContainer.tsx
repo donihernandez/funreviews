@@ -8,8 +8,8 @@ import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { Loading } from '../Loading';
 import { ShowsFilters } from './ShowsFilters';
 import { useQuery } from 'react-query';
-import { getMovieGenres } from '@/api/movies/queries';
-import { getTvGenres } from '@/api/tv/queries';
+import { getMovieGenres } from '_tmdb/movies/queries';
+import { getTvGenres } from '_tmdb/tv/queries';
 import { Movie, Tv } from 'typings';
 import { useBreakpoints } from 'hooks';
 

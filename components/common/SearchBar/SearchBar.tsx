@@ -1,16 +1,7 @@
-import {
-    EventHandler,
-    FC,
-    KeyboardEvent,
-    MouseEvent,
-    MouseEventHandler,
-    SetStateAction,
-    useEffect,
-    useState,
-} from 'react';
+import type { FC } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { Search2Icon } from '@chakra-ui/icons';
 import {
-    Button,
     Container,
     Flex,
     Input,
@@ -19,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { COLORS } from '@/styles/theme';
 import { useShowsContext } from 'contexts/ShowsContext';
-import { getPopular, searchByName } from '@/api/movies/queries';
+import { getPopular, searchByName } from '_tmdb/movies/queries';
 import { useDebounce } from 'hooks';
 
 const SearchBar: FC = () => {

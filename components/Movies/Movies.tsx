@@ -4,7 +4,7 @@ import { Intro } from '../common/Intro';
 import { ShowsList } from '../common/ShowsList';
 import { Wrapper } from '../common/Wrapper';
 
-import { getMovieGenres, getPopular } from '@/api/movies/queries';
+import { getMovieGenres, getPopular } from '_tmdb/movies/queries';
 import { useShowsContext } from 'contexts/ShowsContext';
 import { Flex } from '@chakra-ui/react';
 import { Sidebar } from '../Sidebar';

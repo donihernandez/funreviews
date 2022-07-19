@@ -1,8 +1,8 @@
 import { dehydrate, QueryClient } from 'react-query';
 import type { NextPage } from 'next';
 
-import { getMovieGenres, getUpcoming } from '@/api/movies/queries';
-import { getPopular, getTvGenres } from '@/api/tv/queries';
+import { getMovieGenres, getUpcoming } from '_tmdb/movies/queries';
+import { getPopular, getTvGenres } from '_tmdb/tv/queries';
 import { Home } from '@/components/Home';
 
 const HomePage: NextPage = () => {

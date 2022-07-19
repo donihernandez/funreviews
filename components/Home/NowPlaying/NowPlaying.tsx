@@ -1,7 +1,7 @@
 import { Container, Heading } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 
-import { getNowPlaying } from '@/api/movies/queries';
+import { getNowPlaying } from '_tmdb/movies/queries';
 import { SlideShow } from '@/components/common/SlideShow';
 import { COLORS } from '@/styles/theme';
 import { Loading } from '@/components/common/Loading';

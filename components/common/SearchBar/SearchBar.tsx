@@ -1,7 +1,7 @@
 import type { FC } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { Search2Icon } from '@chakra-ui/icons';
 import {
-    Button,
     Container,
     Flex,
     Input,
@@ -9,6 +9,9 @@ import {
     InputRightElement,
 } from '@chakra-ui/react';
 import { COLORS } from '@/styles/theme';
+import { useShowsContext } from 'contexts/ShowsContext';
+import { getPopular, searchByName } from '_tmdb/movies/queries';
+import { useDebounce } from 'hooks';
 
 const SearchBar: FC = () => {
     const commonStyles = {
@@ -19,6 +22,41 @@ const SearchBar: FC = () => {
         fontFamily: 'Nunito',
         fontSize: '18px',
     };
+
+    const { type, setShows, setTotalPages } = useShowsContext();
+
+    const [searchText, setSearchText] = useState('');
+    const debouncedText = useDebounce(searchText, 500);
+    const [isSearching, setIsSearching] = useState(false);
+
+    const handleSearchByName = async () => {
+        const response = await searchByName(debouncedText);
+        if (response) {
+            setShows(response.results);
+            setTotalPages(response.total_pages);
+        }
+    };
+
+    const handleGetPopular = async () => {
+        const response = await getPopular();
+        if (response) {
+            setShows(response.results);
+            setTotalPages(response.total_pages);
+        }
+    };
+
+    useEffect(() => {
+        if (debouncedText) {
+            setIsSearching(true);
+            if (type === 'movie') {
+                handleSearchByName();
+                setIsSearching(false);
+            }
+        } else {
+            handleGetPopular();
+            setIsSearching(false);
+        }
+    }, [debouncedText]);
 
     return (
         <Container maxW="50vw" w="full">
@@ -36,33 +74,19 @@ const SearchBar: FC = () => {
                         h="50px"
                         w="full"
                         {...commonStyles}
+                        onChange={(e: {
+                            target: { value: SetStateAction<string> };
+                        }) => setSearchText(e.target.value)}
+                        // onKeyDown={(e: KeyboardEvent<HTMLInputElement>) =>
+                        //     handleSearch(e)
+                        // }
                         placeholder="Search by name...."
+                        value={searchText}
                     />
                     <InputRightElement color={COLORS.white} h="50px">
                         <Search2Icon />
                     </InputRightElement>
                 </InputGroup>
-                <Button
-                    _active={{
-                        bg: 'transparent',
-                        borderColor: COLORS.primary,
-                    }}
-                    _hover={{
-                        bg: 'transparent',
-                        borderColor: COLORS.orange,
-                        color: COLORS.orange,
-                    }}
-                    borderLeft={[null, null, '1px solid']}
-                    borderRadius="0"
-                    color={COLORS.white}
-                    fontSize={['14px', '18px']}
-                    h="50px"
-                    transition="all 0.3s ease-in-out"
-                    variant="outline"
-                    w={['full', null, '200px']}
-                >
-                    Search
-                </Button>
             </Flex>
         </Container>
     );

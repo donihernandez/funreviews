@@ -6,10 +6,13 @@ const ShowsProvider = ({ children }) => {
     const [genres, setGenres] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
     const [type, setType] = useState('');
+    const [isSearching, setIsSearching] = useState(false);
 
     const value = {
         genres,
+        isSearching,
         setGenres,
+        setIsSearching,
         setShows,
         setTotalPages,
         setType,

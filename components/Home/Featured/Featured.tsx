@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 
 import { useQuery } from 'react-query';
 
-import { getMovieGenres, getUpcoming } from '@/api/movies/queries';
+import { getMovieGenres, getUpcoming } from '_tmdb/movies/queries';
 
-import { getPopular, getTvGenres } from '@/api/tv/queries';
+import { getPopular, getTvGenres } from '_tmdb/tv/queries';
 
 import { getGenres } from '@/utils/getGenres';
 import { ShowsContainer } from '@/components/common/ShowsContainer';

@@ -23,13 +23,7 @@ module.exports = {
         ecmaVersion: 12,
         sourceType: 'module',
     },
-    plugins: [
-        'react',
-        'testing-library',
-        'react-hooks',
-        'prettier',
-        'eslint-plugin-cypress',
-    ],
+    plugins: ['react', 'testing-library', 'react-hooks', 'prettier'],
     rules: {
         // Possible errors
         'no-console': 'warn',

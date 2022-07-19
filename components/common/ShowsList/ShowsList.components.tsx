@@ -2,7 +2,7 @@ import { Flex } from '@chakra-ui/react';
 
 const ShowsListContainer = ({ children }) => {
     return (
-        <Flex p="100px 0" w="full">
+        <Flex direction="column" p="100px 0" w="full">
             {children}
         </Flex>
     );
@@ -10,7 +10,7 @@ const ShowsListContainer = ({ children }) => {
 
 const List = ({ children }) => {
     return (
-        <Flex direction="column" w="full">
+        <Flex direction="column" my="30px" w="full">
             {children}
         </Flex>
     );

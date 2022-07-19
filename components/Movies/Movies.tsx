@@ -22,11 +22,11 @@ const Movies: FC = () => {
         },
     ];
 
-    const { setShows, setGenres } = useShowsContext();
+    const { setShows, setGenres, setTotalPages, setType } = useShowsContext();
 
     const { data: movies, isSuccess: moviesSuccess } = useQuery(
-        'getPopular',
-        getPopular,
+        ['getPopular'],
+        () => getPopular(),
     );
 
     const { data: genres, isSuccess: genresSuccess } = useQuery(
@@ -37,11 +37,14 @@ const Movies: FC = () => {
     useEffect(() => {
         if (moviesSuccess) {
             setShows(movies.results);
+            setTotalPages(movies.total_pages);
         }
 
         if (genresSuccess) {
             setGenres(genres.genres);
         }
+
+        setType('movie');
     }, [moviesSuccess, genresSuccess]);
 
     return (

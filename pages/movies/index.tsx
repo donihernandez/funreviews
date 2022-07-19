@@ -15,8 +15,8 @@ const MoviesPage: NextPage = () => {
 
 export async function getStaticProps() {
     const queryClient = new QueryClient();
-    await queryClient.prefetchQuery('movieGenres', getMovieGenres);
-    await queryClient.prefetchQuery('popularMovies', getPopular);
+    await queryClient.prefetchQuery(['movieGenres'], getMovieGenres);
+    await queryClient.prefetchQuery(['popularMovies'], () => getPopular());
 
     return {
         props: {

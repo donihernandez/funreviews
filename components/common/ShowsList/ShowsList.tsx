@@ -50,8 +50,7 @@ const ShowsList: FC = () => {
         }
         setIsLoading(false);
     };
-    console.log(shows);
-    console.log(isLoading);
+
     return (
         <ShowsListContainer>
             {totalPages > 0 && (

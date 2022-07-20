@@ -1,3 +1,5 @@
+import { type } from 'os';
+
 interface Movie {
     id: number;
     title: string;
@@ -45,4 +47,24 @@ interface Video {
     published_at: string;
 }
 
-export { Movie, Tv, Video };
+interface IMovieQuery {
+    'primary_release_date.gte': string;
+    'primary_release_date.lte': string;
+    sort_by: string;
+    'vote_average.gte': number;
+    'vote_average.lte': number;
+    with_genres: string;
+}
+
+interface IShowQuery {
+    'first_air_date.gte': string;
+    'first_air_date.lte': string;
+    sort_by: string;
+    'vote_average.gte': number;
+    'vote_average.lte': number;
+    with_genres: string;
+}
+
+type IQuery = IMovieQuery | IShowQuery;
+
+export { Movie, Tv, Video, IQuery };

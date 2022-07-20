@@ -10,8 +10,10 @@ import {
 } from '@chakra-ui/react';
 import { COLORS } from '@/styles/theme';
 import { useShowsContext } from 'contexts/ShowsContext';
-import { getPopular, searchByName } from '_tmdb/movies/queries';
+import { getPopular, searchMovieByName } from '_tmdb/movies/queries';
 import { useDebounce } from 'hooks';
+import { searchTvByName } from '_tmdb/tv/queries/searchTvByName';
+import { getTvPopular } from '_tmdb/tv/queries';
 
 const SearchBar: FC = () => {
     const commonStyles = {
@@ -28,29 +30,46 @@ const SearchBar: FC = () => {
     const [searchText, setSearchText] = useState('');
     const debouncedText = useDebounce(searchText, 500);
 
-    const handleSearchByName = async () => {
-        const response = await searchByName(debouncedText);
-        if (response) {
-            setShows(response.results);
-            setTotalPages(response.total_pages);
-        }
+    const handleSearchMovieByName = async () => {
+        const response = await searchMovieByName(debouncedText);
+        updateShows(response);
     };
 
-    const handleGetPopular = async () => {
+    const handleSearchTvByName = async () => {
+        const response = await searchTvByName(debouncedText);
+        updateShows(response);
+    };
+
+    const handleGetMoviePopular = async () => {
         const response = await getPopular();
-        if (response) {
-            setShows(response.results);
-            setTotalPages(response.total_pages);
+        updateShows(response);
+    };
+
+    const handleGetTvPopular = async () => {
+        const response = await getTvPopular();
+        updateShows(response);
+    };
+
+    const updateShows = showsData => {
+        if (showsData) {
+            setShows(showsData.results);
+            setTotalPages(showsData.total_pages);
         }
     };
 
     useEffect(() => {
         if (debouncedText) {
             if (type === 'movie') {
-                handleSearchByName();
+                handleSearchMovieByName();
+            } else {
+                handleSearchTvByName();
             }
-        } else {
-            handleGetPopular();
+        } else if (!debouncedText) {
+            if (type === 'movie') {
+                handleGetMoviePopular();
+            } else {
+                handleGetTvPopular();
+            }
         }
     }, [debouncedText]);
 

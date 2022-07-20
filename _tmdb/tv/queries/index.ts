@@ -1,2 +1,2 @@
-export * from './getPopular';
+export * from './getTvPopular';
 export * from './getTvGenres';

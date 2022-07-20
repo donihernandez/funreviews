@@ -7,7 +7,7 @@ import { Wrapper } from '../common/Wrapper';
 import { useShowsContext } from 'contexts/ShowsContext';
 import { Flex } from '@chakra-ui/react';
 import { Sidebar } from '../common/Sidebar';
-import { getPopular, getTvGenres } from '_tmdb/tv/queries';
+import { getTvGenres, getTvPopular } from '_tmdb/tv/queries';
 
 const Tv: FC = () => {
     const breadcrumbs = [
@@ -25,7 +25,7 @@ const Tv: FC = () => {
     const { setShows, setGenres, setTotalPages, setType } = useShowsContext();
 
     const { data: tv, isSuccess: tvSucess } = useQuery(['getPopular'], () =>
-        getPopular(),
+        getTvPopular(),
     );
 
     const { data: genres, isSuccess: genresSuccess } = useQuery(

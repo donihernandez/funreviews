@@ -5,7 +5,7 @@ import { useQuery } from 'react-query';
 
 import { getMovieGenres, getUpcoming } from '_tmdb/movies/queries';
 
-import { getPopular, getTvGenres } from '_tmdb/tv/queries';
+import { getTvGenres, getTvPopular } from '_tmdb/tv/queries';
 
 import { getGenres } from '@/utils/getGenres';
 import { ShowsContainer } from '@/components/common/ShowsContainer';
@@ -19,7 +19,7 @@ const Featured: FC = () => {
     );
     const { data: movieGenres } = useQuery('genres', getMovieGenres);
     const { data: tvGenres } = useQuery('tvGenres', getTvGenres);
-    const { data: popular } = useQuery('popular_tv', () => getPopular());
+    const { data: popular } = useQuery('popular_tv', () => getTvPopular());
 
     const [movieGenresList, setMovieGenresList] = useState<string[]>([]);
     const [tvGenresList, setTvGenresList] = useState<string[]>([]);

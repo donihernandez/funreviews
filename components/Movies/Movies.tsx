@@ -7,7 +7,7 @@ import { Wrapper } from '../common/Wrapper';
 import { getMovieGenres, getPopular } from '_tmdb/movies/queries';
 import { useShowsContext } from 'contexts/ShowsContext';
 import { Flex } from '@chakra-ui/react';
-import { Sidebar } from '../Sidebar';
+import { Sidebar } from '../common/Sidebar';
 
 const Movies: FC = () => {
     const breadcrumbs = [

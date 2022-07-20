@@ -216,7 +216,9 @@ const Sidebar: FC = () => {
                                 max={10}
                                 min={0}
                                 mr="20px"
-                                onChange={value => setMinAverageRating(value)}
+                                onChange={value =>
+                                    setMinAverageRating(parseFloat(value))
+                                }
                                 size="sm"
                                 value={minAverageRating}
                             >
@@ -242,7 +244,9 @@ const Sidebar: FC = () => {
                                 keepWithinRange
                                 max={10}
                                 min={0}
-                                onChange={value => setMaxAverageRating(value)}
+                                onChange={value =>
+                                    setMaxAverageRating(parseFloat(value))
+                                }
                                 placeholder="Enter keywords"
                                 size="sm"
                                 value={maxAverageRating}

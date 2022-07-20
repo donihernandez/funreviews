@@ -20,7 +20,7 @@ const Show: FC<IShow> = ({ show }) => {
 
     const { genres } = useShowsContext();
 
-    const date = new Date(show.release_date);
+    const date = new Date(show.release_date || show.first_air_date);
 
     const size = IMAGE_CONFIG.poster_sizes.find(s => s === 'w342');
 
@@ -38,7 +38,7 @@ const Show: FC<IShow> = ({ show }) => {
     }, [genres]);
 
     return (
-        <Flex alignItems="center" mt="15px">
+        <Flex alignItems="center" mt="45px">
             <Image alt="Movie" h="260px" src={image} />
             <Flex
                 color={COLORS.white}

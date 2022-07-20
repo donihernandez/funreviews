@@ -19,7 +19,7 @@ const Featured: FC = () => {
     );
     const { data: movieGenres } = useQuery('genres', getMovieGenres);
     const { data: tvGenres } = useQuery('tvGenres', getTvGenres);
-    const { data: popular } = useQuery('popular_tv', getPopular);
+    const { data: popular } = useQuery('popular_tv', () => getPopular());
 
     const [movieGenresList, setMovieGenresList] = useState<string[]>([]);
     const [tvGenresList, setTvGenresList] = useState<string[]>([]);

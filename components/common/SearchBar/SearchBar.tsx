@@ -27,7 +27,6 @@ const SearchBar: FC = () => {
 
     const [searchText, setSearchText] = useState('');
     const debouncedText = useDebounce(searchText, 500);
-    const [isSearching, setIsSearching] = useState(false);
 
     const handleSearchByName = async () => {
         const response = await searchByName(debouncedText);
@@ -47,14 +46,11 @@ const SearchBar: FC = () => {
 
     useEffect(() => {
         if (debouncedText) {
-            setIsSearching(true);
             if (type === 'movie') {
                 handleSearchByName();
-                setIsSearching(false);
             }
         } else {
             handleGetPopular();
-            setIsSearching(false);
         }
     }, [debouncedText]);
 

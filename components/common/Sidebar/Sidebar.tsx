@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import {
     Box,
+    Button,
     Divider,
     Flex,
     FormControl,
@@ -23,10 +24,87 @@ import { useShowsContext } from 'contexts/ShowsContext';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+import { searchMovies } from '_tmdb/movies/queries';
+
+interface IQuery {
+    'primary_release_date.gte': string;
+    'primary_release_date.lte': string;
+    sort_by: string;
+    'vote_average.gte': number;
+    'vote_average.lte': number;
+    with_genres: string;
+}
+
 const Sidebar: FC = () => {
-    const { genres } = useShowsContext();
+    const { genres, setShows, setTotalPages, type } = useShowsContext();
 
     const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const [minAverageRating, setMinAverageRating] = useState(0);
+    const [maxAverageRating, setMaxAverageRating] = useState(10);
+    const [genre, setGenre] = useState('');
+    const [sortBy, setSortBy] = useState('');
+
+    const sortOptions = [
+        {
+            label: 'Popularity Descending',
+            value: 'popularity.desc',
+        },
+        {
+            label: 'Popularity Ascending',
+            value: 'popularity.asc',
+        },
+        {
+            label: 'Release Date Descending',
+            value: 'release_date.desc',
+        },
+        {
+            label: 'Release Date Ascending',
+            value: 'release_date.asc',
+        },
+        {
+            label: 'Average Rating Descending',
+            value: 'vote_average.desc',
+        },
+        {
+            label: 'Average Rating Ascending',
+            value: 'vote_average.asc',
+        },
+        {
+            label: 'Title Descending',
+            value: 'original_title.desc',
+        },
+        {
+            label: 'Title Ascending',
+            value: 'original_title.asc',
+        },
+    ];
+
+    const handleSearch = async () => {
+        let res = null;
+        const queryParams: IQuery = {
+            'primary_release_date.gte': startDate.toISOString().split('T')[0],
+            'primary_release_date.lte': endDate.toISOString().split('T')[0],
+            sort_by: sortBy,
+            'vote_average.gte': minAverageRating,
+            'vote_average.lte': maxAverageRating,
+            with_genres: genre,
+        };
+
+        Object.keys(queryParams).forEach(key => {
+            if (!queryParams[key]) {
+                delete queryParams[key];
+            }
+        });
+
+        if (type === 'movie') {
+            res = await searchMovies(queryParams);
+            if (res) {
+                setShows(res.results);
+                setTotalPages(res.total_pages);
+            }
+        }
+    };
 
     return (
         <Box minW="300px" ml="40px" p="100px 0">
@@ -50,9 +128,9 @@ const Sidebar: FC = () => {
                             fontWeight="bold"
                             mb="5px"
                         >
-                            Name
+                            Sort by
                         </FormLabel>
-                        <Input
+                        <Select
                             _placeholder={{
                                 color: '#ccc',
                                 fontSize: '12px',
@@ -60,9 +138,22 @@ const Sidebar: FC = () => {
                             bg={COLORS.secondary}
                             border="none"
                             color={COLORS.white}
-                            placeholder="Enter keywords"
+                            onChange={e => setSortBy(e.target.value)}
+                            placeholder="Sort by..."
                             size="sm"
-                        />
+                            value={sortBy}
+                        >
+                            {sortOptions.map(
+                                (option: { label: string; value: string }) => (
+                                    <option
+                                        key={option.value}
+                                        value={option.value}
+                                    >
+                                        {option.label}
+                                    </option>
+                                ),
+                            )}
+                        </Select>
                     </FormControl>
                 </Box>
 
@@ -84,14 +175,18 @@ const Sidebar: FC = () => {
                             bg={COLORS.secondary}
                             border="none"
                             color={COLORS.white}
+                            onChange={e => setGenre(e.target.value)}
                             placeholder="Pick a genre"
                             size="sm"
+                            value={genre}
                         >
-                            {genres.map(genre => (
-                                <option key={genre.id} value={genre.id}>
-                                    {genre.name}
-                                </option>
-                            ))}
+                            {genres.map(
+                                (genre: { id: string; name: string }) => (
+                                    <option key={genre.id} value={genre.name}>
+                                        {genre.name}
+                                    </option>
+                                ),
+                            )}
                         </Select>
                     </FormControl>
                 </Box>
@@ -112,14 +207,20 @@ const Sidebar: FC = () => {
                                     color: '#ccc',
                                     fontSize: '12px',
                                 }}
+                                allowMouseWheel
                                 bg={COLORS.secondary}
+                                clampValueOnBlur
                                 color={COLORS.white}
                                 defaultValue={0}
+                                keepWithinRange
                                 max={10}
                                 min={0}
                                 mr="20px"
-                                placeholder="Enter keywords"
+                                onChange={value =>
+                                    setMinAverageRating(parseFloat(value))
+                                }
                                 size="sm"
+                                value={minAverageRating}
                             >
                                 <NumberInputField border="none" />
                                 <NumberInputStepper border="none">
@@ -135,13 +236,20 @@ const Sidebar: FC = () => {
                                     color: '#ccc',
                                     fontSize: '12px',
                                 }}
+                                allowMouseWheel
                                 bg={COLORS.secondary}
+                                clampValueOnBlur
                                 color={COLORS.white}
                                 defaultValue={0}
+                                keepWithinRange
                                 max={10}
                                 min={0}
+                                onChange={value =>
+                                    setMaxAverageRating(parseFloat(value))
+                                }
                                 placeholder="Enter keywords"
                                 size="sm"
+                                value={maxAverageRating}
                             >
                                 <NumberInputField border="none" />
                                 <NumberInputStepper border="none">
@@ -175,14 +283,21 @@ const Sidebar: FC = () => {
                         <FormControl fontSize="14px" width="50%">
                             <DatePicker
                                 dateFormat="yyyy"
-                                onChange={date => setStartDate(date)}
-                                selected={startDate}
+                                onChange={date => setEndDate(date)}
+                                selected={endDate}
                                 showYearPicker
                                 yearItemNumber={9}
                             />
                         </FormControl>
                     </Flex>
                 </Box>
+                <Button
+                    borderRadius="none"
+                    onClick={() => handleSearch()}
+                    w="full"
+                >
+                    Search
+                </Button>
             </VStack>
         </Box>
     );

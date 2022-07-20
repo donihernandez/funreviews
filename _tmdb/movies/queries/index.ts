@@ -4,3 +4,4 @@ export * from './getNowPlaying';
 export * from './getVideos';
 export * from './getPopular';
 export * from './searchByName';
+export * from './search';

@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { FC, useEffect } from 'react';
 import {
     Pagination,
     PaginationContainer,
@@ -8,20 +8,18 @@ import {
 } from '@ajna/pagination';
 
 import { Movie, Tv } from 'typings';
-import { Show } from './Show';
-import { useShowsContext } from 'contexts/ShowsContext';
+import { Show } from '../Show';
 
 import { List, ShowsListContainer } from './ShowsList.components';
 import { getPopular } from '_tmdb/movies/queries';
 import { COLORS } from '@/styles/theme';
 import { useState } from 'react';
 import { Loading } from '../Loading';
-import { useRecoilState } from 'recoil';
-import { showsState } from 'recoil/atoms';
+
+import { useShowsContext } from 'contexts/ShowsContext';
 
 const ShowsList: FC = () => {
-    const [shows, setShows] = useRecoilState(showsState);
-    const { totalPages, type } = useShowsContext();
+    const { totalPages, type, shows, setShows } = useShowsContext();
 
     const [isLoading, setIsLoading] = useState(false);
 

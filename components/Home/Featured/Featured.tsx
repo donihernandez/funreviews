@@ -5,59 +5,68 @@ import { getGenres } from '@/utils/getGenres';
 import { ShowsContainer } from '@/components/common/ShowsContainer';
 import { COLORS } from '@/styles/theme';
 import { Container } from '@chakra-ui/react';
-import { IGenre, Movie, Tv } from 'typings';
 
-interface IFeaturedProps {
-    movieGenres: IGenre[];
-    tvGenres: IGenre[];
-    tvPopular: Tv[];
-    upcomingMovies: Movie[];
-}
+import { useQuery } from 'react-query';
+import { getMovieGenres, getUpcoming } from '_tmdb/movies/queries';
+import { getTvGenres, getTvPopular } from '_tmdb/tv/queries';
+import { Loading } from '@/components/common/Loading';
 
-const Featured: FC<IFeaturedProps> = ({
-    upcomingMovies,
-    movieGenres,
-    tvGenres,
-    tvPopular,
-}) => {
-    const [movieGenresList, setMovieGenresList] = useState<string[]>([]);
-    const [tvGenresList, setTvGenresList] = useState<string[]>([]);
-
-    useEffect(() => {
-        if (movieGenres) {
-            setMovieGenresList(getGenres(upcomingMovies, movieGenres));
-        }
-        if (tvGenres) {
-            setTvGenresList(getGenres(tvPopular, tvGenres));
-        }
-    }, [movieGenres, upcomingMovies]);
+const Featured: FC = () => {
+    const { data: upcomingMovies, isSuccess: upcomingMoviesSucess } = useQuery(
+        'upcoming',
+        getUpcoming,
+    );
+    const { data: movieGenres, isSuccess: movieGenresSucess } = useQuery(
+        'genres',
+        getMovieGenres,
+    );
+    const { data: tvGenres, isSuccess: tvGenresSuccess } = useQuery(
+        'tvGenres',
+        getTvGenres,
+    );
+    const { data: tvPopular, isSuccess: tvPopularSuccess } = useQuery(
+        'tv_popular',
+        () => getTvPopular(),
+    );
 
     return (
         <Container
             h="full"
             maxW={{ base: '300vw', lg: '80vw' }}
-            padding="100px 0"
+            padding="100px 15px"
         >
-            <ShowsContainer
-                filters={movieGenresList}
-                items={upcomingMovies}
-                link="/movies"
-                title="Upcoming Movies"
-                titleStyles={{
-                    color: COLORS.white,
-                }}
-                type="movie"
-            />
-            <ShowsContainer
-                filters={tvGenresList}
-                items={tvPopular}
-                link="/tv"
-                title="Popular TV Shows"
-                titleStyles={{
-                    color: COLORS.white,
-                }}
-                type="tv"
-            />
+            {movieGenresSucess && upcomingMoviesSucess ? (
+                <ShowsContainer
+                    filters={getGenres(
+                        upcomingMovies?.results,
+                        movieGenres.genres,
+                    )}
+                    items={upcomingMovies?.results}
+                    link="/movies"
+                    title="Upcoming Movies"
+                    titleStyles={{
+                        color: COLORS.white,
+                    }}
+                    type="movie"
+                />
+            ) : (
+                <Loading />
+            )}
+
+            {tvGenresSuccess && tvPopularSuccess ? (
+                <ShowsContainer
+                    filters={getGenres(tvPopular?.results, tvGenres.genres)}
+                    items={tvPopular?.results}
+                    link="/tv"
+                    title="Popular TV Shows"
+                    titleStyles={{
+                        color: COLORS.white,
+                    }}
+                    type="tv"
+                />
+            ) : (
+                <Loading />
+            )}
         </Container>
     );
 };

@@ -1,30 +1,45 @@
 import { FC, useMemo } from 'react';
-import { Button, Divider, Flex, Heading, Image, Text } from '@chakra-ui/react';
+import {
+    Button,
+    Divider,
+    Flex,
+    Heading,
+    Image,
+    SimpleGrid,
+    Text,
+} from '@chakra-ui/react';
 
 import { COLORS } from '@/styles/theme';
-import { Badge } from '../../Badge';
+import { Badge } from '../Badge';
 
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 
 import { useShowsContext } from 'contexts/ShowsContext';
 import { Search2Icon, StarIcon } from '@chakra-ui/icons';
+import { useBreakpoints } from 'hooks';
 
 interface IShow {
     show: any;
 }
 
 const Show: FC<IShow> = ({ show }) => {
+    const { genres } = useShowsContext();
+
+    const { isSmallerThanDesktop } = useBreakpoints();
+
     const badgeStyle = {
         ml: '5px',
     };
 
-    const { genres } = useShowsContext();
-
     const date = new Date(show.release_date || show.first_air_date);
 
-    const size = IMAGE_CONFIG.poster_sizes.find(s => s === 'w342');
+    const path = isSmallerThanDesktop ? show.backdrop_path : show.poster_path;
 
-    const image = `${IMAGE_URL}${size}${show.poster_path}`;
+    const size = isSmallerThanDesktop
+        ? IMAGE_CONFIG.poster_sizes.find(s => s === 'w342')
+        : IMAGE_CONFIG.backdrop_sizes.find(s => s === 'original');
+
+    const image = `${IMAGE_URL}${size}${path}`;
 
     const getShowGenres = useMemo(() => {
         if (genres.length > 0) {
@@ -38,8 +53,8 @@ const Show: FC<IShow> = ({ show }) => {
     }, [genres]);
 
     return (
-        <Flex alignItems="center" mt="45px">
-            <Image alt="Movie" h="260px" src={image} />
+        <Flex alignItems="center" direction={['column', null, 'row']} my="45px">
+            <Image alt="Movie" h={['full', null, '260px']} src={image} />
             <Flex
                 color={COLORS.white}
                 direction="column"
@@ -60,7 +75,7 @@ const Show: FC<IShow> = ({ show }) => {
                 </Text>
 
                 <Divider my={4} />
-                <Flex>
+                <SimpleGrid columns={3} spacing="15px" w="full">
                     {getShowGenres?.length > 0 &&
                         getShowGenres?.map((genre: string, index: number) => {
                             return (
@@ -73,7 +88,7 @@ const Show: FC<IShow> = ({ show }) => {
                                 </Badge>
                             );
                         })}
-                </Flex>
+                </SimpleGrid>
                 <Flex mt={5}>
                     <Button
                         _hover={{

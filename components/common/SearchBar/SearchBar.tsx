@@ -9,13 +9,11 @@ import {
     InputRightElement,
 } from '@chakra-ui/react';
 import { COLORS } from '@/styles/theme';
-import { useShowsContext } from 'contexts/ShowsContext';
 import { getPopular, searchMovieByName } from '_tmdb/movies/queries';
 import { useDebounce } from 'hooks';
 import { searchTvByName } from '_tmdb/tv/queries/searchTvByName';
 import { getTvPopular } from '_tmdb/tv/queries';
-import { useRecoilState } from 'recoil';
-import { showsState } from 'recoil/atoms';
+import { useShowsContext } from 'contexts/ShowsContext';
 
 const SearchBar: FC = () => {
     const commonStyles = {
@@ -27,8 +25,7 @@ const SearchBar: FC = () => {
         fontSize: '18px',
     };
 
-    const [shows, setShows] = useRecoilState(showsState);
-    const { type, setTotalPages } = useShowsContext();
+    const { type, setTotalPages, shows, setShows } = useShowsContext();
 
     const [searchText, setSearchText] = useState('');
     const debouncedText = useDebounce(searchText, 500);
@@ -70,7 +67,7 @@ const SearchBar: FC = () => {
         } else if (!debouncedText) {
             if (type === 'movie') {
                 handleGetMoviePopular();
-            } else {
+            } else if (type === 'tv') {
                 handleGetTvPopular();
             }
         }
@@ -95,9 +92,6 @@ const SearchBar: FC = () => {
                         onChange={(e: {
                             target: { value: SetStateAction<string> };
                         }) => setSearchText(e.target.value)}
-                        // onKeyDown={(e: KeyboardEvent<HTMLInputElement>) =>
-                        //     handleSearch(e)
-                        // }
                         placeholder="Search by name...."
                         value={searchText}
                     />

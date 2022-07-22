@@ -4,15 +4,15 @@ import { COLORS } from '@/styles/theme';
 import { HiOutlinePlay } from 'react-icons/hi';
 import { MotionBox } from '../MotionBox';
 import { Box } from '@chakra-ui/react';
-import { useRecoilState } from 'recoil';
-import { isVideoState } from 'recoil/atoms';
+
+import { useShowsContext } from 'contexts/ShowsContext';
 
 interface IImageBoxProps {
     image: string;
 }
 
 const ImageBox: FC<IImageBoxProps> = ({ image }) => {
-    const [isVideo, setIsVideo] = useRecoilState(isVideoState);
+    const { setIsVideo } = useShowsContext();
 
     return (
         <Box h="full" onClick={() => setIsVideo(true)} w="full">

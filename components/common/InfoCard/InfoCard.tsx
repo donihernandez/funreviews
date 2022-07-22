@@ -1,7 +1,16 @@
 import type { FC } from 'react';
-import { Box, chakra, Flex, Heading, Image, Text } from '@chakra-ui/react';
+import {
+    AspectRatio,
+    Box,
+    Button,
+    chakra,
+    Flex,
+    Heading,
+    Image,
+    Text,
+} from '@chakra-ui/react';
 
-import { StarIcon } from '@chakra-ui/icons';
+import { Search2Icon, StarIcon } from '@chakra-ui/icons';
 
 import { COLORS } from '../../../styles/theme';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
@@ -15,7 +24,7 @@ interface IInfoCardProps {
 }
 
 const InfoCard: FC<IInfoCardProps> = ({
-    height = '437px',
+    height = '500px',
     width = '261px',
     item,
 }) => {
@@ -32,29 +41,29 @@ const InfoCard: FC<IInfoCardProps> = ({
             mr="15px"
             overflow="hidden"
             position="relative"
-            whileHover={{ scale: 1.1 }}
         >
             <Flex
                 bg="rgba(0,0,0,0.5)"
                 direction="column"
                 h="full"
                 justifyContent="flex-end"
-                padding="20px"
                 w="full"
             >
-                <Image
-                    alt={item.original_title || item.original_name}
-                    as={motion.img}
-                    draggable={false}
-                    src={image}
-                />
+                <AspectRatio minH="383px" ratio={1}>
+                    <Image
+                        alt={item.original_title || item.original_name}
+                        as={motion.img}
+                        draggable={false}
+                        src={image}
+                    />
+                </AspectRatio>
 
                 <Heading
                     as="h6"
                     color={COLORS.white}
                     fontFamily="Lato"
                     fontSize="15px"
-                    mt="10px"
+                    pt="15px"
                     textTransform="uppercase"
                 >
                     {item.original_title || item.original_name}
@@ -71,6 +80,24 @@ const InfoCard: FC<IInfoCardProps> = ({
                         </chakra.span>
                         /10
                     </Text>
+                </Flex>
+                <Flex mt={5}>
+                    <Button
+                        _hover={{
+                            bg: COLORS.secondary,
+                            transform: 'scale(1.1)',
+                        }}
+                        as="a"
+                        bg={COLORS.primary}
+                        borderRadius="0"
+                        color={COLORS.white}
+                        cursor="pointer"
+                        leftIcon={<Search2Icon />}
+                        transition="all 0.5s ease-in-out"
+                        w="full"
+                    >
+                        Read More...
+                    </Button>
                 </Flex>
             </Flex>
         </Box>

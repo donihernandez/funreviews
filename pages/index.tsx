@@ -1,70 +1,29 @@
 import type { NextPage } from 'next';
-import { Flex } from '@chakra-ui/react';
 
-import { Featured } from '@/components/Home/Featured';
-import { Hero } from '@/components/Home/Hero';
-import { getMovieGenres, getTrending, getUpcoming } from '_tmdb/movies/queries';
-import { getTvGenres, getTvPopular } from '_tmdb/tv/queries';
-import { IGenre, Movie, Tv } from 'typings';
-import { useRecoilState } from 'recoil';
-import { movieGenresState, tvGenresState } from 'recoil/atoms';
-import { useEffect } from 'react';
-import { Trending } from '@/components/Home/Trending';
+import { getMovieGenres, getPopular, getUpcoming } from '_tmdb/movies/queries';
+import { getTvGenres } from '_tmdb/tv/queries';
 
-interface IHomeProps {
-    movieGenres: IGenre[];
-    tvGenres: IGenre[];
-    tvPopular: Tv[];
-    upcomingMovies: Movie[];
-    trendingMovie: Movie;
-}
+import { dehydrate, QueryClient } from 'react-query';
 
-const HomePage: NextPage<IHomeProps> = ({
-    movieGenres,
-    tvGenres,
-    tvPopular,
-    upcomingMovies,
-    trendingMovie,
-}) => {
-    const [allMovieGenres, setAllMovieGenres] =
-        useRecoilState(movieGenresState);
+import { Home } from '@/components/Home';
 
-    const [allTvGenres, setAllTvGenres] = useRecoilState(tvGenresState);
-
-    useEffect(() => {
-        setAllMovieGenres(() => movieGenres);
-        setAllTvGenres(() => tvGenres);
-    }, []);
-
-    return (
-        <Flex bg="#000" direction="column" w="full">
-            <Hero />
-            <Trending movie={trendingMovie} />
-            <Featured
-                movieGenres={allMovieGenres}
-                tvGenres={allTvGenres}
-                tvPopular={tvPopular}
-                upcomingMovies={upcomingMovies}
-            />
-        </Flex>
-    );
+const HomePage: NextPage = () => {
+    return <Home />;
 };
 
-export async function getServerSideProps() {
-    const movieGenres = await getMovieGenres();
-    const tvGenres = await getTvGenres();
-    const tvPopular = await getTvPopular();
-    const upcomingMovies = await getUpcoming();
-    const getTrendingMovie = await getTrending();
+export async function getStaticProps() {
+    const queryClient = new QueryClient();
+
+    await queryClient.prefetchQuery(['upcoming'], getUpcoming);
+    await queryClient.prefetchQuery(['movieGenres'], getMovieGenres);
+    await queryClient.prefetchQuery(['tvGenres'], getTvGenres);
+    await queryClient.prefetchQuery(['popular_tv'], () => getPopular());
 
     return {
         props: {
-            movieGenres: movieGenres.genres,
-            trendingMovie: getTrendingMovie.results[0],
-            tvGenres: tvGenres.genres,
-            tvPopular: tvPopular.results,
-            upcomingMovies: upcomingMovies.results,
+            dehydratedState: dehydrate(queryClient),
         },
+        revalidate: 30,
     };
 }
 

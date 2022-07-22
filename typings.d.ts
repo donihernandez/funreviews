@@ -47,6 +47,23 @@ interface Video {
     published_at: string;
 }
 
+interface Review {
+    review: {
+        author: string;
+        author_details: {
+            name: string;
+            username: string;
+            avatar_path: string;
+            rating: number;
+        };
+        content: string;
+        id: string;
+        url: string;
+        updated_at: string;
+        created_at: string;
+    };
+}
+
 interface IMovieQuery {
     'primary_release_date.gte': string;
     'primary_release_date.lte': string;
@@ -72,4 +89,4 @@ interface IGenre {
 
 type IQuery = IMovieQuery | IShowQuery;
 
-export { Movie, Tv, Video, IQuery, IGenre };
+export { Movie, Tv, Video, IQuery, IGenre, Review };

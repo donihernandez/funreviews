@@ -2,6 +2,7 @@ import { FC, useMemo, useRef } from 'react';
 import { useEffect, useState } from 'react';
 
 import {
+    Button,
     chakra,
     Container,
     Divider,
@@ -12,14 +13,15 @@ import {
 import { Movie } from 'typings';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 import { COLORS } from '@/styles/theme';
-import { StarIcon } from '@chakra-ui/icons';
-import { getMovieReviews, getVideos } from '_tmdb/movies/queries';
+import { Search2Icon, StarIcon } from '@chakra-ui/icons';
+import { getVideos } from '_tmdb/movies/queries';
 import { getTrailer } from '@/utils/getTrailer';
-import { useRecoilValue } from 'recoil';
-import { isVideoState, movieGenresState } from 'recoil/atoms';
+
 import { ImageBox } from '@/components/common/ImageBox';
 import { Badge } from '@/components/common/Badge';
 import { VideoBox } from '@/components/common/VideoBox';
+
+import { useShowsContext } from 'contexts/ShowsContext';
 
 interface ITrendingProps {
     movie: Movie;
@@ -27,9 +29,8 @@ interface ITrendingProps {
 
 const Trending: FC<ITrendingProps> = ({ movie }) => {
     const [movieTrailer, setMovieTrailer] = useState('');
-    const [reviews, setReviews] = useState([]);
-    const movieGenres = useRecoilValue(movieGenresState);
-    const isVideo = useRecoilValue(isVideoState);
+
+    const { movieGenres, isVideo } = useShowsContext();
 
     const size = IMAGE_CONFIG.backdrop_sizes.find(s => s === 'original');
 
@@ -47,11 +48,6 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
         setMovieTrailer(trailer);
     };
 
-    const handleGetReviews = async (id: number) => {
-        const userReviews = await getMovieReviews(id);
-        setReviews(userReviews.results);
-    };
-
     const getShowGenres = useMemo(() => {
         if (movieGenres?.length > 0) {
             return movie.genre_ids.map(genre => {
@@ -65,15 +61,26 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
 
     useEffect(() => {
         handleGetVideo(movie.id);
-        handleGetReviews(movie.id);
     }, []);
 
     return (
         <Container
             h="full"
             maxW={{ base: '300vw', lg: '80vw' }}
-            padding="100px 0"
+            padding="100px 15px 80px"
         >
+            <Flex>
+                <Heading
+                    as="h2"
+                    color={COLORS.white}
+                    fontFamily="Nunito"
+                    fontSize="30px"
+                    mb={4}
+                >
+                    Treding Now
+                </Heading>
+            </Flex>
+
             <Flex
                 alignItems="center"
                 direction={['column', null, 'row']}
@@ -85,7 +92,7 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                     <VideoBox video={movieTrailer} />
                 )}
 
-                <Flex direction="column" ml="40px">
+                <Flex direction="column" ml={{ lg: '40px' }}>
                     <Heading as="h2" color={COLORS.white} fontFamily="Nunito">
                         {movie.original_title}
                     </Heading>
@@ -126,6 +133,38 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                             )}
                     </Flex>
                     <Text color={COLORS.white}>{movie.overview}</Text>
+
+                    <Flex mt={5}>
+                        <Button
+                            _hover={{
+                                bg: COLORS.secondary,
+                            }}
+                            as="a"
+                            bg={COLORS.primary}
+                            borderRadius="0"
+                            color={COLORS.white}
+                            cursor="pointer"
+                            leftIcon={<Search2Icon />}
+                            mr={4}
+                            transition="all 0.5s ease-in-out"
+                        >
+                            Read More...
+                        </Button>
+                        <Button
+                            _hover={{
+                                bg: COLORS.primary,
+                            }}
+                            as="a"
+                            bg={COLORS.orange}
+                            borderRadius="0"
+                            color={COLORS.white}
+                            cursor="pointer"
+                            leftIcon={<StarIcon />}
+                            transition="all 0.5s ease-in-out"
+                        >
+                            Leave a Review
+                        </Button>
+                    </Flex>
                 </Flex>
             </Flex>
         </Container>

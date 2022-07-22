@@ -1,25 +1,23 @@
 import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
-import { useState } from 'react';
 
-import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { Layout } from '@/components/Layout';
 
 import '@/styles/globals.css';
+import { ShowsProvider } from 'contexts/ShowsContext';
+import { RecoilRoot } from 'recoil';
 
 function MyApp({ Component, pageProps }: AppProps) {
-    const [queryClient] = useState(() => new QueryClient());
-
     return (
-        <QueryClientProvider client={queryClient}>
-            <Hydrate state={pageProps.dehydratedState}>
-                <ChakraProvider>
+        <ChakraProvider>
+            <RecoilRoot>
+                <ShowsProvider>
                     <Layout>
                         <Component {...pageProps} />
                     </Layout>
-                </ChakraProvider>
-            </Hydrate>
-        </QueryClientProvider>
+                </ShowsProvider>
+            </RecoilRoot>
+        </ChakraProvider>
     );
 }
 

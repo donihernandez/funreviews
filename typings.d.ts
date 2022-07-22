@@ -25,7 +25,7 @@ interface Tv {
     overview: string;
     release_date: string;
     genre_ids: number[];
-    first_air_date: string;
+    first_air_date?: string;
     vote_average: number;
     vote_count: number;
     video: boolean;
@@ -65,6 +65,11 @@ interface IShowQuery {
     with_genres: string;
 }
 
+interface IGenre {
+    id: number;
+    name: string;
+}
+
 type IQuery = IMovieQuery | IShowQuery;
 
-export { Movie, Tv, Video, IQuery };
+export { Movie, Tv, Video, IQuery, IGenre };

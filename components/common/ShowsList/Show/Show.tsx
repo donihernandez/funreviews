@@ -29,8 +29,8 @@ const Show: FC<IShow> = ({ show }) => {
     const getShowGenres = useMemo(() => {
         if (genres.length > 0) {
             return show.genre_ids.map(genre => {
-                const showGenre = genres.find(g => g.id === genre);
-                return showGenre.name;
+                const showGenre = genres?.find(g => g.id === genre);
+                return showGenre?.name;
             });
         }
 
@@ -61,11 +61,11 @@ const Show: FC<IShow> = ({ show }) => {
 
                 <Divider my={4} />
                 <Flex>
-                    {getShowGenres.length > 0 &&
-                        getShowGenres.map((genre: string, index: number) => {
+                    {getShowGenres?.length > 0 &&
+                        getShowGenres?.map((genre: string, index: number) => {
                             return (
                                 <Badge
-                                    genre={genre.toLowerCase()}
+                                    genre={genre?.toLowerCase()}
                                     key={index}
                                     {...badgeStyle}
                                 >

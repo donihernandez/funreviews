@@ -14,6 +14,8 @@ import { getPopular, searchMovieByName } from '_tmdb/movies/queries';
 import { useDebounce } from 'hooks';
 import { searchTvByName } from '_tmdb/tv/queries/searchTvByName';
 import { getTvPopular } from '_tmdb/tv/queries';
+import { useRecoilState } from 'recoil';
+import { showsState } from 'recoil/atoms';
 
 const SearchBar: FC = () => {
     const commonStyles = {
@@ -25,7 +27,8 @@ const SearchBar: FC = () => {
         fontSize: '18px',
     };
 
-    const { type, setShows, setTotalPages } = useShowsContext();
+    const [shows, setShows] = useRecoilState(showsState);
+    const { type, setTotalPages } = useShowsContext();
 
     const [searchText, setSearchText] = useState('');
     const debouncedText = useDebounce(searchText, 500);
@@ -52,7 +55,7 @@ const SearchBar: FC = () => {
 
     const updateShows = showsData => {
         if (showsData) {
-            setShows(showsData.results);
+            setShows(() => showsData.results);
             setTotalPages(showsData.total_pages);
         }
     };

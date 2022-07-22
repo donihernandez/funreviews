@@ -1,7 +1,8 @@
 import type { FC } from 'react';
-import { Flex, Link } from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
 
 import links from '../links';
+import Link from 'next/link';
 
 const DesktopMenu: FC = () => {
     const linkStyles = {
@@ -20,9 +21,9 @@ const DesktopMenu: FC = () => {
     return (
         <Flex>
             {links.map(link => (
-                <Link href={link.href} key={link.name} {...linkStyles}>
-                    {link.name}
-                </Link>
+                <Button key={link.name} variant="link" {...linkStyles}>
+                    <Link href={link.href}>{link.name}</Link>
+                </Button>
             ))}
         </Flex>
     );

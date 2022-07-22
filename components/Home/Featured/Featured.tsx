@@ -1,35 +1,34 @@
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 
-import { useQuery } from 'react-query';
-
-import { getMovieGenres, getUpcoming } from '_tmdb/movies/queries';
-
-import { getTvGenres, getTvPopular } from '_tmdb/tv/queries';
-
 import { getGenres } from '@/utils/getGenres';
 import { ShowsContainer } from '@/components/common/ShowsContainer';
 import { COLORS } from '@/styles/theme';
 import { Container } from '@chakra-ui/react';
+import { IGenre, Movie, Tv } from 'typings';
 
-const Featured: FC = () => {
-    const { data: upcomingMovies, isLoading } = useQuery(
-        'upcoming',
-        getUpcoming,
-    );
-    const { data: movieGenres } = useQuery('genres', getMovieGenres);
-    const { data: tvGenres } = useQuery('tvGenres', getTvGenres);
-    const { data: popular } = useQuery('popular_tv', () => getTvPopular());
+interface IFeaturedProps {
+    movieGenres: IGenre[];
+    tvGenres: IGenre[];
+    tvPopular: Tv[];
+    upcomingMovies: Movie[];
+}
 
+const Featured: FC<IFeaturedProps> = ({
+    upcomingMovies,
+    movieGenres,
+    tvGenres,
+    tvPopular,
+}) => {
     const [movieGenresList, setMovieGenresList] = useState<string[]>([]);
     const [tvGenresList, setTvGenresList] = useState<string[]>([]);
 
     useEffect(() => {
         if (movieGenres) {
-            setMovieGenresList(getGenres(upcomingMovies?.results, movieGenres));
+            setMovieGenresList(getGenres(upcomingMovies, movieGenres));
         }
         if (tvGenres) {
-            setTvGenresList(getGenres(popular?.results, tvGenres));
+            setTvGenresList(getGenres(tvPopular, tvGenres));
         }
     }, [movieGenres, upcomingMovies]);
 
@@ -41,8 +40,7 @@ const Featured: FC = () => {
         >
             <ShowsContainer
                 filters={movieGenresList}
-                isLoading={isLoading}
-                items={upcomingMovies?.results}
+                items={upcomingMovies}
                 link="/movies"
                 title="Upcoming Movies"
                 titleStyles={{
@@ -52,8 +50,7 @@ const Featured: FC = () => {
             />
             <ShowsContainer
                 filters={tvGenresList}
-                isLoading={isLoading}
-                items={popular?.results}
+                items={tvPopular}
                 link="/tv"
                 title="Popular TV Shows"
                 titleStyles={{

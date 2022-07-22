@@ -2,21 +2,21 @@ import { useState } from 'react';
 import { ShowsContext } from './context';
 
 const ShowsProvider = ({ children }) => {
-    const [shows, setShows] = useState([]);
     const [genres, setGenres] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
     const [type, setType] = useState('');
     const [isSearching, setIsSearching] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const value = {
         genres,
         isSearching,
+        searchTerm,
         setGenres,
         setIsSearching,
-        setShows,
+        setSearchTerm,
         setTotalPages,
         setType,
-        shows,
         totalPages,
         type,
     };

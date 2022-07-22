@@ -1,6 +1,5 @@
 import type { FC } from 'react';
-import { useState } from 'react';
-import { Box, Button, chakra, Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, chakra, Flex, Heading, Image, Text } from '@chakra-ui/react';
 
 import { StarIcon } from '@chakra-ui/icons';
 
@@ -19,10 +18,7 @@ const InfoCard: FC<IInfoCardProps> = ({
     height = '437px',
     width = '261px',
     item,
-    type,
 }) => {
-    const [opacity, setOpacity] = useState(0);
-
     const size = IMAGE_CONFIG.poster_sizes.find(s => s === 'w342');
 
     const image = `${IMAGE_URL}${size}${item.poster_path}`;
@@ -30,39 +26,14 @@ const InfoCard: FC<IInfoCardProps> = ({
     return (
         <Box
             as={motion.div}
-            backgroundColor={'rgba(0,0,0,0.5)'}
-            backgroundImage={image}
-            backgroundPosition="center"
-            backgroundRepeat="no-repeat"
-            backgroundSize="cover"
             cursor="pointer"
             h={height}
             minW={width}
             mr="15px"
-            onMouseEnter={() => setOpacity(1)}
-            onMouseLeave={() => setOpacity(0)}
             overflow="hidden"
             position="relative"
             whileHover={{ scale: 1.1 }}
         >
-            <Button
-                _hover={{
-                    bg: COLORS.primary,
-                }}
-                as="a"
-                bg={COLORS.orange}
-                borderRadius="0"
-                color={COLORS.white}
-                cursor="pointer"
-                href={`/${type}/${item.id}`}
-                left="30%"
-                opacity={opacity}
-                position="absolute"
-                top="50%"
-            >
-                Read More
-            </Button>
-
             <Flex
                 bg="rgba(0,0,0,0.5)"
                 direction="column"
@@ -71,6 +42,13 @@ const InfoCard: FC<IInfoCardProps> = ({
                 padding="20px"
                 w="full"
             >
+                <Image
+                    alt={item.original_title || item.original_name}
+                    as={motion.img}
+                    draggable={false}
+                    src={image}
+                />
+
                 <Heading
                     as="h6"
                     color={COLORS.white}

@@ -3,17 +3,12 @@ import { dehydrate, QueryClient } from 'react-query';
 
 import { Movies } from '@/components/Movies';
 import { getMovieGenres, getPopular } from '_tmdb/movies/queries';
-import { ShowsProvider } from 'contexts/ShowsContext';
 
 const MoviesPage: NextPage = () => {
-    return (
-        <ShowsProvider>
-            <Movies />
-        </ShowsProvider>
-    );
+    return <Movies />;
 };
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
     const queryClient = new QueryClient();
     await queryClient.prefetchQuery(['movieGenres'], getMovieGenres);
     await queryClient.prefetchQuery(['popularMovies'], () => getPopular());
@@ -22,7 +17,6 @@ export async function getStaticProps() {
         props: {
             dehydratedState: dehydrate(queryClient),
         },
-        revalidate: 30,
     };
 }
 

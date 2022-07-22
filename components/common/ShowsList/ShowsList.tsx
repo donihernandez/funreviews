@@ -16,9 +16,12 @@ import { getPopular } from '_tmdb/movies/queries';
 import { COLORS } from '@/styles/theme';
 import { useState } from 'react';
 import { Loading } from '../Loading';
+import { useRecoilState } from 'recoil';
+import { showsState } from 'recoil/atoms';
 
 const ShowsList: FC = () => {
-    const { shows, totalPages, type, setShows } = useShowsContext();
+    const [shows, setShows] = useRecoilState(showsState);
+    const { totalPages, type } = useShowsContext();
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -44,7 +47,7 @@ const ShowsList: FC = () => {
         if (type === 'movie') {
             res = await getPopular(page);
             if (res) {
-                setShows(res.results);
+                setShows(() => res.results);
                 setCurrentPage(page);
             }
         }

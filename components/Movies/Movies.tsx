@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { Intro } from '../common/Intro';
 import { ShowsList } from '../common/ShowsList';
@@ -8,6 +8,9 @@ import { getMovieGenres, getPopular } from '_tmdb/movies/queries';
 import { useShowsContext } from 'contexts/ShowsContext';
 import { Flex } from '@chakra-ui/react';
 import { Sidebar } from '../common/Sidebar';
+import { Loading } from '../common/Loading';
+import { useRecoilState } from 'recoil';
+import { showsState } from 'recoil/atoms';
 
 const Movies: FC = () => {
     const breadcrumbs = [
@@ -21,38 +24,46 @@ const Movies: FC = () => {
             name: 'Movies',
         },
     ];
+    const [shows, setShows] = useRecoilState(showsState);
 
-    const { setShows, setGenres, setTotalPages, setType } = useShowsContext();
+    const { setGenres, setTotalPages, setType } = useShowsContext();
+    const [isLoading, setIsLoading] = useState(false);
 
-    const { data: movies, isSuccess: moviesSuccess } = useQuery(
-        ['getPopular'],
-        () => getPopular(),
-    );
-
-    const { data: genres, isSuccess: genresSuccess } = useQuery(
-        'getGenres',
-        getMovieGenres,
-    );
-
-    useEffect(() => {
-        if (moviesSuccess) {
-            setShows(movies.results);
+    const handleGetPopularMovies = async () => {
+        const movies = await getPopular();
+        if (movies) {
+            setShows(() => movies.results);
             setTotalPages(movies.total_pages);
         }
+    };
 
-        if (genresSuccess) {
+    const handleGetMovieGenres = async () => {
+        const genres = await getMovieGenres();
+        if (genres) {
             setGenres(genres.genres);
         }
+    };
 
+    useEffect(() => {
+        setIsLoading(true);
+        handleGetPopularMovies();
+        handleGetMovieGenres();
         setType('movie');
-    }, [moviesSuccess, genresSuccess]);
+        setIsLoading(false);
+    }, []);
 
     return (
         <Wrapper>
             <Intro breadcrumbs={breadcrumbs} title="Movies" />
             <Flex>
-                <ShowsList />
-                <Sidebar />
+                {!isLoading ? (
+                    <>
+                        <ShowsList />
+                        <Sidebar />
+                    </>
+                ) : (
+                    <Loading />
+                )}
             </Flex>
         </Wrapper>
     );

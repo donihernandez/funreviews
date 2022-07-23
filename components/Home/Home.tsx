@@ -15,7 +15,7 @@ import { useEffect } from 'react';
 import { Loading } from '@/components/common/Loading';
 
 const Home: FC = () => {
-    const { setMovieGenres } = useShowsContext();
+    const { setMovieGenres, setType, type } = useShowsContext();
     const { data: movieResults, isSuccess: moviesSucess } = useQuery(
         'trendingMovie',
         () => getTrending(),

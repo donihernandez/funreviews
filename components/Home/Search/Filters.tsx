@@ -15,7 +15,7 @@ const commonStyles = {
 };
 
 const Filters: FC = () => {
-    const { setType } = useShowsContext();
+    const { setType, type } = useShowsContext();
 
     return (
         <Select
@@ -26,6 +26,7 @@ const Filters: FC = () => {
             maxW={['100%', null, '200px']}
             {...commonStyles}
             onChange={e => setType(e.target.value)}
+            value={type}
         >
             <option value="movie">Movies</option>
             <option value="tv">TV Shows</option>

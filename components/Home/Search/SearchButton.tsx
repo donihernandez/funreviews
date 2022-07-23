@@ -3,9 +3,13 @@ import { Button } from '@chakra-ui/react';
 
 import { COLORS } from '@/styles/theme';
 import { useRouter } from 'next/router';
+import { useShowsContext } from 'contexts/ShowsContext';
 
 const SearchButton: FC = () => {
     const router = useRouter();
+
+    const { type } = useShowsContext();
+    const url = type === 'movie' ? '/movies' : '/tv-shows';
 
     return (
         <Button
@@ -25,7 +29,7 @@ const SearchButton: FC = () => {
             fontSize={['14px', '18px']}
             h="70px"
             mt={[null, '50px']}
-            onClick={() => router.push('/search', undefined, { shallow: true })}
+            onClick={() => router.push(url, undefined, { shallow: true })}
             transition="all 0.3s ease-in-out"
             variant="outline"
             w={['full', null, '200px']}

@@ -49,7 +49,7 @@ const Tv: FC = () => {
     return (
         <Wrapper>
             <Intro breadcrumbs={breadcrumbs} title="TV Shows" />
-            <Flex>
+            <Flex direction={['column-reverse', null, 'row']}>
                 <ShowsList />
                 <Sidebar />
             </Flex>

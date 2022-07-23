@@ -107,7 +107,6 @@ const Badge: FC<IBadgeProps> = ({ genre, children, ...props }) => {
             fontWeight="800"
             padding="2px 5px"
             textTransform="lowercase"
-            w="full"
             {...props}
         >
             {children}

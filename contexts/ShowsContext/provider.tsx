@@ -4,7 +4,7 @@ import { ShowsContext } from './context';
 const ShowsProvider = ({ children }) => {
     const [genres, setGenres] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
-    const [type, setType] = useState('');
+    const [type, setType] = useState('movie');
     const [isSearching, setIsSearching] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [movieGenres, setMovieGenres] = useState([]);

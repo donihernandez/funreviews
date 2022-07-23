@@ -10,11 +10,12 @@ import {
     Text,
 } from '@chakra-ui/react';
 
-import { Search2Icon, StarIcon } from '@chakra-ui/icons';
+import { StarIcon } from '@chakra-ui/icons';
 
 import { COLORS } from '../../../styles/theme';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 import { motion } from 'framer-motion';
+import { FaPlay } from 'react-icons/fa';
 
 interface IInfoCardProps {
     height?: string;
@@ -49,7 +50,7 @@ const InfoCard: FC<IInfoCardProps> = ({
                 justifyContent="flex-end"
                 w="full"
             >
-                <AspectRatio minH="383px" ratio={1}>
+                <AspectRatio h="full" minH="383px" ratio={1}>
                     <Image
                         alt={item.original_title || item.original_name}
                         as={motion.img}
@@ -81,7 +82,7 @@ const InfoCard: FC<IInfoCardProps> = ({
                         /10
                     </Text>
                 </Flex>
-                <Flex mt={5}>
+                <Flex direction="column" mt={5}>
                     <Button
                         _hover={{
                             bg: COLORS.secondary,
@@ -92,11 +93,26 @@ const InfoCard: FC<IInfoCardProps> = ({
                         borderRadius="0"
                         color={COLORS.white}
                         cursor="pointer"
-                        leftIcon={<Search2Icon />}
+                        leftIcon={<FaPlay />}
                         transition="all 0.5s ease-in-out"
                         w="full"
                     >
-                        Read More...
+                        Watch Now
+                    </Button>
+                    <Button
+                        _hover={{
+                            bg: COLORS.primary,
+                        }}
+                        as="a"
+                        bg={COLORS.orange}
+                        borderRadius="0"
+                        color={COLORS.white}
+                        cursor="pointer"
+                        leftIcon={<StarIcon />}
+                        mt="8px"
+                        transition="all 0.5s ease-in-out"
+                    >
+                        Leave a Review
                     </Button>
                 </Flex>
             </Flex>

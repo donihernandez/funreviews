@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Flex } from '@chakra-ui/react';
 
 import { getMovieGenres, getPopular } from '_tmdb/movies/queries';
@@ -9,7 +9,6 @@ import { Wrapper } from '@/components/common/Wrapper';
 import { Intro } from '@/components/common/Intro';
 import { ShowsList } from '@/components/common/ShowsList';
 
-import { Loading } from '@/components/common/Loading';
 import { useShowsContext } from 'contexts/ShowsContext';
 import { Sidebar } from '@/components/common/Sidebar';
 import { useQuery } from 'react-query';
@@ -27,7 +26,6 @@ const Movies: FC = () => {
         },
     ];
 
-    const [isLoading, setIsLoading] = useState(false);
     const { setShows, setType, setGenres, setTotalPages } = useShowsContext();
 
     const { data: movies, isSuccess: moviesSuccess } = useQuery(
@@ -41,28 +39,24 @@ const Movies: FC = () => {
     );
 
     useEffect(() => {
-        setIsLoading(true);
-        if (moviesSuccess && genresSuccess) {
+        if (moviesSuccess) {
             setShows(movies.results);
             setTotalPages(movies.total_pages);
-            setGenres(genres.genres);
-            setType('movie');
-            setIsLoading(false);
         }
+
+        if (genresSuccess) {
+            setGenres(genres.genres);
+        }
+
+        setType('tv');
     }, [moviesSuccess, genresSuccess]);
 
     return (
         <Wrapper>
             <Intro breadcrumbs={breadcrumbs} title="Movies" />
             <Flex direction={['column-reverse', null, 'row']}>
-                {!isLoading ? (
-                    <>
-                        <ShowsList />
-                        <Sidebar />
-                    </>
-                ) : (
-                    <Loading />
-                )}
+                <ShowsList />
+                <Sidebar />
             </Flex>
         </Wrapper>
     );

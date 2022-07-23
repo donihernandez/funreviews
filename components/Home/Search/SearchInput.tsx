@@ -2,7 +2,7 @@ import type { FC } from 'react';
 
 import { useShowsContext } from 'contexts/ShowsContext';
 import { Input, InputGroup, InputRightElement } from '@chakra-ui/react';
-import { COLORS } from '@/styles/theme';
+import { COLORS } from '../../../styles/theme';
 import { Search2Icon } from '@chakra-ui/icons';
 
 const SearchInput: FC = () => {

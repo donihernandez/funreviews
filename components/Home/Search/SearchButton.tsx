@@ -1,9 +1,9 @@
 import type { FC } from 'react';
 import { Button } from '@chakra-ui/react';
 
-import { COLORS } from '@/styles/theme';
 import { useRouter } from 'next/router';
 import { useShowsContext } from 'contexts/ShowsContext';
+import { COLORS } from '../../../styles/theme';
 
 const SearchButton: FC = () => {
     const router = useRouter();

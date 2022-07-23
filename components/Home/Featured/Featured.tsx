@@ -1,66 +1,71 @@
 import type { FC } from 'react';
-import { useEffect, useState } from 'react';
-
-import { useQuery } from 'react-query';
-
-import { getMovieGenres, getUpcoming } from '_tmdb/movies/queries';
-
-import { getPopular, getTvGenres } from '_tmdb/tv/queries';
 
 import { getGenres } from '@/utils/getGenres';
 import { ShowsContainer } from '@/components/common/ShowsContainer';
 import { COLORS } from '@/styles/theme';
 import { Container } from '@chakra-ui/react';
 
+import { useQuery } from 'react-query';
+import { getMovieGenres, getUpcoming } from '_tmdb/movies/queries';
+import { getTvGenres, getTvPopular } from '_tmdb/tv/queries';
+import { Loading } from '@/components/common/Loading';
+
 const Featured: FC = () => {
-    const { data: upcomingMovies, isLoading } = useQuery(
+    const { data: upcomingMovies, isSuccess: upcomingMoviesSucess } = useQuery(
         'upcoming',
         getUpcoming,
     );
-    const { data: movieGenres } = useQuery('genres', getMovieGenres);
-    const { data: tvGenres } = useQuery('tvGenres', getTvGenres);
-    const { data: popular } = useQuery('popular_tv', getPopular);
-
-    const [movieGenresList, setMovieGenresList] = useState<string[]>([]);
-    const [tvGenresList, setTvGenresList] = useState<string[]>([]);
-
-    useEffect(() => {
-        if (movieGenres) {
-            setMovieGenresList(getGenres(upcomingMovies?.results, movieGenres));
-        }
-        if (tvGenres) {
-            setTvGenresList(getGenres(popular?.results, tvGenres));
-        }
-    }, [movieGenres, upcomingMovies]);
+    const { data: movieGenres, isSuccess: movieGenresSucess } = useQuery(
+        'genres',
+        getMovieGenres,
+    );
+    const { data: tvGenres, isSuccess: tvGenresSuccess } = useQuery(
+        'tvGenres',
+        getTvGenres,
+    );
+    const { data: tvPopular, isSuccess: tvPopularSuccess } = useQuery(
+        'tv_popular',
+        () => getTvPopular(),
+    );
 
     return (
         <Container
             h="full"
             maxW={{ base: '300vw', lg: '80vw' }}
-            padding="100px 0"
+            padding="100px 15px"
         >
-            <ShowsContainer
-                filters={movieGenresList}
-                isLoading={isLoading}
-                items={upcomingMovies?.results}
-                link="/movies"
-                title="Upcoming Movies"
-                titleStyles={{
-                    color: COLORS.white,
-                }}
-                type="movie"
-            />
-            <ShowsContainer
-                filters={tvGenresList}
-                isLoading={isLoading}
-                items={popular?.results}
-                link="/tv"
-                title="Popular TV Shows"
-                titleStyles={{
-                    color: COLORS.white,
-                }}
-                type="tv"
-            />
+            {movieGenresSucess && upcomingMoviesSucess ? (
+                <ShowsContainer
+                    filters={getGenres(
+                        upcomingMovies?.results,
+                        movieGenres.genres,
+                    )}
+                    items={upcomingMovies?.results}
+                    link="/movies"
+                    title="Upcoming Movies"
+                    titleStyles={{
+                        color: COLORS.white,
+                    }}
+                    type="movie"
+                />
+            ) : (
+                <Loading />
+            )}
+
+            {tvGenresSuccess && tvPopularSuccess ? (
+                <ShowsContainer
+                    filters={getGenres(tvPopular?.results, tvGenres.genres)}
+                    items={tvPopular?.results}
+                    link="/tv"
+                    title="Popular TV Shows"
+                    titleStyles={{
+                        color: COLORS.white,
+                    }}
+                    type="tv"
+                />
+            ) : (
+                <Loading />
+            )}
         </Container>
     );
 };

@@ -10,7 +10,7 @@ const ShowsListContainer = ({ children }) => {
 
 const List = ({ children }) => {
     return (
-        <Flex direction="column" my="30px" w="full">
+        <Flex direction="column" my="50px" w="full">
             {children}
         </Flex>
     );

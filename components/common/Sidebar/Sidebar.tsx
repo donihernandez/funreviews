@@ -7,7 +7,6 @@ import {
     FormControl,
     FormLabel,
     Heading,
-    Input,
     NumberDecrementStepper,
     NumberIncrementStepper,
     NumberInput,
@@ -24,16 +23,8 @@ import { useShowsContext } from 'contexts/ShowsContext';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { searchMovies } from '_tmdb/movies/queries';
-
-interface IQuery {
-    'primary_release_date.gte': string;
-    'primary_release_date.lte': string;
-    sort_by: string;
-    'vote_average.gte': number;
-    'vote_average.lte': number;
-    with_genres: string;
-}
+import { IQuery } from 'typings';
+import { search } from '_tmdb/common/queries';
 
 const Sidebar: FC = () => {
     const { genres, setShows, setTotalPages, type } = useShowsContext();
@@ -82,14 +73,32 @@ const Sidebar: FC = () => {
 
     const handleSearch = async () => {
         let res = null;
-        const queryParams: IQuery = {
-            'primary_release_date.gte': startDate.toISOString().split('T')[0],
-            'primary_release_date.lte': endDate.toISOString().split('T')[0],
-            sort_by: sortBy,
-            'vote_average.gte': minAverageRating,
-            'vote_average.lte': maxAverageRating,
-            with_genres: genre,
-        };
+
+        let query = null;
+
+        if (type === 'movie') {
+            query = {
+                'primary_release_date.gte': startDate
+                    .toISOString()
+                    .split('T')[0],
+                'primary_release_date.lte': endDate.toISOString().split('T')[0],
+                sort_by: sortBy,
+                'vote_average.gte': minAverageRating,
+                'vote_average.lte': maxAverageRating,
+                with_genres: genre,
+            };
+        } else {
+            query = {
+                'first_air_date.gte': startDate.toISOString().split('T')[0],
+                'first_air_date.lte': endDate.toISOString().split('T')[0],
+                sort_by: sortBy,
+                'vote_average.gte': minAverageRating,
+                'vote_average.lte': maxAverageRating,
+                with_genres: genre,
+            };
+        }
+
+        const queryParams: IQuery = query;
 
         Object.keys(queryParams).forEach(key => {
             if (!queryParams[key]) {
@@ -97,17 +106,19 @@ const Sidebar: FC = () => {
             }
         });
 
-        if (type === 'movie') {
-            res = await searchMovies(queryParams);
-            if (res) {
-                setShows(res.results);
-                setTotalPages(res.total_pages);
-            }
+        res = await search(queryParams, type);
+        updateShows(res);
+    };
+
+    const updateShows = showsData => {
+        if (showsData) {
+            setShows(showsData.results);
+            setTotalPages(showsData.total_pages);
         }
     };
 
     return (
-        <Box minW="300px" ml="40px" p="100px 0">
+        <Box minW="300px" ml={[null, null, '40px']} p={[null, null, '100px 0']}>
             <Heading as="h2" color={COLORS.white} size="md">
                 Search for Movie
             </Heading>

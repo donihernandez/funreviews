@@ -1,13 +1,5 @@
 import { FC, useMemo } from 'react';
-import {
-    Button,
-    Divider,
-    Flex,
-    Heading,
-    Image,
-    SimpleGrid,
-    Text,
-} from '@chakra-ui/react';
+import { Button, Divider, Flex, Heading, Image, Text } from '@chakra-ui/react';
 
 import { COLORS } from '@/styles/theme';
 import { Badge } from '../Badge';

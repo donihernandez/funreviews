@@ -1,5 +1,4 @@
 import type { FC } from 'react';
-import { useEffect, useState } from 'react';
 
 import { getGenres } from '@/utils/getGenres';
 import { ShowsContainer } from '@/components/common/ShowsContainer';

@@ -20,9 +20,6 @@ const Search: FC = () => {
 
     const { shows, type, searchTerm } = useShowsContext();
 
-    console.log(type);
-    console.log(searchTerm);
-
     return (
         <Wrapper>
             <Intro breadcrumbs={breadcrumbs} title="Search" />

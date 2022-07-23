@@ -9,6 +9,8 @@ import {
     Flex,
     Heading,
     Text,
+    Wrap,
+    WrapItem,
 } from '@chakra-ui/react';
 import { Movie } from 'typings';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
@@ -37,10 +39,6 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
     const image = `${IMAGE_URL}${size}${movie.backdrop_path}`;
 
     const release_date = new Date(movie.release_date).toDateString();
-
-    const badgeStyle = {
-        mr: '5px',
-    };
 
     const handleGetVideo = async (id: number) => {
         const data = await getVideos(id);
@@ -116,22 +114,20 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                         </Text>
                     </Flex>
                     <Divider my={4} />
-                    <Flex mb="15px">
+                    <Wrap mb="15px" spacingX="5px">
                         {getShowGenres?.length > 0 &&
                             getShowGenres?.map(
                                 (genre: string, index: number) => {
                                     return (
-                                        <Badge
-                                            genre={genre?.toLowerCase()}
-                                            key={index}
-                                            {...badgeStyle}
-                                        >
-                                            #{genre}
-                                        </Badge>
+                                        <WrapItem key={index}>
+                                            <Badge genre={genre?.toLowerCase()}>
+                                                #{genre}
+                                            </Badge>
+                                        </WrapItem>
                                     );
                                 },
                             )}
-                    </Flex>
+                    </Wrap>
                     <Text color={COLORS.white}>{movie.overview}</Text>
 
                     <Flex mt={5}>

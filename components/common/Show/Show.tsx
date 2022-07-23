@@ -1,5 +1,14 @@
 import { FC, useMemo } from 'react';
-import { Button, Divider, Flex, Heading, Image, Text } from '@chakra-ui/react';
+import {
+    Button,
+    Divider,
+    Flex,
+    Heading,
+    Image,
+    Text,
+    Wrap,
+    WrapItem,
+} from '@chakra-ui/react';
 
 import { COLORS } from '@/styles/theme';
 import { Badge } from '../Badge';
@@ -18,10 +27,6 @@ const Show: FC<IShow> = ({ show }) => {
     const { genres } = useShowsContext();
 
     const { isSmallerThanDesktop } = useBreakpoints();
-
-    const badgeStyle = {
-        ml: '5px',
-    };
 
     const date = new Date(show.release_date || show.first_air_date);
 
@@ -73,22 +78,20 @@ const Show: FC<IShow> = ({ show }) => {
                     </Text>
 
                     <Divider my={4} />
-                    <Flex>
+                    <Wrap spacingX="5px">
                         {getShowGenres?.length > 0 &&
                             getShowGenres?.map(
                                 (genre: string, index: number) => {
                                     return (
-                                        <Badge
-                                            genre={genre?.toLowerCase()}
-                                            key={index}
-                                            {...badgeStyle}
-                                        >
-                                            #{genre}
-                                        </Badge>
+                                        <WrapItem key={index}>
+                                            <Badge genre={genre?.toLowerCase()}>
+                                                #{genre}
+                                            </Badge>
+                                        </WrapItem>
                                     );
                                 },
                             )}
-                    </Flex>
+                    </Wrap>
                     <Flex mt={5}>
                         <Button
                             _hover={{

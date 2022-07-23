@@ -25,7 +25,7 @@ interface Tv {
     overview: string;
     release_date: string;
     genre_ids: number[];
-    first_air_date: string;
+    first_air_date?: string;
     vote_average: number;
     vote_count: number;
     video: boolean;
@@ -47,6 +47,23 @@ interface Video {
     published_at: string;
 }
 
+interface Review {
+    review: {
+        author: string;
+        author_details: {
+            name: string;
+            username: string;
+            avatar_path: string;
+            rating: number;
+        };
+        content: string;
+        id: string;
+        url: string;
+        updated_at: string;
+        created_at: string;
+    };
+}
+
 interface IMovieQuery {
     'primary_release_date.gte': string;
     'primary_release_date.lte': string;
@@ -65,6 +82,11 @@ interface IShowQuery {
     with_genres: string;
 }
 
+interface IGenre {
+    id: number;
+    name: string;
+}
+
 type IQuery = IMovieQuery | IShowQuery;
 
-export { Movie, Tv, Video, IQuery };
+export { Movie, Tv, Video, IQuery, IGenre, Review };

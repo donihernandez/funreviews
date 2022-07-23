@@ -1,5 +1,7 @@
 import { Flex } from '@chakra-ui/react';
-import { Filters, SearchButton, SearchInput } from './Search.components';
+import { Filters } from './Filters';
+import { SearchButton } from './SearchButton';
+import { SearchInput } from './SearchInput';
 
 const Search = () => {
     return (

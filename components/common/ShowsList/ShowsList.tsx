@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { FC } from 'react';
 import {
     Pagination,
     PaginationContainer,
@@ -8,8 +8,7 @@ import {
 } from '@ajna/pagination';
 
 import { Movie, Tv } from 'typings';
-import { Show } from './Show';
-import { useShowsContext } from 'contexts/ShowsContext';
+import { Show } from '../Show';
 
 import { List, ShowsListContainer } from './ShowsList.components';
 import { getPopular } from '_tmdb/movies/queries';
@@ -17,8 +16,10 @@ import { COLORS } from '@/styles/theme';
 import { useState } from 'react';
 import { Loading } from '../Loading';
 
+import { useShowsContext } from 'contexts/ShowsContext';
+
 const ShowsList: FC = () => {
-    const { shows, totalPages, type, setShows } = useShowsContext();
+    const { totalPages, type, shows, setShows } = useShowsContext();
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -44,7 +45,7 @@ const ShowsList: FC = () => {
         if (type === 'movie') {
             res = await getPopular(page);
             if (res) {
-                setShows(res.results);
+                setShows(() => res.results);
                 setCurrentPage(page);
             }
         }

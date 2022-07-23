@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { chakra, Container, Flex, Heading } from '@chakra-ui/react';
-
+import { useRouter } from 'next/router';
 import { useBreakpoints } from '../../hooks';
 import { DesktopMenu } from './DesktopMenu';
 import { MobileMenu } from './MobileMenu';
@@ -8,6 +8,7 @@ import { MobileMenu } from './MobileMenu';
 import { COLORS } from '@/styles/theme';
 
 const Header: FC = () => {
+    const router = useRouter();
     const { isSmallerThanDesktop } = useBreakpoints();
     const [offset, setOffSet] = useState<number>(0);
 
@@ -46,10 +47,12 @@ const Header: FC = () => {
                 >
                     <Heading
                         color={COLORS.white}
+                        cursor="pointer"
                         fontFamily="Lato"
                         fontSize="30px"
                         fontWeight="800"
                         mr="50px"
+                        onClick={() => router.push('/')}
                     >
                         Fun
                         <chakra.span color={COLORS.orange}>Reviews</chakra.span>

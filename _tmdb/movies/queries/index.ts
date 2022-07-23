@@ -4,3 +4,7 @@ export * from './getNowPlaying';
 export * from './getVideos';
 export * from './getPopular';
 export * from './searchMovieByName';
+export * from './getTrending';
+export * from './getMovieCredits';
+export * from './getMovieDetails';
+export * from './getMovieReviews';

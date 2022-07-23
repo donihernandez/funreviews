@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { SetStateAction, useEffect, useState } from 'react';
+import { SetStateAction, useEffect } from 'react';
 import { Search2Icon } from '@chakra-ui/icons';
 import {
     Container,
@@ -9,11 +9,11 @@ import {
     InputRightElement,
 } from '@chakra-ui/react';
 import { COLORS } from '@/styles/theme';
-import { useShowsContext } from 'contexts/ShowsContext';
 import { getPopular, searchMovieByName } from '_tmdb/movies/queries';
 import { useDebounce } from 'hooks';
 import { searchTvByName } from '_tmdb/tv/queries/searchTvByName';
 import { getTvPopular } from '_tmdb/tv/queries';
+import { useShowsContext } from 'contexts/ShowsContext';
 
 const SearchBar: FC = () => {
     const commonStyles = {
@@ -25,10 +25,10 @@ const SearchBar: FC = () => {
         fontSize: '18px',
     };
 
-    const { type, setShows, setTotalPages } = useShowsContext();
+    const { type, setTotalPages, searchTerm, setSearchTerm, setShows } =
+        useShowsContext();
 
-    const [searchText, setSearchText] = useState('');
-    const debouncedText = useDebounce(searchText, 500);
+    const debouncedText = useDebounce(searchTerm, 500);
 
     const handleSearchMovieByName = async () => {
         const response = await searchMovieByName(debouncedText);
@@ -52,7 +52,7 @@ const SearchBar: FC = () => {
 
     const updateShows = showsData => {
         if (showsData) {
-            setShows(showsData.results);
+            setShows(() => showsData.results);
             setTotalPages(showsData.total_pages);
         }
     };
@@ -67,14 +67,14 @@ const SearchBar: FC = () => {
         } else if (!debouncedText) {
             if (type === 'movie') {
                 handleGetMoviePopular();
-            } else {
+            } else if (type === 'tv') {
                 handleGetTvPopular();
             }
         }
     }, [debouncedText]);
 
     return (
-        <Container maxW="50vw" w="full">
+        <Container maxW={['100vw', null, '50vw']} w="full">
             <Flex
                 alignItems="center"
                 direction={['column', null, 'row']}
@@ -91,12 +91,9 @@ const SearchBar: FC = () => {
                         {...commonStyles}
                         onChange={(e: {
                             target: { value: SetStateAction<string> };
-                        }) => setSearchText(e.target.value)}
-                        // onKeyDown={(e: KeyboardEvent<HTMLInputElement>) =>
-                        //     handleSearch(e)
-                        // }
+                        }) => setSearchTerm(e.target.value)}
                         placeholder="Search by name...."
-                        value={searchText}
+                        value={searchTerm}
                     />
                     <InputRightElement color={COLORS.white} h="50px">
                         <Search2Icon />

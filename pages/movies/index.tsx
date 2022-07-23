@@ -1,16 +1,11 @@
+import { Movies } from '@/components/Movies';
 import { NextPage } from 'next';
 import { dehydrate, QueryClient } from 'react-query';
 
-import { Movies } from '@/components/Movies';
 import { getMovieGenres, getPopular } from '_tmdb/movies/queries';
-import { ShowsProvider } from 'contexts/ShowsContext';
 
 const MoviesPage: NextPage = () => {
-    return (
-        <ShowsProvider>
-            <Movies />
-        </ShowsProvider>
-    );
+    return <Movies />;
 };
 
 export async function getStaticProps() {

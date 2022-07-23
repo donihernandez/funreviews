@@ -118,7 +118,7 @@ const Sidebar: FC = () => {
     };
 
     return (
-        <Box minW="300px" ml="40px" p="100px 0">
+        <Box minW="300px" ml={[null, null, '40px']} p={[null, null, '100px 0']}>
             <Heading as="h2" color={COLORS.white} size="md">
                 Search for Movie
             </Heading>

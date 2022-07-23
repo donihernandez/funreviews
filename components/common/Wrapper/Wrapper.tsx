@@ -10,7 +10,7 @@ const Wrapper: FC<IWrapperProps> = ({ children }) => {
         <Flex bg="#000" direction="column" w="full">
             <Container
                 h="full"
-                maxW={{ base: '300vw', lg: '80vw' }}
+                maxW={{ base: '300vw', lg: '90vw', xl: '80vw' }}
                 minH="100vh"
             >
                 {children}

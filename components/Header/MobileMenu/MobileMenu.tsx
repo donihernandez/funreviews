@@ -1,4 +1,4 @@
-import { DrawerHeader, Flex, Link, useDisclosure } from '@chakra-ui/react';
+import { Button, DrawerHeader, Flex, useDisclosure } from '@chakra-ui/react';
 import { useRef } from 'react';
 import type { FC } from 'react';
 
@@ -14,6 +14,7 @@ import links from '../links';
 import { COLORS } from '../../../styles/theme';
 
 import { HamburguerButton } from './HamburgerButton';
+import Link from 'next/link';
 
 const MobileMenu: FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -56,13 +57,13 @@ const MobileMenu: FC = () => {
                             justifyContent="space-evenly"
                         >
                             {links.map(link => (
-                                <Link
-                                    href={link.href}
+                                <Button
                                     key={link.name}
+                                    variant="link"
                                     {...linkStyles}
                                 >
-                                    {link.name}
-                                </Link>
+                                    <Link href={link.href}>{link.name}</Link>
+                                </Button>
                             ))}
                         </Flex>
                     </DrawerBody>

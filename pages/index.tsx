@@ -1,8 +1,10 @@
-import { dehydrate, QueryClient } from 'react-query';
 import type { NextPage } from 'next';
 
-import { getMovieGenres, getUpcoming } from '_tmdb/movies/queries';
-import { getTvGenres, getTvPopular } from '_tmdb/tv/queries';
+import { getMovieGenres, getPopular, getUpcoming } from '_tmdb/movies/queries';
+import { getTvGenres } from '_tmdb/tv/queries';
+
+import { dehydrate, QueryClient } from 'react-query';
+
 import { Home } from '@/components/Home';
 
 const HomePage: NextPage = () => {
@@ -15,7 +17,7 @@ export async function getStaticProps() {
     await queryClient.prefetchQuery(['upcoming'], getUpcoming);
     await queryClient.prefetchQuery(['movieGenres'], getMovieGenres);
     await queryClient.prefetchQuery(['tvGenres'], getTvGenres);
-    await queryClient.prefetchQuery(['popular_tv'], () => getTvPopular());
+    await queryClient.prefetchQuery(['popular_tv'], () => getPopular());
 
     return {
         props: {

@@ -103,7 +103,10 @@ const Badge: FC<IBadgeProps> = ({ genre, children, ...props }) => {
             bg={getColor().bg}
             color={getColor().color}
             fontFamily="Nunito"
-            fontSize="12px"
+            fontSize="13px"
+            fontWeight="800"
+            padding="2px 5px"
+            textTransform="lowercase"
             {...props}
         >
             {children}

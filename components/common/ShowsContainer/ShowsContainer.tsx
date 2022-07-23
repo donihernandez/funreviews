@@ -1,15 +1,12 @@
 import { Box, Flex, Heading, Link } from '@chakra-ui/react';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 
 import { COLORS } from '@/styles/theme';
 import { Carousel } from '../Carousel';
 import { MotionBox } from '../MotionBox';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { Loading } from '../Loading';
-import { ShowsFilters } from './ShowsFilters';
-import { useQuery } from 'react-query';
-import { getMovieGenres } from '_tmdb/movies/queries';
-import { getTvGenres } from '_tmdb/tv/queries';
+
 import { Movie, Tv } from 'typings';
 import { useBreakpoints } from 'hooks';
 
@@ -19,14 +16,13 @@ interface IShowsContainer {
     filters: string[];
     items: Movie[] | Tv[];
     link: string;
-    isLoading: boolean;
+    isLoading?: boolean;
     type: 'movie' | 'tv';
 }
 
 const ShowsContainer: FC<IShowsContainer> = ({
     title,
     titleStyles,
-    filters,
     items,
     link,
     isLoading,
@@ -43,24 +39,7 @@ const ShowsContainer: FC<IShowsContainer> = ({
 
     const { isSmallerThanDesktop } = useBreakpoints();
 
-    const [genres, setGenres] = useState({
-        genres: [],
-    });
-
     const [show, setShow] = useState(false);
-    const [filtered, setFiltered] = useState(items);
-    const [activeGenre, setActiveGenre] = useState('all');
-
-    const { data: movieGenres } = useQuery('genres', getMovieGenres);
-    const { data: tvGenres } = useQuery('tvGenres', getTvGenres);
-
-    useEffect(() => {
-        if (type === 'movie') {
-            setGenres(movieGenres);
-        } else {
-            setGenres(tvGenres);
-        }
-    }, [movieGenres, tvGenres, type]);
 
     return (
         <Flex direction="column" h="full" padding="50px 0" w="full">
@@ -114,22 +93,7 @@ const ShowsContainer: FC<IShowsContainer> = ({
                 </Flex>
             </Flex>
 
-            {!isSmallerThanDesktop && (
-                <ShowsFilters
-                    activeGenre={activeGenre}
-                    filters={filters}
-                    genres={genres}
-                    items={items}
-                    setActiveGenre={setActiveGenre}
-                    setFiltered={setFiltered}
-                />
-            )}
-
-            {isLoading ? (
-                <Loading />
-            ) : (
-                <Carousel filtered={filtered} type={type} />
-            )}
+            {isLoading ? <Loading /> : <Carousel shows={items} type={type} />}
         </Flex>
     );
 };

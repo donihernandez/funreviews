@@ -18,13 +18,14 @@ import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 import { useShowsContext } from 'contexts/ShowsContext';
 import { Search2Icon, StarIcon } from '@chakra-ui/icons';
 import { useBreakpoints } from 'hooks';
+import Link from 'next/link';
 
 interface IShow {
     show: any;
 }
 
 const Show: FC<IShow> = ({ show }) => {
-    const { genres } = useShowsContext();
+    const { genres, type } = useShowsContext();
 
     const { isSmallerThanDesktop } = useBreakpoints();
 
@@ -37,6 +38,8 @@ const Show: FC<IShow> = ({ show }) => {
         : IMAGE_CONFIG.backdrop_sizes.find(s => s === 'original');
 
     const image = `${IMAGE_URL}${size}${path}`;
+
+    const pathMedia = type === 'movie' ? 'movies' : 'tv-shows';
 
     const getShowGenres = useMemo(() => {
         if (genres.length > 0) {
@@ -106,7 +109,9 @@ const Show: FC<IShow> = ({ show }) => {
                             mr={4}
                             transition="all 0.5s ease-in-out"
                         >
-                            Read More...
+                            <Link href={`/${pathMedia}/${show.id}`}>
+                                View More...
+                            </Link>
                         </Button>
                         <Button
                             _hover={{

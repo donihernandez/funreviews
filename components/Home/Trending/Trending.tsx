@@ -24,6 +24,7 @@ import { Badge } from '@/components/common/Badge';
 import { VideoBox } from '@/components/common/VideoBox';
 
 import { useShowsContext } from 'contexts/ShowsContext';
+import Link from 'next/link';
 
 interface ITrendingProps {
     movie: Movie;
@@ -144,7 +145,9 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                             mr={4}
                             transition="all 0.5s ease-in-out"
                         >
-                            Read More...
+                            <Link href={`/movies/${movie.id}`}>
+                                View More...
+                            </Link>
                         </Button>
                         <Button
                             _hover={{

@@ -8,7 +8,7 @@ import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 const Review: FC<Review> = ({ review }) => {
     const getAvatar = () => {
         if (
-            review.author_details.avatar_path.includes(
+            review?.author_details?.avatar_path?.includes(
                 'https://www.gravatar.com/',
             )
         ) {

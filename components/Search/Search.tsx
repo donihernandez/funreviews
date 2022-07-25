@@ -18,7 +18,7 @@ const Search: FC = () => {
         },
     ];
 
-    const { shows, type, searchTerm } = useShowsContext();
+    const { shows, type } = useShowsContext();
 
     return (
         <Wrapper>

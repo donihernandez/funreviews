@@ -48,7 +48,7 @@ const Movies: FC = () => {
             setGenres(genres.genres);
         }
 
-        setType('tv');
+        setType('movie');
     }, [moviesSuccess, genresSuccess]);
 
     return (

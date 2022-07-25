@@ -16,6 +16,8 @@ import { COLORS } from '../../../styles/theme';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 import { motion } from 'framer-motion';
 import { FaPlay } from 'react-icons/fa';
+import { useShowsContext } from 'contexts/ShowsContext';
+import Link from 'next/link';
 
 interface IInfoCardProps {
     height?: string;
@@ -29,9 +31,13 @@ const InfoCard: FC<IInfoCardProps> = ({
     width = '261px',
     item,
 }) => {
+    const { type } = useShowsContext();
+
     const size = IMAGE_CONFIG.poster_sizes.find(s => s === 'w342');
 
     const image = `${IMAGE_URL}${size}${item.poster_path}`;
+
+    const pathType = type === 'movie' ? 'movies' : 'tv-shows';
 
     return (
         <Box
@@ -97,7 +103,7 @@ const InfoCard: FC<IInfoCardProps> = ({
                         transition="all 0.5s ease-in-out"
                         w="full"
                     >
-                        Watch Now
+                        <Link href={`/${pathType}/${item.id}`}>Watch Now</Link>
                     </Button>
                     <Button
                         _hover={{

@@ -8,3 +8,5 @@ export * from './getTrending';
 export * from './getMovieCredits';
 export * from './getMovieDetails';
 export * from './getMovieReviews';
+export * from './getRecommendations';
+export * from './getWatchProviders';

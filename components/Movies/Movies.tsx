@@ -7,7 +7,7 @@ import { getMovieGenres, getPopular } from '_tmdb/movies/queries';
 
 import { Wrapper } from '@/components/common/Wrapper';
 import { Intro } from '@/components/common/Intro';
-import { ShowsList } from '@/components/common/ShowsList';
+import { ShowsList } from '@/components/common/Shows/ShowsList';
 
 import { useShowsContext } from 'contexts/ShowsContext';
 import { Sidebar } from '@/components/common/Sidebar';

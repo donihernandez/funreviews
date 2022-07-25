@@ -1,11 +1,11 @@
 import type { FC } from 'react';
 import { Avatar, Flex, Heading, Text } from '@chakra-ui/react';
 
-import { Review } from 'typings';
+import { IReview } from 'typings';
 import { COLORS } from '@/styles/theme';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 
-const Review: FC<Review> = ({ review }) => {
+const Review: FC<IReview> = ({ review }) => {
     const getAvatar = () => {
         if (
             review?.author_details?.avatar_path?.includes(

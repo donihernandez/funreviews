@@ -2,10 +2,10 @@ import { Box, Flex, Heading, Link } from '@chakra-ui/react';
 import { FC, useState } from 'react';
 
 import { COLORS } from '@/styles/theme';
-import { Carousel } from '../Carousel';
-import { MotionBox } from '../MotionBox';
+import { Carousel } from '../../Carousel';
+import { MotionBox } from '../../MotionBox';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
-import { Loading } from '../Loading';
+import { Loading } from '../../Loading';
 
 import { Movie, Tv } from 'typings';
 import { useBreakpoints } from 'hooks';
@@ -13,9 +13,8 @@ import { useBreakpoints } from 'hooks';
 interface IShowsContainer {
     title: string;
     titleStyles: any;
-    filters: string[];
     items: Movie[] | Tv[];
-    link: string;
+    link?: string;
     isLoading?: boolean;
     type: 'movie' | 'tv';
 }

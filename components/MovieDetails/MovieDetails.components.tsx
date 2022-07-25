@@ -1,18 +1,130 @@
-import type { FC } from 'react';
+import type { FC, ReactNode } from 'react';
 import {
     AspectRatio,
     Avatar,
     Box,
+    Center,
     chakra,
     Divider,
     Flex,
     Heading,
     Image,
     Text,
+    Wrap,
+    WrapItem,
 } from '@chakra-ui/react';
 
 import { COLORS } from '@/styles/theme';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
+import { StarIcon } from '@chakra-ui/icons';
+
+import { IReview } from 'typings';
+import { Review } from '../common/Review';
+
+interface IDetailsProps {
+    children: ReactNode;
+}
+
+const DetailsContainer: FC<IDetailsProps> = ({ children }) => {
+    return (
+        <Flex
+            alignItems="center"
+            direction={['column', null, 'row']}
+            justifyContent="center"
+            paddingY="50px"
+        >
+            {children}
+        </Flex>
+    );
+};
+
+const MovieInfoContainer: FC<IDetailsProps> = ({ children }) => {
+    return (
+        <Flex direction="column" ml={['0', null, '30px']}>
+            {children}
+        </Flex>
+    );
+};
+
+interface IMovieTitleProps {
+    title: string;
+}
+
+const MovieTitle: FC<IMovieTitleProps> = ({ title }) => {
+    return (
+        <Heading
+            _hover={{
+                color: COLORS.orange,
+            }}
+            as="h1"
+            color={COLORS.white}
+            cursor="pointer"
+            fontFamily="Lato"
+            fontSize="4xl"
+            fontWeight="bold"
+        >
+            {title}
+        </Heading>
+    );
+};
+
+interface IMovieRateProps {
+    vote_average: number;
+}
+
+const MovieRate: FC<IMovieRateProps> = ({ vote_average }) => {
+    return (
+        <Flex alignItems="center" my="10px">
+            <StarIcon color="yellow.400" mr="5px" />
+            <Text color={COLORS.white} fontFamily="Nunito" fontSize="12px">
+                <chakra.span fontSize="16px" fontWeight="800">
+                    {vote_average}
+                </chakra.span>
+                /10
+            </Text>
+        </Flex>
+    );
+};
+
+interface IMovieDescriptionProps {
+    overview: string;
+}
+
+const MovieDescription: FC<IMovieDescriptionProps> = ({ overview }) => {
+    return (
+        <Text
+            color={COLORS.white}
+            fontFamily="Nunito"
+            fontSize="15px"
+            textAlign="justify"
+        >
+            {overview}
+        </Text>
+    );
+};
+
+interface IMovieBudgetAndReleaseDateProps {
+    budget: number;
+    date: string;
+}
+
+const MovieBudgetAndReleaseDate: FC<IMovieBudgetAndReleaseDateProps> = ({
+    budget,
+    date,
+}) => {
+    return (
+        <Flex>
+            <Text color={COLORS.white} fontWeight="extrabold">
+                Budget: <chakra.span fontWeight="light">${budget}</chakra.span>
+            </Text>
+            <Divider color={COLORS.white} mx="10px" orientation="vertical" />
+            <Text color={COLORS.white} fontWeight="extrabold">
+                Release Date:{' '}
+                <chakra.span fontWeight="light">{date}</chakra.span>
+            </Text>
+        </Flex>
+    );
+};
 
 interface IMoviePosterProps {
     title: string;
@@ -76,11 +188,13 @@ const ProductionCompaniesContainer: FC<IProductionCompaniesContainerProps> = ({
             >
                 Production Companies
             </Heading>
-            <Flex>
+            <Wrap>
                 {companies.map(company => (
-                    <ProductionCompany company={company} key={company.id} />
+                    <WrapItem key={company.id}>
+                        <ProductionCompany company={company} />
+                    </WrapItem>
                 ))}
-            </Flex>
+            </Wrap>
         </Flex>
     );
 };
@@ -105,15 +219,21 @@ const ProductionCompany: FC<IProductionCompanyProps> = ({ company }) => {
             mr="5px"
             padding="10px"
         >
-            {company.logo_path ? (
-                <Image alt={company.name} h="20px" mr="5px" src={image} />
-            ) : (
-                <Text fontSize="20px" fontWeight="bold">
-                    {company.name}
-                </Text>
-            )}
+            <Center>
+                {company.logo_path ? (
+                    <Image alt={company.name} h="20px" mr="5px" src={image} />
+                ) : (
+                    <Text fontSize="20px" fontWeight="bold">
+                        {company.name}
+                    </Text>
+                )}
+            </Center>
         </Flex>
     );
+};
+
+const MovieAdditionalInfo: FC<IDetailsProps> = ({ children }) => {
+    return <Flex w="full">{children}</Flex>;
 };
 
 interface ICastContainerProps {
@@ -312,13 +432,35 @@ const Crew: FC<ICrewProps> = ({ crew }) => {
     );
 };
 
+interface ReviewsList {
+    reviews: IReview[];
+}
+
+const ReviewsList = ({ reviews }) => {
+    return (
+        <Flex direction="column">
+            {reviews.map(review => (
+                <Review key={review.id} review={review} />
+            ))}
+        </Flex>
+    );
+};
+
 export {
     Crew,
     Cast,
     CrewContainer,
     CastContainer,
+    DetailsContainer,
     MoviePoster,
+    MovieTitle,
+    MovieInfoContainer,
+    MovieAdditionalInfo,
+    MovieDescription,
+    MovieBudgetAndReleaseDate,
+    MovieRate,
     MovieTrailer,
     ProductionCompany,
     ProductionCompaniesContainer,
+    ReviewsList,
 };

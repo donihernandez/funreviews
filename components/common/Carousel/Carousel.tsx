@@ -47,7 +47,7 @@ const Carousel: FC<ICarouselProps> = ({ shows, type }) => {
                 style={innerCarouselStyle}
             >
                 {shows?.map(item => {
-                    return <InfoCard item={item} key={item.id} type={type} />;
+                    return <InfoCard key={item.id} show={item} type={type} />;
                 })}
             </MotionBox>
         </MotionBox>

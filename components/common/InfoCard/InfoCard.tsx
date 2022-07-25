@@ -2,7 +2,6 @@ import type { FC } from 'react';
 import {
     AspectRatio,
     Box,
-    Button,
     chakra,
     Flex,
     Heading,
@@ -17,7 +16,8 @@ import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 import { motion } from 'framer-motion';
 import { FaPlay } from 'react-icons/fa';
 import { useShowsContext } from 'contexts/ShowsContext';
-import Link from 'next/link';
+
+import { PrimaryButton, SecondaryButton } from '../Buttons';
 
 interface IInfoCardProps {
     height?: string;
@@ -89,37 +89,12 @@ const InfoCard: FC<IInfoCardProps> = ({
                     </Text>
                 </Flex>
                 <Flex direction="column" mt={5}>
-                    <Button
-                        _hover={{
-                            bg: COLORS.secondary,
-                            transform: 'scale(1.1)',
-                        }}
-                        bg={COLORS.primary}
-                        borderRadius="0"
-                        color={COLORS.white}
-                        cursor="pointer"
-                        leftIcon={<FaPlay />}
-                        transition="all 0.5s ease-in-out"
-                        variant="unstyled"
-                        w="full"
-                    >
-                        <Link href={`/${pathType}/${show.id}`}>Watch Now</Link>
-                    </Button>
-                    <Button
-                        _hover={{
-                            bg: COLORS.primary,
-                        }}
-                        bg={COLORS.orange}
-                        borderRadius="0"
-                        color={COLORS.white}
-                        cursor="pointer"
-                        leftIcon={<StarIcon />}
-                        mt="8px"
-                        transition="all 0.5s ease-in-out"
-                        variant="unstyled"
-                    >
-                        Leave a Review
-                    </Button>
+                    <PrimaryButton
+                        icon={<FaPlay />}
+                        link={`/${pathType}/${show.id}`}
+                        text="Watch Now"
+                    />
+                    <SecondaryButton icon={<StarIcon />} link="" />
                 </Flex>
             </Flex>
         </Box>

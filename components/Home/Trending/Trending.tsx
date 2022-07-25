@@ -2,7 +2,6 @@ import { FC, useMemo } from 'react';
 import { useEffect, useState } from 'react';
 
 import {
-    Button,
     chakra,
     Container,
     Divider,
@@ -22,8 +21,9 @@ import { ImageBox } from '@/components/common/ImageBox';
 import { VideoBox } from '@/components/common/VideoBox';
 
 import { useShowsContext } from 'contexts/ShowsContext';
-import Link from 'next/link';
+
 import { GenresList } from '@/components/common/GenreList';
+import { PrimaryButton, SecondaryButton } from '@/components/common/Buttons';
 
 interface ITrendingProps {
     movie: Movie;
@@ -118,37 +118,11 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                     <Text color={COLORS.white}>{movie.overview}</Text>
 
                     <Flex mt={5}>
-                        <Button
-                            _hover={{
-                                bg: COLORS.secondary,
-                            }}
-                            bg={COLORS.primary}
-                            borderRadius="0"
-                            color={COLORS.white}
-                            cursor="pointer"
-                            leftIcon={<Search2Icon />}
-                            mr={4}
-                            transition="all 0.5s ease-in-out"
-                            variant="unstyled"
-                        >
-                            <Link href={`/movies/${movie.id}`}>
-                                View More...
-                            </Link>
-                        </Button>
-                        <Button
-                            _hover={{
-                                bg: COLORS.primary,
-                            }}
-                            bg={COLORS.orange}
-                            borderRadius="0"
-                            color={COLORS.white}
-                            cursor="pointer"
-                            leftIcon={<StarIcon />}
-                            transition="all 0.5s ease-in-out"
-                            variant="unstyled"
-                        >
-                            Leave a Review
-                        </Button>
+                        <PrimaryButton
+                            icon={<Search2Icon />}
+                            link={`/movies/${movie.id}`}
+                        />
+                        <SecondaryButton icon={<StarIcon />} link="" />
                     </Flex>
                 </Flex>
             </Flex>

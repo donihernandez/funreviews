@@ -1,15 +1,22 @@
 import { FC, useMemo } from 'react';
-import { Button, Divider, Flex, Heading, Image, Text } from '@chakra-ui/react';
-
-import { COLORS } from '@/styles/theme';
+import { Divider, Flex } from '@chakra-ui/react';
 
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 
 import { useShowsContext } from 'contexts/ShowsContext';
 import { Search2Icon, StarIcon } from '@chakra-ui/icons';
 import { useBreakpoints } from 'hooks';
-import Link from 'next/link';
+
 import { GenresList } from '../../GenreList';
+import {
+    ShowContainer,
+    ShowDescription,
+    ShowDetailsContainer,
+    ShowImage,
+    ShowRating,
+    ShowTitle,
+} from './Show.components';
+import { PrimaryButton, SecondaryButton } from '../../Buttons';
 
 interface IShow {
     show: any;
@@ -46,68 +53,28 @@ const Show: FC<IShow> = ({ show }) => {
 
     return (
         path && (
-            <Flex
-                alignItems="center"
-                direction={['column', null, 'row']}
-                my="45px"
-            >
-                <Image alt="Movie" h={['full', null, '260px']} src={image} />
-                <Flex
-                    color={COLORS.white}
-                    direction="column"
-                    ml={6}
-                    textAlign="justify"
-                >
-                    <Heading as="h3" fontFamily="Lato" fontSize="xl">
-                        {show.title || show.name} ({date.getFullYear()})
-                    </Heading>
-                    <Flex alignItems="center" py="15px">
-                        <StarIcon boxSize="15px" color="yellow.500" />
-                        <Text fontSize="md" ml={1}>
-                            8.1/10
-                        </Text>
-                    </Flex>
-                    <Text fontSize="14px" fontWeight="300">
-                        {show.overview}
-                    </Text>
+            <ShowContainer>
+                <ShowImage image={image} name={show.name} title={show.title} />
+                <ShowDetailsContainer>
+                    <ShowTitle
+                        date={date}
+                        name={show.name}
+                        title={show.title}
+                    />
+                    <ShowRating vote_average={show.vote_average} />
+                    <ShowDescription overview={show.overview} />
 
                     <Divider my={4} />
                     <GenresList getGenres={getShowGenres} />
                     <Flex mt={5}>
-                        <Button
-                            _hover={{
-                                bg: COLORS.secondary,
-                            }}
-                            bg={COLORS.primary}
-                            borderRadius="0"
-                            color={COLORS.white}
-                            cursor="pointer"
-                            leftIcon={<Search2Icon />}
-                            mr={4}
-                            transition="all 0.5s ease-in-out"
-                            variant="unstyled"
-                        >
-                            <Link href={`/${pathMedia}/${show.id}`}>
-                                View More...
-                            </Link>
-                        </Button>
-                        <Button
-                            _hover={{
-                                bg: COLORS.primary,
-                            }}
-                            bg={COLORS.orange}
-                            borderRadius="0"
-                            color={COLORS.white}
-                            cursor="pointer"
-                            leftIcon={<StarIcon />}
-                            transition="all 0.5s ease-in-out"
-                            variant="unstyled"
-                        >
-                            Leave a Review
-                        </Button>
+                        <PrimaryButton
+                            icon={<Search2Icon />}
+                            link={`/${pathMedia}/${show.id}`}
+                        />
+                        <SecondaryButton icon={<StarIcon />} link="" />
                     </Flex>
-                </Flex>
-            </Flex>
+                </ShowDetailsContainer>
+            </ShowContainer>
         )
     );
 };

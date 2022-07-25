@@ -14,6 +14,7 @@ const SecondaryButton: FC<ISecondaryButtonProps> = ({
     link,
     text = ' Leave a Review',
     icon,
+    ...props
 }) => {
     return (
         <Button
@@ -27,6 +28,8 @@ const SecondaryButton: FC<ISecondaryButtonProps> = ({
             leftIcon={icon}
             transition="all 0.5s ease-in-out"
             variant="unstyled"
+            w="full"
+            {...props}
         >
             <Link href={link}>{text}</Link>
         </Button>

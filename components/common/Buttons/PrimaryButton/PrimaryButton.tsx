@@ -15,6 +15,7 @@ const PrimaryButton: FC<IPrimaryButtonProps> = ({
     link,
     text = 'View More...',
     icon,
+    ...props
 }) => {
     return (
         <Button
@@ -29,6 +30,8 @@ const PrimaryButton: FC<IPrimaryButtonProps> = ({
             mr={4}
             transition="all 0.5s ease-in-out"
             variant="unstyled"
+            w="full"
+            {...props}
         >
             <Link href={link}>{text}</Link>
         </Button>

@@ -39,6 +39,10 @@ const InfoCard: FC<IInfoCardProps> = ({
 
     const pathType = type === 'movie' ? 'movies' : 'tv-shows';
 
+    const primaryButtonStyle = {
+        mb: '10px',
+    };
+
     return (
         <Box
             as={motion.div}
@@ -93,6 +97,7 @@ const InfoCard: FC<IInfoCardProps> = ({
                         icon={<FaPlay />}
                         link={`/${pathType}/${show.id}`}
                         text="Watch Now"
+                        {...primaryButtonStyle}
                     />
                     <SecondaryButton icon={<StarIcon />} link="" />
                 </Flex>

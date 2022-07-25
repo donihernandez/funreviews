@@ -115,7 +115,9 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                     </Flex>
                     <Divider my={4} />
                     <GenresList getGenres={getShowGenres} />
-                    <Text color={COLORS.white}>{movie.overview}</Text>
+                    <Text color={COLORS.white} mt="10px">
+                        {movie.overview}
+                    </Text>
 
                     <Flex mt={5}>
                         <PrimaryButton

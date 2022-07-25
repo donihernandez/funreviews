@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import {
     Button,
     Divider,
@@ -47,6 +47,7 @@ import { VideoBox } from '../common/VideoBox';
 import { useBreakpoints } from 'hooks';
 import { ShowsContainer } from '../common/Shows/ShowsContainer';
 import { GenresList } from '../common/GenreList';
+import { Loading } from '../common/Loading';
 
 const MovieDetails: FC = () => {
     const router = useRouter();
@@ -55,18 +56,16 @@ const MovieDetails: FC = () => {
 
     const wrapperStyles = {
         minH: '200vh',
+        paddingBottom: '100px',
     };
 
     const [movieTrailer, setMovieTrailer] = useState('');
 
     const { id } = router.query;
 
-    const size = isSmallerThanDesktop
-        ? IMAGE_CONFIG.poster_sizes.find(s => s === 'original')
-        : IMAGE_CONFIG.backdrop_sizes.find(s => s === 'original');
-
-    const { data: movieDetails } = useQuery(['movieDetails', id], () =>
-        getMovieDetails(id as string),
+    const { data: movieDetails, isSuccess: movieDetailsSuccess } = useQuery(
+        ['movieDetails', id],
+        () => getMovieDetails(id as string),
     );
     const date = new Date(movieDetails.release_date).toDateString();
 
@@ -87,11 +86,22 @@ const MovieDetails: FC = () => {
         () => getRecommendations(id as string),
     );
 
-    const imagePath = isSmallerThanDesktop
-        ? movieDetails?.poster_path
-        : movieDetails?.backdrop_path;
+    const getImagePath = useMemo(() => {
+        let imagePath = '';
+        if (!isSmallerThanDesktop) {
+            imagePath = movieDetails.backdrop_path
+                ? movieDetails.backdrop_path
+                : movieDetails.poster_path;
+        } else {
+            imagePath = movieDetails.poster_path;
+        }
 
-    const image = `${IMAGE_URL}${size}${imagePath}`;
+        if (imagePath !== '') {
+            return `${IMAGE_URL}original${imagePath}`;
+        }
+
+        return '';
+    }, [movieDetailsSuccess]);
 
     const tabListStyles = {
         _active: {
@@ -122,10 +132,14 @@ const MovieDetails: FC = () => {
     return (
         <Wrapper {...wrapperStyles}>
             <Flex direction="column" paddingTop="100px" position="relative">
-                <MoviePoster
-                    image={image}
-                    title={movieDetails.original_title}
-                />
+                {getImagePath !== '' ? (
+                    <MoviePoster
+                        image={getImagePath}
+                        title={movieDetails.original_title}
+                    />
+                ) : (
+                    <Loading />
+                )}
 
                 <DetailsContainer>
                     <MovieTrailer video={movieTrailer} />

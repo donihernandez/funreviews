@@ -3,6 +3,7 @@ import {
     AspectRatio,
     Avatar,
     Box,
+    Center,
     chakra,
     Divider,
     Flex,
@@ -218,13 +219,15 @@ const ProductionCompany: FC<IProductionCompanyProps> = ({ company }) => {
             mr="5px"
             padding="10px"
         >
-            {company.logo_path ? (
-                <Image alt={company.name} h="20px" mr="5px" src={image} />
-            ) : (
-                <Text fontSize="20px" fontWeight="bold">
-                    {company.name}
-                </Text>
-            )}
+            <Center>
+                {company.logo_path ? (
+                    <Image alt={company.name} h="20px" mr="5px" src={image} />
+                ) : (
+                    <Text fontSize="20px" fontWeight="bold">
+                        {company.name}
+                    </Text>
+                )}
+            </Center>
         </Flex>
     );
 };

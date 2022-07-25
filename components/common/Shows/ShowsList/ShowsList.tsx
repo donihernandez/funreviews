@@ -14,7 +14,7 @@ import { List, ShowsListContainer } from './ShowsList.components';
 import { getPopular } from '_tmdb/movies/queries';
 import { COLORS } from '@/styles/theme';
 import { useState } from 'react';
-import { Loading } from '../Loading';
+import { Loading } from '../../Loading';
 
 import { useShowsContext } from 'contexts/ShowsContext';
 

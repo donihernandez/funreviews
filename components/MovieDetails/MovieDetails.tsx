@@ -1,19 +1,14 @@
 import { FC, useEffect, useState } from 'react';
 import {
     Button,
-    chakra,
     Divider,
     Flex,
-    Heading,
     SimpleGrid,
     Tab,
     TabList,
     TabPanel,
     TabPanels,
     Tabs,
-    Text,
-    Wrap,
-    WrapItem,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
@@ -22,26 +17,36 @@ import {
     getMovieCredits,
     getMovieDetails,
     getMovieReviews,
+    getRecommendations,
     getVideos,
-    getWatchProviders,
 } from '_tmdb/movies/queries';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 import { COLORS } from '@/styles/theme';
 
 import { getTrailer } from '@/utils/getTrailer';
-import { StarIcon } from '@chakra-ui/icons';
+
 import {
     CastContainer,
     CrewContainer,
+    DetailsContainer,
+    MovieAdditionalInfo,
+    MovieBudgetAndReleaseDate,
+    MovieDescription,
+    MovieInfoContainer,
     MoviePoster,
+    MovieRate,
+    MovieTitle,
     MovieTrailer,
     ProductionCompaniesContainer,
+    ReviewsList,
 } from './MovieDetails.components';
-import { Badge } from '../common/Badge';
+
 import { FaPlay } from 'react-icons/fa';
-import { Review } from '../common/Review';
+
 import { VideoBox } from '../common/VideoBox';
 import { useBreakpoints } from 'hooks';
+import { ShowsContainer } from '../common/Shows/ShowsContainer';
+import { GenresList } from '../common/GenreList';
 
 const MovieDetails: FC = () => {
     const router = useRouter();
@@ -77,6 +82,11 @@ const MovieDetails: FC = () => {
         getVideos(id as string),
     );
 
+    const { data: movieRecommendations } = useQuery(
+        ['movieRecommendations', id],
+        () => getRecommendations(id as string),
+    );
+
     const imagePath = isSmallerThanDesktop
         ? movieDetails?.poster_path
         : movieDetails?.backdrop_path;
@@ -101,7 +111,7 @@ const MovieDetails: FC = () => {
         setMovieTrailer(trailer);
     };
 
-    const getGenres = () => {
+    const getGenres = (): string[] => {
         return movieDetails.genres.map(genre => genre.name);
     };
 
@@ -117,90 +127,21 @@ const MovieDetails: FC = () => {
                     title={movieDetails.original_title}
                 />
 
-                <Flex
-                    alignItems="center"
-                    direction={['column', null, 'row']}
-                    justifyContent="center"
-                    paddingY="50px"
-                >
+                <DetailsContainer>
                     <MovieTrailer video={movieTrailer} />
-                    <Flex direction="column" ml={['0', null, '30px']}>
-                        <Heading
-                            _hover={{
-                                color: COLORS.orange,
-                            }}
-                            as="h1"
-                            color={COLORS.white}
-                            cursor="pointer"
-                            fontFamily="Lato"
-                            fontSize="4xl"
-                            fontWeight="bold"
-                        >
-                            {movieDetails.title}
-                        </Heading>
-                        <Flex alignItems="center" my="10px">
-                            <StarIcon color="yellow.400" mr="5px" />
-                            <Text
-                                color={COLORS.white}
-                                fontFamily="Nunito"
-                                fontSize="12px"
-                            >
-                                <chakra.span fontSize="16px" fontWeight="800">
-                                    {movieDetails.vote_average}
-                                </chakra.span>
-                                /10
-                            </Text>
-                        </Flex>
-                        <Text
-                            color={COLORS.white}
-                            fontFamily="Nunito"
-                            fontSize="15px"
-                            textAlign="justify"
-                        >
-                            {movieDetails.overview}
-                        </Text>
-
+                    <MovieInfoContainer>
+                        <MovieTitle title={movieDetails.title} />
+                        <MovieRate vote_average={movieDetails.vote_average} />
+                        <MovieDescription overview={movieDetails.overview} />
                         <Divider color={COLORS.white} my="15px" />
 
-                        <Flex>
-                            <Text color={COLORS.white} fontWeight="extrabold">
-                                Budget:{' '}
-                                <chakra.span fontWeight="light">
-                                    ${movieDetails.budget}
-                                </chakra.span>
-                            </Text>
-                            <Divider
-                                color={COLORS.white}
-                                mx="10px"
-                                orientation="vertical"
-                            />
-                            <Text color={COLORS.white} fontWeight="extrabold">
-                                Release Date:{' '}
-                                <chakra.span fontWeight="light">
-                                    {date}
-                                </chakra.span>
-                            </Text>
-                        </Flex>
+                        <MovieBudgetAndReleaseDate
+                            budget={movieDetails.budget}
+                            date={date}
+                        />
 
                         <Divider color={COLORS.white} my="15px" />
-
-                        <Wrap spacingX="5px">
-                            {getGenres()?.length > 0 &&
-                                getGenres()?.map(
-                                    (genre: string, index: number) => {
-                                        return (
-                                            <WrapItem key={index}>
-                                                <Badge
-                                                    genre={genre?.toLowerCase()}
-                                                >
-                                                    #{genre}
-                                                </Badge>
-                                            </WrapItem>
-                                        );
-                                    },
-                                )}
-                        </Wrap>
-
+                        <GenresList getGenres={getGenres()} />
                         <ProductionCompaniesContainer
                             companies={movieDetails.production_companies}
                         />
@@ -222,11 +163,11 @@ const MovieDetails: FC = () => {
                         >
                             Watch Now
                         </Button>
-                    </Flex>
-                </Flex>
+                    </MovieInfoContainer>
+                </DetailsContainer>
             </Flex>
 
-            <Flex w="full">
+            <MovieAdditionalInfo>
                 <Tabs w="full">
                     <TabList>
                         <Tab {...tabListStyles}>Reviews</Tab>
@@ -236,11 +177,7 @@ const MovieDetails: FC = () => {
 
                     <TabPanels>
                         <TabPanel>
-                            <Flex direction="column">
-                                {movieReviews.results.map(review => (
-                                    <Review key={review.id} review={review} />
-                                ))}
-                            </Flex>
+                            <ReviewsList reviews={movieReviews.results} />
                         </TabPanel>
                         <TabPanel>
                             <Flex direction="column">
@@ -265,7 +202,17 @@ const MovieDetails: FC = () => {
                         </TabPanel>
                     </TabPanels>
                 </Tabs>
-            </Flex>
+            </MovieAdditionalInfo>
+
+            <ShowsContainer
+                items={movieRecommendations?.results}
+                link="/movies"
+                title="Related Movies"
+                titleStyles={{
+                    color: COLORS.white,
+                }}
+                type="movie"
+            />
         </Wrapper>
     );
 };

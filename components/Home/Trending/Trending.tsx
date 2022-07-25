@@ -9,8 +9,6 @@ import {
     Flex,
     Heading,
     Text,
-    Wrap,
-    WrapItem,
 } from '@chakra-ui/react';
 import { Movie } from 'typings';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
@@ -20,11 +18,12 @@ import { getVideos } from '_tmdb/movies/queries';
 import { getTrailer } from '@/utils/getTrailer';
 
 import { ImageBox } from '@/components/common/ImageBox';
-import { Badge } from '@/components/common/Badge';
+
 import { VideoBox } from '@/components/common/VideoBox';
 
 import { useShowsContext } from 'contexts/ShowsContext';
 import Link from 'next/link';
+import { GenresList } from '@/components/common/GenreList';
 
 interface ITrendingProps {
     movie: Movie;
@@ -115,20 +114,7 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                         </Text>
                     </Flex>
                     <Divider my={4} />
-                    <Wrap mb="15px" spacingX="5px">
-                        {getShowGenres?.length > 0 &&
-                            getShowGenres?.map(
-                                (genre: string, index: number) => {
-                                    return (
-                                        <WrapItem key={index}>
-                                            <Badge genre={genre?.toLowerCase()}>
-                                                #{genre}
-                                            </Badge>
-                                        </WrapItem>
-                                    );
-                                },
-                            )}
-                    </Wrap>
+                    <GenresList getGenres={getShowGenres} />
                     <Text color={COLORS.white}>{movie.overview}</Text>
 
                     <Flex mt={5}>
@@ -136,7 +122,6 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                             _hover={{
                                 bg: COLORS.secondary,
                             }}
-                            as="a"
                             bg={COLORS.primary}
                             borderRadius="0"
                             color={COLORS.white}
@@ -144,6 +129,7 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                             leftIcon={<Search2Icon />}
                             mr={4}
                             transition="all 0.5s ease-in-out"
+                            variant="unstyled"
                         >
                             <Link href={`/movies/${movie.id}`}>
                                 View More...
@@ -153,13 +139,13 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                             _hover={{
                                 bg: COLORS.primary,
                             }}
-                            as="a"
                             bg={COLORS.orange}
                             borderRadius="0"
                             color={COLORS.white}
                             cursor="pointer"
                             leftIcon={<StarIcon />}
                             transition="all 0.5s ease-in-out"
+                            variant="unstyled"
                         >
                             Leave a Review
                         </Button>

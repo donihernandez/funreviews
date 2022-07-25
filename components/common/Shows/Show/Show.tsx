@@ -1,17 +1,7 @@
 import { FC, useMemo } from 'react';
-import {
-    Button,
-    Divider,
-    Flex,
-    Heading,
-    Image,
-    Text,
-    Wrap,
-    WrapItem,
-} from '@chakra-ui/react';
+import { Button, Divider, Flex, Heading, Image, Text } from '@chakra-ui/react';
 
 import { COLORS } from '@/styles/theme';
-import { Badge } from '../Badge';
 
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 
@@ -19,6 +9,7 @@ import { useShowsContext } from 'contexts/ShowsContext';
 import { Search2Icon, StarIcon } from '@chakra-ui/icons';
 import { useBreakpoints } from 'hooks';
 import Link from 'next/link';
+import { GenresList } from '../../GenreList';
 
 interface IShow {
     show: any;
@@ -81,26 +72,12 @@ const Show: FC<IShow> = ({ show }) => {
                     </Text>
 
                     <Divider my={4} />
-                    <Wrap spacingX="5px">
-                        {getShowGenres?.length > 0 &&
-                            getShowGenres?.map(
-                                (genre: string, index: number) => {
-                                    return (
-                                        <WrapItem key={index}>
-                                            <Badge genre={genre?.toLowerCase()}>
-                                                #{genre}
-                                            </Badge>
-                                        </WrapItem>
-                                    );
-                                },
-                            )}
-                    </Wrap>
+                    <GenresList getGenres={getShowGenres} />
                     <Flex mt={5}>
                         <Button
                             _hover={{
                                 bg: COLORS.secondary,
                             }}
-                            as="a"
                             bg={COLORS.primary}
                             borderRadius="0"
                             color={COLORS.white}
@@ -108,6 +85,7 @@ const Show: FC<IShow> = ({ show }) => {
                             leftIcon={<Search2Icon />}
                             mr={4}
                             transition="all 0.5s ease-in-out"
+                            variant="unstyled"
                         >
                             <Link href={`/${pathMedia}/${show.id}`}>
                                 View More...
@@ -117,13 +95,13 @@ const Show: FC<IShow> = ({ show }) => {
                             _hover={{
                                 bg: COLORS.primary,
                             }}
-                            as="a"
                             bg={COLORS.orange}
                             borderRadius="0"
                             color={COLORS.white}
                             cursor="pointer"
                             leftIcon={<StarIcon />}
                             transition="all 0.5s ease-in-out"
+                            variant="unstyled"
                         >
                             Leave a Review
                         </Button>

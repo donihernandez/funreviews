@@ -2,7 +2,6 @@ import type { FC } from 'react';
 import {
     AspectRatio,
     Box,
-    Button,
     chakra,
     Flex,
     Heading,
@@ -16,22 +15,33 @@ import { COLORS } from '../../../styles/theme';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 import { motion } from 'framer-motion';
 import { FaPlay } from 'react-icons/fa';
+import { useShowsContext } from 'contexts/ShowsContext';
+
+import { PrimaryButton, SecondaryButton } from '../Buttons';
 
 interface IInfoCardProps {
     height?: string;
     width?: string;
-    item: any;
+    show: any;
     type: 'movie' | 'tv';
 }
 
 const InfoCard: FC<IInfoCardProps> = ({
     height = '500px',
     width = '261px',
-    item,
+    show,
 }) => {
+    const { type } = useShowsContext();
+
     const size = IMAGE_CONFIG.poster_sizes.find(s => s === 'w342');
 
-    const image = `${IMAGE_URL}${size}${item.poster_path}`;
+    const image = `${IMAGE_URL}${size}${show.poster_path}`;
+
+    const pathType = type === 'movie' ? 'movies' : 'tv-shows';
+
+    const primaryButtonStyle = {
+        mb: '10px',
+    };
 
     return (
         <Box
@@ -52,7 +62,7 @@ const InfoCard: FC<IInfoCardProps> = ({
             >
                 <AspectRatio h="full" minH="383px" ratio={1}>
                     <Image
-                        alt={item.original_title || item.original_name}
+                        alt={show.original_title || show.original_name}
                         as={motion.img}
                         draggable={false}
                         src={image}
@@ -67,7 +77,7 @@ const InfoCard: FC<IInfoCardProps> = ({
                     pt="15px"
                     textTransform="uppercase"
                 >
-                    {item.original_title || item.original_name}
+                    {show.original_title || show.original_name}
                 </Heading>
                 <Flex alignItems="center" mt="5px">
                     <StarIcon color="yellow.400" mr="5px" />
@@ -77,43 +87,19 @@ const InfoCard: FC<IInfoCardProps> = ({
                         fontSize="12px"
                     >
                         <chakra.span fontSize="16px" fontWeight="800">
-                            {item.vote_average}
+                            {show.vote_average}
                         </chakra.span>
                         /10
                     </Text>
                 </Flex>
                 <Flex direction="column" mt={5}>
-                    <Button
-                        _hover={{
-                            bg: COLORS.secondary,
-                            transform: 'scale(1.1)',
-                        }}
-                        as="a"
-                        bg={COLORS.primary}
-                        borderRadius="0"
-                        color={COLORS.white}
-                        cursor="pointer"
-                        leftIcon={<FaPlay />}
-                        transition="all 0.5s ease-in-out"
-                        w="full"
-                    >
-                        Watch Now
-                    </Button>
-                    <Button
-                        _hover={{
-                            bg: COLORS.primary,
-                        }}
-                        as="a"
-                        bg={COLORS.orange}
-                        borderRadius="0"
-                        color={COLORS.white}
-                        cursor="pointer"
-                        leftIcon={<StarIcon />}
-                        mt="8px"
-                        transition="all 0.5s ease-in-out"
-                    >
-                        Leave a Review
-                    </Button>
+                    <PrimaryButton
+                        icon={<FaPlay />}
+                        link={`/${pathType}/${show.id}`}
+                        text="Watch Now"
+                        {...primaryButtonStyle}
+                    />
+                    <SecondaryButton icon={<StarIcon />} link="" />
                 </Flex>
             </Flex>
         </Box>

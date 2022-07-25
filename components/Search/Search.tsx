@@ -18,14 +18,14 @@ const Search: FC = () => {
         },
     ];
 
-    const { shows, type, searchTerm } = useShowsContext();
+    const { shows, type } = useShowsContext();
 
     return (
         <Wrapper>
             <Intro breadcrumbs={breadcrumbs} title="Search" />
             <SimpleGrid columns={[1, null, 4]} my="150px" spacing={8}>
                 {shows.map(show => (
-                    <InfoCard item={show} key={show.id} type={type} />
+                    <InfoCard key={show.id} show={show} type={type} />
                 ))}
             </SimpleGrid>
         </Wrapper>

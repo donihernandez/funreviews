@@ -47,7 +47,7 @@ interface Video {
     published_at: string;
 }
 
-interface Review {
+interface IReview {
     review: {
         author: string;
         author_details: {
@@ -89,4 +89,4 @@ interface IGenre {
 
 type IQuery = IMovieQuery | IShowQuery;
 
-export { Movie, Tv, Video, IQuery, IGenre, Review };
+export { Movie, Tv, Video, IQuery, IGenre, IReview };

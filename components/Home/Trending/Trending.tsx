@@ -2,15 +2,12 @@ import { FC, useMemo } from 'react';
 import { useEffect, useState } from 'react';
 
 import {
-    Button,
     chakra,
     Container,
     Divider,
     Flex,
     Heading,
     Text,
-    Wrap,
-    WrapItem,
 } from '@chakra-ui/react';
 import { Movie } from 'typings';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
@@ -20,10 +17,13 @@ import { getVideos } from '_tmdb/movies/queries';
 import { getTrailer } from '@/utils/getTrailer';
 
 import { ImageBox } from '@/components/common/ImageBox';
-import { Badge } from '@/components/common/Badge';
+
 import { VideoBox } from '@/components/common/VideoBox';
 
 import { useShowsContext } from 'contexts/ShowsContext';
+
+import { GenresList } from '@/components/common/GenreList';
+import { PrimaryButton, SecondaryButton } from '@/components/common/Buttons';
 
 interface ITrendingProps {
     movie: Movie;
@@ -114,52 +114,17 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                         </Text>
                     </Flex>
                     <Divider my={4} />
-                    <Wrap mb="15px" spacingX="5px">
-                        {getShowGenres?.length > 0 &&
-                            getShowGenres?.map(
-                                (genre: string, index: number) => {
-                                    return (
-                                        <WrapItem key={index}>
-                                            <Badge genre={genre?.toLowerCase()}>
-                                                #{genre}
-                                            </Badge>
-                                        </WrapItem>
-                                    );
-                                },
-                            )}
-                    </Wrap>
-                    <Text color={COLORS.white}>{movie.overview}</Text>
+                    <GenresList getGenres={getShowGenres} />
+                    <Text color={COLORS.white} mt="10px">
+                        {movie.overview}
+                    </Text>
 
                     <Flex mt={5}>
-                        <Button
-                            _hover={{
-                                bg: COLORS.secondary,
-                            }}
-                            as="a"
-                            bg={COLORS.primary}
-                            borderRadius="0"
-                            color={COLORS.white}
-                            cursor="pointer"
-                            leftIcon={<Search2Icon />}
-                            mr={4}
-                            transition="all 0.5s ease-in-out"
-                        >
-                            Read More...
-                        </Button>
-                        <Button
-                            _hover={{
-                                bg: COLORS.primary,
-                            }}
-                            as="a"
-                            bg={COLORS.orange}
-                            borderRadius="0"
-                            color={COLORS.white}
-                            cursor="pointer"
-                            leftIcon={<StarIcon />}
-                            transition="all 0.5s ease-in-out"
-                        >
-                            Leave a Review
-                        </Button>
+                        <PrimaryButton
+                            icon={<Search2Icon />}
+                            link={`/movies/${movie.id}`}
+                        />
+                        <SecondaryButton icon={<StarIcon />} link="" />
                     </Flex>
                 </Flex>
             </Flex>

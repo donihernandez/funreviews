@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { Intro } from '../common/Intro';
-import { ShowsList } from '../common/ShowsList';
+import { ShowsList } from '../common/Shows/ShowsList';
 import { Wrapper } from '../common/Wrapper';
 
 import { useShowsContext } from 'contexts/ShowsContext';

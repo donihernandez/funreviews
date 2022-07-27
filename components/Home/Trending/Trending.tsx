@@ -72,17 +72,17 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                     as="h2"
                     color={COLORS.white}
                     fontFamily="Nunito"
-                    fontSize="30px"
-                    mb={4}
+                    fontSize="50px"
+                    mb="20px"
                 >
                     Treding Now
                 </Heading>
             </Flex>
 
             <Flex
-                alignItems="center"
+                alignItems={['center', null, 'flex-start']}
                 direction={['column', null, 'row']}
-                justifyContent="center"
+                justifyContent={['center', null, 'flex-start']}
             >
                 {!isVideo ? (
                     <ImageBox image={image} />
@@ -90,7 +90,7 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                     <VideoBox video={movieTrailer} />
                 )}
 
-                <Flex direction="column" ml={{ lg: '40px' }}>
+                <Flex direction="column" ml={['0', null, '40px']}>
                     <Heading as="h2" color={COLORS.white} fontFamily="Nunito">
                         {movie.original_title}
                     </Heading>

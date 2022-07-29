@@ -1,7 +1,6 @@
 import type { FC } from 'react';
 import { Flex } from '@chakra-ui/react';
 
-import { Featured } from '@/components/Home/Featured';
 import { Hero } from '@/components/Home/Hero';
 import { getMovieGenres, getTrending } from '_tmdb/movies/queries';
 
@@ -13,6 +12,11 @@ import { useShowsContext } from 'contexts/ShowsContext';
 import { useEffect } from 'react';
 
 import { Loading } from '@/components/common/Loading';
+import { PopularMovies } from './PopularMovies';
+import { TopRatedMovies } from './TopRatedMovies';
+
+import { TopRatedTv } from './TopRatedTv';
+import { PopularTv } from './PopularTv';
 
 const Home: FC = () => {
     const { setMovieGenres } = useShowsContext();
@@ -38,7 +42,10 @@ const Home: FC = () => {
             {moviesSucess ? (
                 <>
                     <Trending movie={movieResults?.results[0]} />
-                    <Featured />
+                    <PopularMovies />
+                    <TopRatedMovies />
+                    <PopularTv />
+                    <TopRatedTv />
                 </>
             ) : (
                 <Loading />

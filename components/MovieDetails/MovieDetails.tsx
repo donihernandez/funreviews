@@ -20,7 +20,7 @@ import {
     getRecommendations,
     getVideos,
 } from '_tmdb/movies/queries';
-import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
+import { IMAGE_URL } from '@/utils/images';
 import { COLORS } from '@/styles/theme';
 
 import { getTrailer } from '@/utils/getTrailer';

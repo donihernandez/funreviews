@@ -22,8 +22,8 @@ const ImageBox: FC<IImageBoxProps> = ({ image }) => {
                 backgroundRepeat="no-repeat"
                 backgroundSize="cover"
                 cursor="pointer"
-                h="400px"
-                maxW={['375px', null, '500px']}
+                h="600px"
+                maxW={['375px', null, '600px', 'full']}
                 mb="15px"
                 overflow="hidden"
                 position="relative"

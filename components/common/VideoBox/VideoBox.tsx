@@ -14,8 +14,8 @@ const VideoBox: FC<IVideoBoxProps> = ({ video }) => {
             allowFullScreen
             as="iframe"
             frameBorder="0"
-            h="400px"
-            maxW={['375px', null, '500px']}
+            h="600px"
+            maxW={['375px', null, '600px', 'full']}
             src={`https://www.youtube.com/embed/${video}`}
             w="full"
         ></Box>

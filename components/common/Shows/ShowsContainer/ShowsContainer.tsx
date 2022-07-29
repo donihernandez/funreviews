@@ -12,7 +12,7 @@ import { useBreakpoints } from 'hooks';
 
 interface IShowsContainer {
     title: string;
-    titleStyles: any;
+    titleStyles?: any;
     items: Movie[] | Tv[];
     link?: string;
     isLoading?: boolean;

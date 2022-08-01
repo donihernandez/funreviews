@@ -2,7 +2,9 @@ import type { FC } from 'react';
 import { Button, Flex } from '@chakra-ui/react';
 
 import links from '../links';
-import Link from 'next/link';
+
+import { useShowsContext } from 'contexts/ShowsContext';
+import { useRouter } from 'next/router';
 
 const DesktopMenu: FC = () => {
     const linkStyles = {
@@ -18,11 +20,22 @@ const DesktopMenu: FC = () => {
         textDecoration: 'none',
     };
 
+    const router = useRouter();
+    const { updateShows } = useShowsContext();
+
     return (
         <Flex>
             {links.map(link => (
-                <Button key={link.name} variant="link" {...linkStyles}>
-                    <Link href={link.href}>{link.name}</Link>
+                <Button
+                    key={link.name}
+                    onClick={() => {
+                        updateShows([]);
+                        router.push(link.href);
+                    }}
+                    variant="link"
+                    {...linkStyles}
+                >
+                    {link.name}
                 </Button>
             ))}
         </Flex>

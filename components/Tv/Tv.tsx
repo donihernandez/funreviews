@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { Intro } from '../common/Intro';
 import { ShowsList } from '../common/Shows/ShowsList';
@@ -8,6 +8,7 @@ import { useShowsContext } from 'contexts/ShowsContext';
 import { Flex } from '@chakra-ui/react';
 import { Sidebar } from '../common/Sidebar';
 import { getTvGenres, getTvPopular } from '_tmdb/tv/queries';
+import { Loading } from '../common/Loading';
 
 const Tv: FC = () => {
     const breadcrumbs = [
@@ -22,36 +23,41 @@ const Tv: FC = () => {
         },
     ];
 
-    const { setShows, setGenres, setTotalPages, setType } = useShowsContext();
+    const { setGenres, setTotalPages, setType, setShows } = useShowsContext();
+    const [isLoading, setIsLoading] = useState(false);
 
-    const { data: tv, isSuccess: tvSucess } = useQuery(['getPopular'], () =>
-        getTvPopular(),
-    );
+    const getTv = async () => {
+        setShows([]);
+        const tv = await getTvPopular();
+        setShows(tv.results);
+        setTotalPages(tv.total_pages);
+        setType('tv');
+    };
 
-    const { data: genres, isSuccess: genresSuccess } = useQuery(
-        'getGenres',
-        getTvGenres,
-    );
+    const getGenres = async () => {
+        const genres = await getTvGenres();
+        setGenres(genres.genres);
+    };
 
     useEffect(() => {
-        if (tvSucess) {
-            setShows(tv.results);
-            setTotalPages(tv.total_pages);
-        }
-
-        if (genresSuccess) {
-            setGenres(genres.genres);
-        }
-
-        setType('tv');
-    }, [tvSucess, genresSuccess]);
+        setIsLoading(true);
+        getTv();
+        getGenres();
+        setIsLoading(false);
+    }, []);
 
     return (
         <Wrapper>
             <Intro breadcrumbs={breadcrumbs} title="TV Shows" />
             <Flex direction={['column-reverse', null, 'row']}>
-                <ShowsList />
-                <Sidebar />
+                {isLoading ? (
+                    <Loading />
+                ) : (
+                    <>
+                        <ShowsList />
+                        <Sidebar />
+                    </>
+                )}
             </Flex>
         </Wrapper>
     );

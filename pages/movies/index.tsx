@@ -8,7 +8,7 @@ const MoviesPage: NextPage = () => {
     return <Movies />;
 };
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
     const queryClient = new QueryClient();
     await queryClient.prefetchQuery(['movieGenres'], getMovieGenres);
     await queryClient.prefetchQuery(['popularMovies'], () => getPopular());
@@ -17,7 +17,6 @@ export async function getStaticProps() {
         props: {
             dehydratedState: dehydrate(queryClient),
         },
-        revalidate: 30,
     };
 }
 

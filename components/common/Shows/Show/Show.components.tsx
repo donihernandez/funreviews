@@ -35,6 +35,7 @@ const ShowDetailsContainer: FC<IChildrenProps> = ({ children }) => {
             direction="column"
             ml={6}
             textAlign="justify"
+            w="full"
         >
             {children}
         </Flex>

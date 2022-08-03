@@ -1,5 +1,8 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
     Button,
     Divider,
     Flex,
@@ -12,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
-import { Wrapper } from '../common/Wrapper';
+import { Wrapper } from '../../common/Wrapper';
 import {
     getMovieCredits,
     getMovieDetails,
@@ -25,29 +28,35 @@ import { COLORS } from '@/styles/theme';
 
 import { getTrailer } from '@/utils/getTrailer';
 
-import {
-    CastContainer,
-    CrewContainer,
-    DetailsContainer,
-    MovieAdditionalInfo,
-    MovieBudgetAndReleaseDate,
-    MovieDescription,
-    MovieInfoContainer,
-    MoviePoster,
-    MovieRate,
-    MovieTitle,
-    MovieTrailer,
-    ProductionCompaniesContainer,
-    ReviewsList,
-} from './MovieDetails.components';
+import { MovieBudgetAndReleaseDate } from './MovieDetails.components';
 
 import { FaPlay } from 'react-icons/fa';
 
-import { VideoBox } from '../common/VideoBox';
+import { VideoBox } from '../../common/VideoBox';
 import { useBreakpoints } from 'hooks';
-import { ShowsContainer } from '../common/Shows/ShowsContainer';
-import { GenresList } from '../common/GenreList';
-import { Loading } from '../common/Loading';
+import { ShowsContainer } from '../../common/Shows/ShowsContainer';
+import { GenresList } from '../../common/GenreList';
+import { Loading } from '../../common/Loading';
+import {
+    AdditionalInfo,
+    CastContainer,
+    CrewContainer,
+    Description,
+    DetailsContainer,
+    InfoContainer,
+    Poster,
+    ProductionCompaniesContainer,
+    Rate,
+    ReviewsList,
+    Title,
+    Trailer,
+} from '../Details.components';
+
+interface IBreadcrumb {
+    link: string;
+    name: string;
+    isCurrentPage?: boolean;
+}
 
 const MovieDetails: FC = () => {
     const router = useRouter();
@@ -67,6 +76,23 @@ const MovieDetails: FC = () => {
         ['movieDetails', id],
         () => getMovieDetails(id as string),
     );
+
+    const breadcrumbs = [
+        {
+            link: '/',
+            name: 'Home',
+        },
+        {
+            link: '/movies',
+            name: 'Movies',
+        },
+        {
+            isCurrentPage: true,
+            link: '#',
+            name: movieDetails?.title,
+        },
+    ];
+
     const date = new Date(movieDetails.release_date).toDateString();
 
     const { data: movieCredits } = useQuery(['movieCredits', id], () =>
@@ -132,8 +158,31 @@ const MovieDetails: FC = () => {
     return (
         <Wrapper {...wrapperStyles}>
             <Flex direction="column" paddingTop="100px" position="relative">
+                <Flex w="full">
+                    <Breadcrumb color={COLORS.white} my={6}>
+                        {breadcrumbs.map(
+                            (breadcrumb: IBreadcrumb, index: number) => {
+                                return (
+                                    <BreadcrumbItem
+                                        _hover={{
+                                            color: !breadcrumb.isCurrentPage
+                                                ? COLORS.orange
+                                                : '#fff',
+                                        }}
+                                        isCurrentPage={breadcrumb.isCurrentPage}
+                                        key={index}
+                                    >
+                                        <BreadcrumbLink href={breadcrumb.link}>
+                                            {breadcrumb.name}
+                                        </BreadcrumbLink>
+                                    </BreadcrumbItem>
+                                );
+                            },
+                        )}
+                    </Breadcrumb>
+                </Flex>
                 {getImagePath !== '' ? (
-                    <MoviePoster
+                    <Poster
                         image={getImagePath}
                         title={movieDetails.original_title}
                     />
@@ -142,11 +191,11 @@ const MovieDetails: FC = () => {
                 )}
 
                 <DetailsContainer>
-                    <MovieTrailer video={movieTrailer} />
-                    <MovieInfoContainer>
-                        <MovieTitle title={movieDetails.title} />
-                        <MovieRate vote_average={movieDetails.vote_average} />
-                        <MovieDescription overview={movieDetails.overview} />
+                    <Trailer video={movieTrailer} />
+                    <InfoContainer>
+                        <Title title={movieDetails.title} />
+                        <Rate vote_average={movieDetails.vote_average} />
+                        <Description overview={movieDetails.overview} />
                         <Divider color={COLORS.white} my="15px" />
 
                         <MovieBudgetAndReleaseDate
@@ -177,11 +226,11 @@ const MovieDetails: FC = () => {
                         >
                             Watch Now
                         </Button>
-                    </MovieInfoContainer>
+                    </InfoContainer>
                 </DetailsContainer>
             </Flex>
 
-            <MovieAdditionalInfo>
+            <AdditionalInfo>
                 <Tabs w="full">
                     <TabList>
                         <Tab {...tabListStyles}>Reviews</Tab>
@@ -216,7 +265,7 @@ const MovieDetails: FC = () => {
                         </TabPanel>
                     </TabPanels>
                 </Tabs>
-            </MovieAdditionalInfo>
+            </AdditionalInfo>
 
             <ShowsContainer
                 items={movieRecommendations?.results}

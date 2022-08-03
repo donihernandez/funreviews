@@ -30,9 +30,8 @@ const InfoCard: FC<IInfoCardProps> = ({
     height = '500px',
     width = '261px',
     show,
+    type,
 }) => {
-    const { type } = useShowsContext();
-
     const size = IMAGE_CONFIG.poster_sizes.find(s => s === 'w342');
 
     const image = `${IMAGE_URL}${size}${show.poster_path}`;

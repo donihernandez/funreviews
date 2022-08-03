@@ -47,21 +47,29 @@ interface Video {
     published_at: string;
 }
 
+interface Season {
+    air_date: string;
+    episode_count: number;
+    id: number;
+    name: string;
+    overview: string;
+    poster_path: string;
+    season_number: number;
+}
+
 interface IReview {
-    review: {
-        author: string;
-        author_details: {
-            name: string;
-            username: string;
-            avatar_path: string;
-            rating: number;
-        };
-        content: string;
-        id: string;
-        url: string;
-        updated_at: string;
-        created_at: string;
+    author: string;
+    author_details: {
+        name: string;
+        username: string;
+        avatar_path: string;
+        rating: number;
     };
+    content: string;
+    id: string;
+    url: string;
+    updated_at: string;
+    created_at: string;
 }
 
 interface IMovieQuery {
@@ -89,4 +97,4 @@ interface IGenre {
 
 type IQuery = IMovieQuery | IShowQuery;
 
-export { Movie, Tv, Video, IQuery, IGenre, IReview };
+export { Movie, Tv, Video, IQuery, IGenre, IReview, Season };

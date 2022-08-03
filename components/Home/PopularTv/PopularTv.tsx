@@ -23,7 +23,7 @@ const PopularTv: FC = () => {
             {isSuccess ? (
                 <ShowsContainer
                     items={popularTv?.results}
-                    link="/tv"
+                    link="/tv-shows"
                     title="Popular TV Shows"
                     titleStyles={{
                         color: COLORS.white,

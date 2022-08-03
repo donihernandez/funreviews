@@ -23,7 +23,7 @@ const TopRatedTv: FC = () => {
             {isSuccess ? (
                 <ShowsContainer
                     items={topRated?.results}
-                    link="/tv"
+                    link="/tv-shows"
                     title="Top Rated TV Shows"
                     titleStyles={{
                         color: COLORS.white,

@@ -13,13 +13,11 @@ import {
     Wrap,
     WrapItem,
 } from '@chakra-ui/react';
-
 import { COLORS } from '@/styles/theme';
-import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 import { StarIcon } from '@chakra-ui/icons';
-
-import { IReview } from 'typings';
+import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 import { Review } from '../common/Review';
+import { IReview } from 'typings';
 
 interface IDetailsProps {
     children: ReactNode;
@@ -38,7 +36,47 @@ const DetailsContainer: FC<IDetailsProps> = ({ children }) => {
     );
 };
 
-const MovieInfoContainer: FC<IDetailsProps> = ({ children }) => {
+interface IPosterProps {
+    title: string;
+    image: string;
+}
+
+const Poster: FC<IPosterProps> = ({ title, image }) => {
+    return (
+        <AspectRatio maxH="600px" maxW="90vw" ratio={1}>
+            <Image
+                alt={title}
+                h="full"
+                objectFit="cover"
+                src={image}
+                w="full"
+            />
+        </AspectRatio>
+    );
+};
+
+interface ITrailerProps {
+    video: string;
+}
+
+const Trailer: FC<ITrailerProps> = ({ video }) => {
+    return (
+        <Box
+            // eslint-disable-next-line max-len
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            as="iframe"
+            frameBorder="0"
+            h="full"
+            minH={['300px', null, '500px']}
+            minW={['375px', null, '600px']}
+            src={`https://www.youtube.com/embed/${video}`}
+            w="full"
+        />
+    );
+};
+
+const InfoContainer: FC<IDetailsProps> = ({ children }) => {
     return (
         <Flex direction="column" ml={['0', null, '30px']}>
             {children}
@@ -46,11 +84,11 @@ const MovieInfoContainer: FC<IDetailsProps> = ({ children }) => {
     );
 };
 
-interface IMovieTitleProps {
+interface ITitleProps {
     title: string;
 }
 
-const MovieTitle: FC<IMovieTitleProps> = ({ title }) => {
+const Title: FC<ITitleProps> = ({ title }) => {
     return (
         <Heading
             _hover={{
@@ -68,11 +106,11 @@ const MovieTitle: FC<IMovieTitleProps> = ({ title }) => {
     );
 };
 
-interface IMovieRateProps {
+interface IRateProps {
     vote_average: number;
 }
 
-const MovieRate: FC<IMovieRateProps> = ({ vote_average }) => {
+const Rate: FC<IRateProps> = ({ vote_average }) => {
     return (
         <Flex alignItems="center" my="10px">
             <StarIcon color="yellow.400" mr="5px" />
@@ -86,11 +124,11 @@ const MovieRate: FC<IMovieRateProps> = ({ vote_average }) => {
     );
 };
 
-interface IMovieDescriptionProps {
+interface IDescriptionProps {
     overview: string;
 }
 
-const MovieDescription: FC<IMovieDescriptionProps> = ({ overview }) => {
+const Description: FC<IDescriptionProps> = ({ overview }) => {
     return (
         <Text
             color={COLORS.white}
@@ -100,69 +138,6 @@ const MovieDescription: FC<IMovieDescriptionProps> = ({ overview }) => {
         >
             {overview}
         </Text>
-    );
-};
-
-interface IMovieBudgetAndReleaseDateProps {
-    budget: number;
-    date: string;
-}
-
-const MovieBudgetAndReleaseDate: FC<IMovieBudgetAndReleaseDateProps> = ({
-    budget,
-    date,
-}) => {
-    return (
-        <Flex>
-            <Text color={COLORS.white} fontWeight="extrabold">
-                Budget: <chakra.span fontWeight="light">${budget}</chakra.span>
-            </Text>
-            <Divider color={COLORS.white} mx="10px" orientation="vertical" />
-            <Text color={COLORS.white} fontWeight="extrabold">
-                Release Date:{' '}
-                <chakra.span fontWeight="light">{date}</chakra.span>
-            </Text>
-        </Flex>
-    );
-};
-
-interface IMoviePosterProps {
-    title: string;
-    image: string;
-}
-
-const MoviePoster: FC<IMoviePosterProps> = ({ title, image }) => {
-    return (
-        <AspectRatio maxH="600px" maxW="90vw" ratio={1}>
-            <Image
-                alt={title}
-                h="full"
-                objectFit="cover"
-                src={image}
-                w="full"
-            />
-        </AspectRatio>
-    );
-};
-
-interface IMovieTrailerProps {
-    video: string;
-}
-
-const MovieTrailer: FC<IMovieTrailerProps> = ({ video }) => {
-    return (
-        <Box
-            // eslint-disable-next-line max-len
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            as="iframe"
-            frameBorder="0"
-            h="full"
-            minH={['300px', null, '500px']}
-            minW={['375px', null, '600px']}
-            src={`https://www.youtube.com/embed/${video}`}
-            w="full"
-        />
     );
 };
 
@@ -189,7 +164,7 @@ const ProductionCompaniesContainer: FC<IProductionCompaniesContainerProps> = ({
                 Production Companies
             </Heading>
             <Wrap>
-                {companies.map(company => (
+                {companies?.map(company => (
                     <WrapItem key={company.id}>
                         <ProductionCompany company={company} />
                     </WrapItem>
@@ -232,8 +207,22 @@ const ProductionCompany: FC<IProductionCompanyProps> = ({ company }) => {
     );
 };
 
-const MovieAdditionalInfo: FC<IDetailsProps> = ({ children }) => {
+const AdditionalInfo: FC<IDetailsProps> = ({ children }) => {
     return <Flex w="full">{children}</Flex>;
+};
+
+interface IReviewsListProps {
+    reviews: IReview[];
+}
+
+const ReviewsList: FC<IReviewsListProps> = ({ reviews }) => {
+    return (
+        <Flex direction="column">
+            {reviews?.map(review => (
+                <Review key={review.id} review={review} />
+            ))}
+        </Flex>
+    );
 };
 
 interface ICastContainerProps {
@@ -266,7 +255,7 @@ const CastContainer: FC<ICastContainerProps> = ({ castList }) => {
                 Cast
             </Heading>
             <Divider color={COLORS.white} my="15px" />
-            {castList.map(cast => (
+            {castList?.map(cast => (
                 <Cast cast={cast} key={cast.id} />
             ))}
         </Flex>
@@ -364,7 +353,7 @@ const CrewContainer: FC<ICrewContainerProps> = ({ crewList }) => {
                 Crew
             </Heading>
             <Divider color={COLORS.white} my="15px" />
-            {crewList.map((crew, index) => (
+            {crewList?.map((crew, index) => (
                 <Crew crew={crew} key={index} />
             ))}
         </Flex>
@@ -432,35 +421,20 @@ const Crew: FC<ICrewProps> = ({ crew }) => {
     );
 };
 
-interface ReviewsList {
-    reviews: IReview[];
-}
-
-const ReviewsList = ({ reviews }) => {
-    return (
-        <Flex direction="column">
-            {reviews.map(review => (
-                <Review key={review.id} review={review} />
-            ))}
-        </Flex>
-    );
-};
-
 export {
+    Poster,
+    DetailsContainer,
+    Trailer,
+    InfoContainer,
+    Title,
+    Rate,
+    Description,
+    ProductionCompaniesContainer,
+    ProductionCompany,
+    AdditionalInfo,
+    ReviewsList,
     Crew,
     Cast,
     CrewContainer,
     CastContainer,
-    DetailsContainer,
-    MoviePoster,
-    MovieTitle,
-    MovieInfoContainer,
-    MovieAdditionalInfo,
-    MovieDescription,
-    MovieBudgetAndReleaseDate,
-    MovieRate,
-    MovieTrailer,
-    ProductionCompany,
-    ProductionCompaniesContainer,
-    ReviewsList,
 };

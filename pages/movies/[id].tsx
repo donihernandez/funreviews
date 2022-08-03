@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { dehydrate, QueryClient } from 'react-query';
-import { MovieDetails } from '@/components/MovieDetails';
+import { MovieDetails } from '@/components/Details/MovieDetails';
 import {
     getMovieCredits,
     getMovieDetails,

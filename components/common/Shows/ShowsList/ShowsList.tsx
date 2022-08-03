@@ -80,15 +80,19 @@ const ShowsList: FC = () => {
                 </Pagination>
             )}
 
-            <List>
-                {shows?.map((show: Movie | Tv) => {
-                    return !isLoading ? (
-                        <Show key={show.id} show={show} />
-                    ) : (
-                        <Loading />
-                    );
-                })}
-            </List>
+            {shows.length > 0 ? (
+                <List>
+                    {shows?.map((show: Movie | Tv) => {
+                        return !isLoading ? (
+                            <Show key={show.id} show={show} />
+                        ) : (
+                            <Loading />
+                        );
+                    })}
+                </List>
+            ) : (
+                <Loading />
+            )}
 
             {totalPages > 0 && (
                 <Pagination

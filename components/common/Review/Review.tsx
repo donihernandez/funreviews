@@ -5,7 +5,11 @@ import { IReview } from 'typings';
 import { COLORS } from '@/styles/theme';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 
-const Review: FC<IReview> = ({ review }) => {
+interface IReviewProps {
+    review: IReview;
+}
+
+const Review: FC<IReviewProps> = ({ review }) => {
     const getAvatar = () => {
         if (
             review?.author_details?.avatar_path?.includes(
@@ -47,7 +51,7 @@ const Review: FC<IReview> = ({ review }) => {
                     fontWeight="bold"
                     mb="10px"
                 >
-                    {review.author_details.name} |{' '}
+                    {review.author_details.name || review.author} |{' '}
                     {new Date(review.created_at).toDateString()}
                 </Heading>
                 <Text fontFamily="Lato" fontSize="18px" fontWeight="bold">

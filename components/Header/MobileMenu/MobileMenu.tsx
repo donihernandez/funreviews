@@ -15,6 +15,8 @@ import { COLORS } from '../../../styles/theme';
 
 import { HamburguerButton } from './HamburgerButton';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useShowsContext } from 'contexts/ShowsContext';
 
 const MobileMenu: FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -31,6 +33,9 @@ const MobileMenu: FC = () => {
         fontWeight: '600',
         textDecoration: 'none',
     };
+
+    const router = useRouter();
+    const { updateShows } = useShowsContext();
 
     return (
         <>
@@ -59,10 +64,14 @@ const MobileMenu: FC = () => {
                             {links.map(link => (
                                 <Button
                                     key={link.name}
+                                    onClick={() => {
+                                        updateShows([]);
+                                        router.push(link.href);
+                                    }}
                                     variant="link"
                                     {...linkStyles}
                                 >
-                                    <Link href={link.href}>{link.name}</Link>
+                                    {link.name}
                                 </Button>
                             ))}
                         </Flex>

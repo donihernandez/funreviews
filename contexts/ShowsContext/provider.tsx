@@ -11,16 +11,26 @@ const ShowsProvider = ({ children }) => {
     const [tvGenres, setTvGenres] = useState([]);
     const [isVideo, setIsVideo] = useState(false);
     const [shows, setShows] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const updateShows = newShows => {
+        if (shows.length > 0) {
+            setShows([]);
+        }
+        setShows(newShows);
+    };
 
     const value = {
         genres,
         isSearching,
         isVideo,
+        loading,
         movieGenres,
         searchTerm,
         setGenres,
         setIsSearching,
         setIsVideo,
+        setLoading,
         setMovieGenres,
         setSearchTerm,
         setShows,
@@ -31,6 +41,7 @@ const ShowsProvider = ({ children }) => {
         totalPages,
         tvGenres,
         type,
+        updateShows,
     };
 
     return (

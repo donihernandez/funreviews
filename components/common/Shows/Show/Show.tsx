@@ -40,8 +40,8 @@ const Show: FC<IShow> = ({ show }) => {
     const pathMedia = type === 'movie' ? 'movies' : 'tv-shows';
 
     const getShowGenres = useMemo(() => {
-        if (genres.length > 0) {
-            return show.genre_ids.map(genre => {
+        if (genres && genres?.length > 0) {
+            return show?.genre_ids.map(genre => {
                 const showGenre = genres?.find(g => g.id === genre);
                 if (showGenre) {
                     return showGenre.name;

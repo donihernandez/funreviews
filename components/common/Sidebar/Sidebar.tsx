@@ -191,7 +191,7 @@ const Sidebar: FC = () => {
                             size="sm"
                             value={genre}
                         >
-                            {genres.map(
+                            {genres?.map(
                                 (genre: { id: string; name: string }) => (
                                     <option key={genre.id} value={genre.name}>
                                         {genre.name}

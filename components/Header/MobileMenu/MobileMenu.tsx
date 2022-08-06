@@ -14,7 +14,6 @@ import links from '../links';
 import { COLORS } from '../../../styles/theme';
 
 import { HamburguerButton } from './HamburgerButton';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useShowsContext } from 'contexts/ShowsContext';
 
@@ -56,24 +55,48 @@ const MobileMenu: FC = () => {
                     <DrawerHeader></DrawerHeader>
                     <DrawerBody>
                         <Flex
-                            alignItems="center"
                             direction="column"
                             h="full"
-                            justifyContent="space-evenly"
+                            justifyContent="space-between"
                         >
-                            {links.map(link => (
+                            <Flex
+                                alignItems="center"
+                                direction="column"
+                                h="full"
+                                justifyContent="center"
+                            >
+                                {links.map(link => (
+                                    <Button
+                                        key={link.name}
+                                        mb="20px"
+                                        onClick={() => {
+                                            updateShows([]);
+                                            router.push(link.href);
+                                        }}
+                                        textTransform="uppercase"
+                                        variant="link"
+                                        {...linkStyles}
+                                    >
+                                        {link.name}
+                                    </Button>
+                                ))}
+                            </Flex>
+                            <Flex justifyContent="space-between" p="20px">
                                 <Button
-                                    key={link.name}
-                                    onClick={() => {
-                                        updateShows([]);
-                                        router.push(link.href);
-                                    }}
+                                    textTransform="uppercase"
                                     variant="link"
                                     {...linkStyles}
                                 >
-                                    {link.name}
+                                    Sign In
                                 </Button>
-                            ))}
+                                <Button
+                                    textTransform="uppercase"
+                                    variant="link"
+                                    {...linkStyles}
+                                >
+                                    Sign Up
+                                </Button>
+                            </Flex>
                         </Flex>
                     </DrawerBody>
                 </DrawerContent>

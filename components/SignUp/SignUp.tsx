@@ -1,35 +1,56 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import {
+    Alert,
+    AlertDescription,
+    AlertIcon,
+    AlertTitle,
     Box,
     Button,
     chakra,
+    CloseButton,
     Flex,
     FormControl,
     FormErrorMessage,
     Heading,
     Input,
     Text,
+    useDisclosure,
 } from '@chakra-ui/react';
-import Link from 'next/link';
+
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
 
 import { Wrapper } from '../common/Wrapper';
 import { COLORS } from '@/styles/theme';
+import Link from 'next/link';
 import { useAuthContext } from 'contexts/AuthContext';
+import { useRouter } from 'next/router';
 
-const SignIn: FC = () => {
+const SignUp: FC = () => {
+    const router = useRouter();
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const {
+        isOpen: isVisible,
+        onClose,
+        onOpen,
+    } = useDisclosure({ defaultIsOpen: false });
+
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm();
-    const router = useRouter();
-    const { signIn } = useAuthContext();
 
-    const handleSignIn = async (data: { email: string; password: string }) => {
+    const { signUp } = useAuthContext();
+
+    const handleSignUp = async (data: { email: string; password: string }) => {
+        if (data.password !== confirmPassword) {
+            onOpen();
+            return;
+        }
+
         try {
-            await signIn(data.email, data.password);
+            await signUp(data.email, data.password);
             router.push('/');
         } catch (err) {
             console.log(err);
@@ -51,7 +72,7 @@ const SignIn: FC = () => {
                     fontFamily="Nunito"
                     fontSize="50px"
                 >
-                    Sign In
+                    Sign Up
                 </Heading>
                 <Box
                     maxW={['full', null, null, '600px']}
@@ -59,7 +80,7 @@ const SignIn: FC = () => {
                     padding="30px"
                     w="full"
                 >
-                    <chakra.form onSubmit={handleSubmit(handleSignIn)}>
+                    <chakra.form onSubmit={handleSubmit(handleSignUp)}>
                         <FormControl color={COLORS.white}>
                             <Input
                                 _focusVisible={{
@@ -97,6 +118,48 @@ const SignIn: FC = () => {
                             )}
                         </FormControl>
 
+                        <FormControl color={COLORS.white} mt="30px">
+                            <Input
+                                _focusVisible={{
+                                    borderColor: COLORS.orange,
+                                }}
+                                onChange={e =>
+                                    setConfirmPassword(e.target.value)
+                                }
+                                placeholder="
+                            Confirm Password"
+                                required={true}
+                                transition="all 0.5s ease-in-out"
+                                type="password"
+                                value={confirmPassword}
+                                variant="flushed"
+                            />
+                        </FormControl>
+
+                        {isVisible && (
+                            <Alert
+                                mt="20px"
+                                status="error"
+                                variant="top-accent"
+                            >
+                                <AlertIcon />
+                                <Box w="full">
+                                    <AlertTitle>Error!</AlertTitle>
+                                    <AlertDescription>
+                                        Your passwords do not match.
+                                    </AlertDescription>
+                                </Box>
+
+                                <CloseButton
+                                    alignSelf="flex-start"
+                                    onClick={onClose}
+                                    position="relative"
+                                    right={0}
+                                    top={-1}
+                                />
+                            </Alert>
+                        )}
+
                         <Button
                             _hover={{
                                 bg: COLORS.primary,
@@ -111,7 +174,7 @@ const SignIn: FC = () => {
                             variant="unstyled"
                             w="full"
                         >
-                            Sign In
+                            Create new account
                         </Button>
                         <Text
                             color={COLORS.white}
@@ -119,14 +182,14 @@ const SignIn: FC = () => {
                             mt="20px"
                             textAlign="center"
                         >
-                            {"Don't you have an account?"}{' '}
+                            Already have an account?{' '}
                             <chakra.span
                                 _hover={{
                                     color: COLORS.orange,
                                 }}
                                 fontWeight="bold"
                             >
-                                <Link href="/signup">Sign Up</Link>
+                                <Link href="/signin">Sign In</Link>
                             </chakra.span>
                         </Text>
                     </chakra.form>
@@ -136,4 +199,4 @@ const SignIn: FC = () => {
     );
 };
 
-export { SignIn };
+export { SignUp };

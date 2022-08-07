@@ -1,17 +1,19 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
+import {
+    createUserWithEmailAndPassword,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    signOut,
+} from 'firebase/auth';
 
 import { AuthContext } from './context';
 import { auth } from '@/utils/firebase';
-
 interface IAuthProviderProps {
     children: ReactNode;
 }
 
 const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, user => {
@@ -33,12 +35,22 @@ const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
         };
     }, []);
 
+    const signUp = (email: string, password: string) =>
+        createUserWithEmailAndPassword(auth, email, password);
+
+    const signIn = (email: string, password: string) =>
+        signInWithEmailAndPassword(auth, email, password);
+
+    const logout = async () => {
+        setUser(null);
+        await signOut(auth);
+    };
+
     const value = {
-        email,
-        password,
-        setEmail,
-        setPassword,
+        logout,
         setUser,
+        signIn,
+        signUp,
         user,
     };
 

@@ -14,9 +14,10 @@ import links from '../links';
 import { COLORS } from '../../../styles/theme';
 
 import { HamburguerButton } from './HamburgerButton';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useShowsContext } from 'contexts/ShowsContext';
+import Link from 'next/link';
+import { useAuthContext } from 'contexts/AuthContext';
 
 const MobileMenu: FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,6 +37,12 @@ const MobileMenu: FC = () => {
 
     const router = useRouter();
     const { updateShows } = useShowsContext();
+    const { user, logout } = useAuthContext();
+
+    const handleLogout = () => {
+        logout();
+        router.push('/signin');
+    };
 
     return (
         <>
@@ -56,24 +63,71 @@ const MobileMenu: FC = () => {
                     <DrawerHeader></DrawerHeader>
                     <DrawerBody>
                         <Flex
-                            alignItems="center"
                             direction="column"
                             h="full"
-                            justifyContent="space-evenly"
+                            justifyContent="space-between"
                         >
-                            {links.map(link => (
-                                <Button
-                                    key={link.name}
-                                    onClick={() => {
-                                        updateShows([]);
-                                        router.push(link.href);
-                                    }}
-                                    variant="link"
-                                    {...linkStyles}
-                                >
-                                    {link.name}
-                                </Button>
-                            ))}
+                            <Flex
+                                alignItems="center"
+                                direction="column"
+                                h="full"
+                                justifyContent="center"
+                            >
+                                {links.map(link => (
+                                    <Button
+                                        key={link.name}
+                                        mb="20px"
+                                        onClick={() => {
+                                            updateShows([]);
+                                            router.push(link.href);
+                                        }}
+                                        textTransform="uppercase"
+                                        variant="link"
+                                        {...linkStyles}
+                                    >
+                                        {link.name}
+                                    </Button>
+                                ))}
+                            </Flex>
+                            <Flex
+                                justifyContent={
+                                    !user ? 'space-between' : 'center'
+                                }
+                                p="20px"
+                            >
+                                {!user ? (
+                                    <>
+                                        <Link href="/signin" passHref>
+                                            <Button
+                                                textTransform="uppercase"
+                                                variant="link"
+                                                {...linkStyles}
+                                            >
+                                                Sign In
+                                            </Button>
+                                        </Link>
+
+                                        <Link href="/signup" passHref>
+                                            <Button
+                                                textTransform="uppercase"
+                                                variant="link"
+                                                {...linkStyles}
+                                            >
+                                                Sign Up
+                                            </Button>
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <Button
+                                        onClick={() => handleLogout()}
+                                        textTransform="uppercase"
+                                        variant="link"
+                                        {...linkStyles}
+                                    >
+                                        Logout
+                                    </Button>
+                                )}
+                            </Flex>
                         </Flex>
                     </DrawerBody>
                 </DrawerContent>

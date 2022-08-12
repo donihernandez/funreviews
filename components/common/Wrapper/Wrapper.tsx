@@ -7,7 +7,7 @@ interface IWrapperProps {
 
 const Wrapper: FC<IWrapperProps> = ({ children, ...props }) => {
     return (
-        <Flex bg="#000" direction="column" w="full">
+        <Flex bg="#000" direction="column" h="full" w="full">
             <Container
                 h="full"
                 maxW={{ base: '300vw', lg: '90vw', xl: '80vw' }}

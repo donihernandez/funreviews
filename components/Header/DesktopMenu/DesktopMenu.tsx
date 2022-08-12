@@ -1,13 +1,10 @@
 import type { FC } from 'react';
-import { Button, Flex, useDisclosure } from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 
 import links from '../links';
 
 import { useShowsContext } from 'contexts/ShowsContext';
-import { useRouter } from 'next/router';
-import { COLORS } from '@/styles/theme';
-import Link from 'next/link';
-import { useAuthContext } from 'contexts/AuthContext';
 
 const DesktopMenu: FC = () => {
     const linkStyles = {
@@ -25,12 +22,6 @@ const DesktopMenu: FC = () => {
 
     const router = useRouter();
     const { updateShows } = useShowsContext();
-    const { user, logout } = useAuthContext();
-
-    const handleLogout = () => {
-        logout();
-        router.push('/signin');
-    };
 
     return (
         <Flex alignItems="center" justifyContent="space-between" w="full">
@@ -48,41 +39,6 @@ const DesktopMenu: FC = () => {
                         {link.name}
                     </Button>
                 ))}
-            </Flex>
-            <Flex>
-                {!user ? (
-                    <>
-                        <Link href="/signin" passHref>
-                            <Button variant="link" {...linkStyles}>
-                                Sign In
-                            </Button>
-                        </Link>
-
-                        <Link href="/signup" passHref>
-                            <Button
-                                _hover={{
-                                    borderColor: COLORS.orange,
-                                    color: COLORS.orange,
-                                }}
-                                bg="transparent"
-                                border="1px solid #ffffff"
-                                borderRadius="0"
-                                color={COLORS.white}
-                                transition="all 0.4s ease-in-out"
-                            >
-                                Sign Up
-                            </Button>
-                        </Link>
-                    </>
-                ) : (
-                    <Button
-                        onClick={() => handleLogout()}
-                        variant="link"
-                        {...linkStyles}
-                    >
-                        Logout
-                    </Button>
-                )}
             </Flex>
         </Flex>
     );

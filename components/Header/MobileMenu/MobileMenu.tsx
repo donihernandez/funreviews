@@ -16,8 +16,6 @@ import { COLORS } from '../../../styles/theme';
 import { HamburguerButton } from './HamburgerButton';
 import { useRouter } from 'next/router';
 import { useShowsContext } from 'contexts/ShowsContext';
-import Link from 'next/link';
-import { useAuthContext } from 'contexts/AuthContext';
 
 const MobileMenu: FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,12 +35,6 @@ const MobileMenu: FC = () => {
 
     const router = useRouter();
     const { updateShows } = useShowsContext();
-    const { user, logout } = useAuthContext();
-
-    const handleLogout = () => {
-        logout();
-        router.push('/signin');
-    };
 
     return (
         <>
@@ -88,45 +80,6 @@ const MobileMenu: FC = () => {
                                         {link.name}
                                     </Button>
                                 ))}
-                            </Flex>
-                            <Flex
-                                justifyContent={
-                                    !user ? 'space-between' : 'center'
-                                }
-                                p="20px"
-                            >
-                                {!user ? (
-                                    <>
-                                        <Link href="/signin" passHref>
-                                            <Button
-                                                textTransform="uppercase"
-                                                variant="link"
-                                                {...linkStyles}
-                                            >
-                                                Sign In
-                                            </Button>
-                                        </Link>
-
-                                        <Link href="/signup" passHref>
-                                            <Button
-                                                textTransform="uppercase"
-                                                variant="link"
-                                                {...linkStyles}
-                                            >
-                                                Sign Up
-                                            </Button>
-                                        </Link>
-                                    </>
-                                ) : (
-                                    <Button
-                                        onClick={() => handleLogout()}
-                                        textTransform="uppercase"
-                                        variant="link"
-                                        {...linkStyles}
-                                    >
-                                        Logout
-                                    </Button>
-                                )}
                             </Flex>
                         </Flex>
                     </DrawerBody>

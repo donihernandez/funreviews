@@ -11,7 +11,7 @@ const HomePage: NextPage = () => {
     return <Home />;
 };
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
     const queryClient = new QueryClient();
 
     await queryClient.prefetchQuery(['movieGenres'], getMovieGenres);
@@ -24,6 +24,7 @@ export async function getServerSideProps() {
         props: {
             dehydratedState: dehydrate(queryClient),
         },
+        revalidate: 30,
     };
 }
 

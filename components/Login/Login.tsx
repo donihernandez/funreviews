@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import {
     Box,
     Button,
@@ -14,21 +14,21 @@ import {
     Input,
     Text,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
+
 import Link from 'next/link';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import Swal from 'sweetalert2';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
-
-import { supabase } from '@/utils/supabaseClient';
 
 import { COLORS } from '@/styles/theme';
 import { ArrowBackIcon } from '@chakra-ui/icons';
+import { useAuthContext } from 'contexts/AuthContext';
+import { useBreakpoints } from 'hooks';
+import { FullPageLoader } from '../common/FullPageLoader';
 
 const Login: FC = () => {
-    const router = useRouter();
+    const { signIn } = useAuthContext();
+    const { isSmallerThanDesktop } = useBreakpoints();
     const schema = yup
         .object({
             email: yup.string().required(),
@@ -44,31 +44,23 @@ const Login: FC = () => {
         resolver: yupResolver(schema),
     });
 
-    const onSubmit = async formData => {
-        const { error, user } = await supabase.auth.signIn(formData);
-
-        if (error) {
-            Swal.fire({
-                cancelButtonColor: COLORS.primary,
-                icon: 'error',
-                text: 'Something went wrong!',
-                title: 'Oops...',
-            });
-        } else {
-            console.log(user);
-        }
+    const onSubmit = async (formData: { email: string; password: string }) => {
+        await signIn(formData.email, formData.password);
     };
 
     return (
         <Flex bg="black" h="100vh" w="full">
-            <Box h="100vh">
-                <Image
-                    alt="movies camera"
-                    h="full"
-                    objectFit="contain"
-                    src="/login.webp"
-                />
-            </Box>
+            {!isSmallerThanDesktop && (
+                <Box h="100vh">
+                    <Image
+                        alt="movies camera"
+                        h="full"
+                        objectFit="contain"
+                        src="/login.webp"
+                    />
+                </Box>
+            )}
+
             <Container h="100vh" px="50px" w="full">
                 <Flex direction="column" h="full" justifyContent="center">
                     <Box mb="60px">
@@ -92,7 +84,7 @@ const Login: FC = () => {
                         as="h1"
                         color={COLORS.white}
                         fontSize="60px"
-                        pb="100px"
+                        pb="50px"
                     >
                         Login
                     </Heading>
@@ -100,7 +92,7 @@ const Login: FC = () => {
                     <chakra.form onSubmit={handleSubmit(onSubmit)}>
                         <FormControl
                             isInvalid={errors.email as unknown as boolean}
-                            mb="50px"
+                            mb="20px"
                         >
                             <FormLabel color={COLORS.white}>Email</FormLabel>
                             <Input
@@ -119,7 +111,7 @@ const Login: FC = () => {
                         >
                             <FormLabel color={COLORS.white}>Password</FormLabel>
                             <Input
-                                autoComplete="current-password"
+                                autoComplete="password"
                                 color={COLORS.white}
                                 type="password"
                                 variant="flushed"
@@ -145,7 +137,7 @@ const Login: FC = () => {
                             color={COLORS.white}
                             fontSize={['14px', '18px']}
                             h="50px"
-                            mt={[null, '50px']}
+                            mt={['20px', '50px']}
                             transition="all 0.3s ease-in-out"
                             type="submit"
                             variant="outline"

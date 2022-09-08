@@ -8,7 +8,7 @@ const TVShowsPage: NextPage = () => {
     return <Tv />;
 };
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
     const queryClient = new QueryClient();
     await queryClient.prefetchQuery(['tvGenres'], getTvGenres);
     await queryClient.prefetchQuery(['popularTv'], () => getTvPopular());

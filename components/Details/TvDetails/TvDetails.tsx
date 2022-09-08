@@ -290,15 +290,17 @@ const TvDetails: FC = () => {
                 </Tabs>
             </AdditionalInfo>
 
-            <ShowsContainer
-                items={tvRecommendations?.results}
-                link="/tv-shows"
-                title="Related TV Shows"
-                titleStyles={{
-                    color: COLORS.white,
-                }}
-                type="tv"
-            />
+            {tvRecommendations?.results.length > 0 && (
+                <ShowsContainer
+                    items={tvRecommendations?.results}
+                    link="/tv-shows"
+                    title="Related TV Shows"
+                    titleStyles={{
+                        color: COLORS.white,
+                    }}
+                    type="tv"
+                />
+            )}
         </Wrapper>
     );
 };

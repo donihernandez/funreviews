@@ -5,8 +5,9 @@ import Link from 'next/link';
 
 import links from '../links';
 
-import { useShowsContext } from 'contexts/ShowsContext';
 import { COLORS } from '@/styles/theme';
+import { useShowsContext } from 'contexts/ShowsContext';
+import { useAuthContext } from 'contexts/AuthContext';
 
 const DesktopMenu: FC = () => {
     const linkStyles = {
@@ -24,6 +25,7 @@ const DesktopMenu: FC = () => {
 
     const router = useRouter();
     const { updateShows } = useShowsContext();
+    const { user, logout } = useAuthContext();
 
     return (
         <Flex alignItems="center" justifyContent="space-between" w="full">
@@ -43,30 +45,38 @@ const DesktopMenu: FC = () => {
                 ))}
             </Flex>
             <Flex alignItems="center">
-                <Link href="/login" passHref>
-                    <ChakraLink {...linkStyles}>Login</ChakraLink>
-                </Link>
-                <Link href="/register" passHref>
-                    <Button
-                        _hover={{
-                            bg: 'transparent',
-                            borderColor: COLORS.orange,
-                            color: COLORS.orange,
-                            textDecoration: 'none',
-                        }}
-                        as={ChakraLink}
-                        border="3px solid"
-                        borderColor={COLORS.white}
-                        borderRadius="0"
-                        color={COLORS.white}
-                        fontSize={['14px', '18px']}
-                        transition="all 0.3s ease-in-out"
-                        variant="outline"
-                        w="full"
-                    >
-                        Register
+                {!user ? (
+                    <>
+                        <Link href="/login" passHref>
+                            <ChakraLink {...linkStyles}>Login</ChakraLink>
+                        </Link>
+                        <Link href="/register" passHref>
+                            <Button
+                                _hover={{
+                                    bg: 'transparent',
+                                    borderColor: COLORS.orange,
+                                    color: COLORS.orange,
+                                    textDecoration: 'none',
+                                }}
+                                as={ChakraLink}
+                                border="3px solid"
+                                borderColor={COLORS.white}
+                                borderRadius="0"
+                                color={COLORS.white}
+                                fontSize={['14px', '18px']}
+                                transition="all 0.3s ease-in-out"
+                                variant="outline"
+                                w="full"
+                            >
+                                Register
+                            </Button>
+                        </Link>
+                    </>
+                ) : (
+                    <Button {...linkStyles} onClick={logout} variant="unstyled">
+                        Logout
                     </Button>
-                </Link>
+                )}
             </Flex>
         </Flex>
     );

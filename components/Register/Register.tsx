@@ -1,5 +1,4 @@
 import type { FC } from 'react';
-import { useState } from 'react';
 import {
     Box,
     Button,
@@ -23,9 +22,12 @@ import Swal from 'sweetalert2';
 
 import { COLORS } from '@/styles/theme';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { supabase } from '@/utils/supabaseClient';
+import { useAuthContext } from 'contexts/AuthContext';
+import { useBreakpoints } from 'hooks';
 
 const Register: FC = () => {
+    const { signUp } = useAuthContext();
+    const { isSmallerThanDesktop } = useBreakpoints();
     const schema = yup
         .object({
             confirmPassword: yup.string().required(),
@@ -42,24 +44,13 @@ const Register: FC = () => {
         resolver: yupResolver(schema),
     });
 
-    const onSubmit = async formData => {
+    const onSubmit = async (formData: {
+        email: string;
+        password: string;
+        confirmPassword: string;
+    }) => {
         if (formData.password === formData.confirmPassword) {
-            const { error, user } = await supabase.auth.signUp({
-                email: formData.email,
-                password: formData.password,
-            });
-
-            if (error) {
-                Swal.fire({
-                    confirmButtonColor: COLORS.primary,
-                    icon: 'error',
-                    showConfirmButton: true,
-                    text: error.message,
-                    title: 'Oops...',
-                });
-            } else {
-                console.log(user);
-            }
+            await signUp(formData.email, formData.password);
         } else {
             Swal.fire({
                 confirmButtonColor: COLORS.primary,
@@ -73,14 +64,17 @@ const Register: FC = () => {
 
     return (
         <Flex bg="black" h="100vh" w="full">
-            <Box h="100vh">
-                <Image
-                    alt="movies camera"
-                    h="full"
-                    objectFit="contain"
-                    src="/register.webp"
-                />
-            </Box>
+            {!isSmallerThanDesktop && (
+                <Box h="100vh">
+                    <Image
+                        alt="movies camera"
+                        h="full"
+                        objectFit="contain"
+                        src="/register.webp"
+                    />
+                </Box>
+            )}
+
             <Container h="100vh" px="50px" w="full">
                 <Flex direction="column" h="full" justifyContent="center">
                     <Box mb="60px">
@@ -112,7 +106,7 @@ const Register: FC = () => {
                     <chakra.form onSubmit={handleSubmit(onSubmit)}>
                         <FormControl
                             isInvalid={errors.email as unknown as boolean}
-                            mb="50px"
+                            mb="20px"
                         >
                             <FormLabel color={COLORS.white}>Email</FormLabel>
                             <Input
@@ -128,7 +122,7 @@ const Register: FC = () => {
                         </FormControl>
                         <FormControl
                             isInvalid={errors.password as unknown as boolean}
-                            mb="50px"
+                            mb="20px"
                         >
                             <FormLabel color={COLORS.white}>Password</FormLabel>
                             <Input
@@ -178,7 +172,7 @@ const Register: FC = () => {
                             color={COLORS.white}
                             fontSize={['14px', '18px']}
                             h="50px"
-                            mt={[null, '50px']}
+                            mt={['30px', '50px']}
                             transition="all 0.3s ease-in-out"
                             type="submit"
                             variant="outline"

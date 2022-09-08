@@ -1,7 +1,12 @@
+import type { FC } from 'react';
 import { useState } from 'react';
 import { ShowsContext } from './context';
 
-const ShowsProvider = ({ children }) => {
+interface IShowsProviderProps {
+    children: React.ReactNode;
+}
+
+const ShowsProvider: FC<IShowsProviderProps> = ({ children }) => {
     const [genres, setGenres] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
     const [type, setType] = useState('movie');

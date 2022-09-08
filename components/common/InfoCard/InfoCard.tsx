@@ -15,7 +15,6 @@ import { COLORS } from '../../../styles/theme';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 import { motion } from 'framer-motion';
 import { FaPlay } from 'react-icons/fa';
-import { useShowsContext } from 'contexts/ShowsContext';
 
 import { PrimaryButton, SecondaryButton } from '../Buttons';
 

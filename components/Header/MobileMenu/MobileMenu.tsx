@@ -1,13 +1,17 @@
-import { Button, DrawerHeader, Flex, useDisclosure } from '@chakra-ui/react';
-import { useRef } from 'react';
 import type { FC } from 'react';
-
+import { useRef } from 'react';
+import Link from 'next/link';
 import {
+    Button,
+    Link as ChakraLink,
     Drawer,
     DrawerBody,
     DrawerCloseButton,
     DrawerContent,
+    DrawerHeader,
     DrawerOverlay,
+    Flex,
+    useDisclosure,
 } from '@chakra-ui/react';
 
 import links from '../links';
@@ -16,6 +20,7 @@ import { COLORS } from '../../../styles/theme';
 import { HamburguerButton } from './HamburgerButton';
 import { useRouter } from 'next/router';
 import { useShowsContext } from 'contexts/ShowsContext';
+import { useAuthContext } from 'contexts/AuthContext';
 
 const MobileMenu: FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -35,6 +40,12 @@ const MobileMenu: FC = () => {
 
     const router = useRouter();
     const { updateShows } = useShowsContext();
+    const { user, logout } = useAuthContext();
+
+    const navigate = (href: string) => {
+        updateShows([]);
+        router.push(href);
+    };
 
     return (
         <>
@@ -69,10 +80,7 @@ const MobileMenu: FC = () => {
                                     <Button
                                         key={link.name}
                                         mb="20px"
-                                        onClick={() => {
-                                            updateShows([]);
-                                            router.push(link.href);
-                                        }}
+                                        onClick={() => navigate(link.href)}
                                         textTransform="uppercase"
                                         variant="link"
                                         {...linkStyles}
@@ -80,6 +88,43 @@ const MobileMenu: FC = () => {
                                         {link.name}
                                     </Button>
                                 ))}
+
+                                {!user ? (
+                                    <>
+                                        <Link href="/login" passHref>
+                                            <Button
+                                                as={ChakraLink}
+                                                mb="20px"
+                                                textTransform="uppercase"
+                                                variant="link"
+                                                {...linkStyles}
+                                            >
+                                                Login
+                                            </Button>
+                                        </Link>
+                                        <Link href="/login" passHref>
+                                            <Button
+                                                as={ChakraLink}
+                                                mb="20px"
+                                                textTransform="uppercase"
+                                                variant="link"
+                                                {...linkStyles}
+                                            >
+                                                Register
+                                            </Button>
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <Button
+                                        mb="20px"
+                                        onClick={() => logout()}
+                                        textTransform="uppercase"
+                                        variant="link"
+                                        {...linkStyles}
+                                    >
+                                        Logout
+                                    </Button>
+                                )}
                             </Flex>
                         </Flex>
                     </DrawerBody>

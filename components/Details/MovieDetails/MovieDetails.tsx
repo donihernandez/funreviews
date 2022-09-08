@@ -51,6 +51,7 @@ import {
     Title,
     Trailer,
 } from '../Details.components';
+import { FullPageLoader } from '@/components/common/FullPageLoader';
 
 interface IBreadcrumb {
     link: string;
@@ -154,6 +155,10 @@ const MovieDetails: FC = () => {
     useEffect(() => {
         handleGetVideo();
     }, [movieVideos]);
+
+    if (!movieDetailsSuccess) {
+        return <FullPageLoader />;
+    }
 
     return (
         <Wrapper {...wrapperStyles}>
@@ -267,15 +272,17 @@ const MovieDetails: FC = () => {
                 </Tabs>
             </AdditionalInfo>
 
-            <ShowsContainer
-                items={movieRecommendations?.results}
-                link="/movies"
-                title="Related Movies"
-                titleStyles={{
-                    color: COLORS.white,
-                }}
-                type="movie"
-            />
+            {movieRecommendations?.results.length > 0 && (
+                <ShowsContainer
+                    items={movieRecommendations?.results}
+                    link="/movies"
+                    title="Related Movies"
+                    titleStyles={{
+                        color: COLORS.white,
+                    }}
+                    type="movie"
+                />
+            )}
         </Wrapper>
     );
 };

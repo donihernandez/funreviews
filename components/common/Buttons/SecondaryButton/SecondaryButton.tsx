@@ -1,8 +1,8 @@
 import type { FC, JSXElementConstructor, ReactElement } from 'react';
-import { Button } from '@chakra-ui/react';
+import Link from 'next/link';
+import { Button, Link as ChakraLink } from '@chakra-ui/react';
 
 import { COLORS } from '../../../../styles/theme';
-import Link from 'next/link';
 
 interface ISecondaryButtonProps {
     link: string;
@@ -17,22 +17,26 @@ const SecondaryButton: FC<ISecondaryButtonProps> = ({
     ...props
 }) => {
     return (
-        <Button
-            _hover={{
-                bg: COLORS.primary,
-            }}
-            bg={COLORS.orange}
-            borderRadius="0"
-            color={COLORS.white}
-            cursor="pointer"
-            leftIcon={icon}
-            transition="all 0.5s ease-in-out"
-            variant="unstyled"
-            w="full"
-            {...props}
-        >
-            <Link href={link}>{text}</Link>
-        </Button>
+        <Link href={link} passHref>
+            <Button
+                _hover={{
+                    bg: COLORS.primary,
+                    textDecoration: 'none',
+                }}
+                as={ChakraLink}
+                bg={COLORS.orange}
+                borderRadius="0"
+                color={COLORS.white}
+                cursor="pointer"
+                leftIcon={icon}
+                transition="all 0.5s ease-in-out"
+                variant="ghost"
+                w="full"
+                {...props}
+            >
+                {text}
+            </Button>
+        </Link>
     );
 };
 

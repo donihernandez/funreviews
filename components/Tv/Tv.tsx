@@ -1,4 +1,7 @@
-import { FC, useEffect, useState } from 'react';
+import type { FC } from 'react';
+
+import { useEffect, useState } from 'react';
+
 import { Intro } from '../common/Intro';
 import { ShowsList } from '../common/Shows/ShowsList';
 import { Wrapper } from '../common/Wrapper';

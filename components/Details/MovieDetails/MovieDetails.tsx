@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -61,6 +61,9 @@ interface IBreadcrumb {
 
 const MovieDetails: FC = () => {
     const router = useRouter();
+    const [credits, setCredits] = useState<any>();
+    const [reviews, setReviews] = useState<any>();
+    const [videos, setVideos] = useState<any>();
 
     const { isSmallerThanDesktop } = useBreakpoints();
 
@@ -96,16 +99,19 @@ const MovieDetails: FC = () => {
 
     const date = new Date(movieDetails.release_date).toDateString();
 
-    const { data: movieCredits } = useQuery(['movieCredits', id], () =>
-        getMovieCredits(id as string),
+    const { data: movieCredits, isSuccess: movieCreditsSuccess } = useQuery(
+        ['movieCredits', id],
+        () => getMovieCredits(id as string),
     );
 
-    const { data: movieReviews } = useQuery(['movieReviews', id], () =>
-        getMovieReviews(id as string),
+    const { data: movieReviews, isSuccess: movieReviewsSuccess } = useQuery(
+        ['movieReviews', id],
+        () => getMovieReviews(id as string),
     );
 
-    const { data: movieVideos } = useQuery(['movieVideos', id], () =>
-        getVideos(id as string),
+    const { data: movieVideos, isSuccess: movieVideosSuccess } = useQuery(
+        ['movieVideos', id],
+        () => getVideos(id as string),
     );
 
     const { data: movieRecommendations } = useQuery(
@@ -138,23 +144,36 @@ const MovieDetails: FC = () => {
             color: COLORS.orange,
         },
         color: COLORS.white,
+        cursor: 'pointer',
         fontFamily: 'Nunito',
         fontSize: '20px',
         fontWeight: 'bold',
     };
 
-    const handleGetVideo = async () => {
+    const handleGetVideo = useCallback(async () => {
         const trailer = getTrailer(movieVideos?.results);
         setMovieTrailer(trailer);
-    };
+    }, [movieVideosSuccess]);
 
     const getGenres = (): string[] => {
         return movieDetails.genres.map(genre => genre.name);
     };
 
     useEffect(() => {
+        if (movieCreditsSuccess) {
+            setCredits(movieCredits);
+        }
+        if (movieReviewsSuccess) {
+            setReviews(movieReviews);
+        }
+        if (movieVideosSuccess) {
+            setVideos(movieVideos);
+        }
+    }, [movieCreditsSuccess, movieReviewsSuccess, movieVideosSuccess]);
+
+    useEffect(() => {
         handleGetVideo();
-    }, [movieVideos]);
+    }, [movieVideosSuccess]);
 
     if (!movieDetailsSuccess) {
         return <FullPageLoader />;
@@ -162,7 +181,7 @@ const MovieDetails: FC = () => {
 
     return (
         <Wrapper {...wrapperStyles}>
-            <Flex direction="column" paddingTop="100px" position="relative">
+            <Flex direction="column" paddingTop="100px">
                 <Flex w="full">
                     <Breadcrumb color={COLORS.white} my={6}>
                         {breadcrumbs.map(
@@ -186,17 +205,17 @@ const MovieDetails: FC = () => {
                         )}
                     </Breadcrumb>
                 </Flex>
-                {getImagePath !== '' ? (
-                    <Poster
-                        image={getImagePath}
-                        title={movieDetails.original_title}
-                    />
-                ) : (
-                    <Loading />
-                )}
+
+                <Poster
+                    image={getImagePath}
+                    title={movieDetails.original_title}
+                />
 
                 <DetailsContainer>
-                    <Trailer video={movieTrailer} />
+                    <Flex>
+                        <Trailer video={movieTrailer} />
+                    </Flex>
+
                     <InfoContainer>
                         <Title title={movieDetails.title} />
                         <Rate vote_average={movieDetails.vote_average} />
@@ -245,13 +264,13 @@ const MovieDetails: FC = () => {
 
                     <TabPanels>
                         <TabPanel>
-                            <ReviewsList reviews={movieReviews.results} />
+                            <ReviewsList reviews={reviews?.results} />
                         </TabPanel>
                         <TabPanel>
                             <Flex direction="column">
-                                <CastContainer castList={movieCredits?.cast} />
+                                <CastContainer castList={credits?.cast} />
                                 <Divider color={COLORS.white} my="30px" />
-                                <CrewContainer crewList={movieCredits?.crew} />
+                                <CrewContainer crewList={credits?.crew} />
                             </Flex>
                         </TabPanel>
                         <TabPanel>
@@ -260,7 +279,7 @@ const MovieDetails: FC = () => {
                                 mt="20px"
                                 spacingX="20px"
                             >
-                                {movieVideos?.results.map(video => (
+                                {videos?.results.map(video => (
                                     <VideoBox
                                         key={video.id}
                                         video={video.key}

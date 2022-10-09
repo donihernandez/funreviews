@@ -183,14 +183,8 @@ const TvDetails: FC = () => {
                         )}
                     </Breadcrumb>
                 </Flex>
-                {getImagePath !== '' ? (
-                    <Poster
-                        image={getImagePath}
-                        title={tvDetails?.original_name}
-                    />
-                ) : (
-                    <Loading />
-                )}
+
+                <Poster image={getImagePath} title={tvDetails?.original_name} />
 
                 <DetailsContainer>
                     <Trailer video={trailer} />

@@ -1,8 +1,14 @@
-import { Flex } from '@chakra-ui/layout';
+import { Flex } from '@chakra-ui/react';
+import { useState } from 'react';
 import { Intro } from '../common/Intro';
 import { Wrapper } from '../common/Wrapper';
+import { ChangePassword } from './ChangePassword';
+import { ProfileDetails } from './ProfileDetails';
+import { ProfileSidebar } from './ProfileSidebar';
 
 const Profile = () => {
+    const [activeLink, setActiveLink] = useState('profile_details');
+
     const breadcrumbs = [
         {
             link: '/',
@@ -15,6 +21,20 @@ const Profile = () => {
         },
     ];
 
+    const renderLink = () => {
+        let renderComponent = null;
+        switch (activeLink) {
+            case 'profile_details':
+                renderComponent = <ProfileDetails />;
+                break;
+            case 'change_password':
+                renderComponent = <ChangePassword />;
+                break;
+        }
+
+        return renderComponent;
+    };
+
     return (
         <Wrapper>
             <Intro
@@ -22,9 +42,9 @@ const Profile = () => {
                 hasSearch={false}
                 title="Profile"
             />
-            <Flex>
-                <Flex direction="column"></Flex>
-                <Flex></Flex>
+            <Flex flexDirection={['column', 'row']}>
+                <ProfileSidebar setActiveLink={setActiveLink} />
+                {renderLink()}
             </Flex>
         </Wrapper>
     );

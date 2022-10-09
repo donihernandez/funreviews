@@ -18,9 +18,10 @@ interface IBreadcrumb {
 interface IIntroProps {
     title: string;
     breadcrumbs: IBreadcrumb[];
+    hasSearch?: boolean;
 }
 
-const Intro: FC<IIntroProps> = ({ title, breadcrumbs }) => {
+const Intro: FC<IIntroProps> = ({ title, breadcrumbs, hasSearch = true }) => {
     return (
         <Flex
             alignItems="center"
@@ -56,7 +57,7 @@ const Intro: FC<IIntroProps> = ({ title, breadcrumbs }) => {
                     );
                 })}
             </Breadcrumb>
-            <SearchBar />
+            {hasSearch && <SearchBar />}
         </Flex>
     );
 };

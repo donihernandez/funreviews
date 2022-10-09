@@ -1,5 +1,13 @@
 import type { FC } from 'react';
-import { Button, Link as ChakraLink, Flex } from '@chakra-ui/react';
+import {
+    Button,
+    Link as ChakraLink,
+    Flex,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
@@ -8,6 +16,7 @@ import links from '../links';
 import { COLORS } from '@/styles/theme';
 import { useShowsContext } from 'contexts/ShowsContext';
 import { useAuthContext } from 'contexts/AuthContext';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 
 const DesktopMenu: FC = () => {
     const linkStyles = {
@@ -73,9 +82,72 @@ const DesktopMenu: FC = () => {
                         </Link>
                     </>
                 ) : (
-                    <Button {...linkStyles} onClick={logout} variant="unstyled">
-                        Logout
-                    </Button>
+                    <Menu>
+                        <MenuButton
+                            _active={{
+                                backgroundColor: 'transparent',
+                                color: COLORS.orange,
+                            }}
+                            _hover={{
+                                backgroundColor: 'transparent',
+                                color: COLORS.orange,
+                            }}
+                            as={Button}
+                            bg="transparent"
+                            color={COLORS.white}
+                            rightIcon={<ChevronDownIcon />}
+                        >
+                            My Account
+                        </MenuButton>
+                        <MenuList
+                            bg="transparent"
+                            border="1px solid"
+                            borderColor={COLORS.orange}
+                            borderRadius="0"
+                            padding="0"
+                        >
+                            <Link href="/profile" passHref>
+                                <MenuItem
+                                    _active={{
+                                        backgroundColor: 'transparent',
+                                    }}
+                                    _focus={{
+                                        backgroundColor: 'transparent',
+                                    }}
+                                    _hover={{
+                                        backgroundColor: COLORS.white,
+                                        color: COLORS.primary,
+                                        textDecoration: 'none',
+                                    }}
+                                    as={ChakraLink}
+                                    color={COLORS.white}
+                                    fontWeight="bold"
+                                    py="15px"
+                                >
+                                    Profile
+                                </MenuItem>
+                            </Link>
+
+                            <MenuItem
+                                _active={{
+                                    backgroundColor: 'transparent',
+                                }}
+                                _focus={{
+                                    backgroundColor: 'transparent',
+                                }}
+                                _hover={{
+                                    backgroundColor: COLORS.white,
+                                    color: COLORS.primary,
+                                }}
+                                color={COLORS.white}
+                                fontWeight="bold"
+                                onClick={logout}
+                                py="15px"
+                            >
+                                Logout
+                            </MenuItem>
+                        </MenuList>
+                    </Menu>
                 )}
             </Flex>
         </Flex>

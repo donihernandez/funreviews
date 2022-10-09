@@ -1,7 +1,8 @@
+import { Profile } from '@/components/Profile';
 import { NextPage } from 'next';
 
 const ProfilePage: NextPage = () => {
-    return <h1>My Profile</h1>;
+    return <Profile />;
 };
 
 export default ProfilePage;

@@ -1,6 +1,6 @@
-import { FC, useState } from 'react';
+import type { FC } from 'react';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 
 import { getMovieGenres, getPopular } from '_tmdb/movies/queries';

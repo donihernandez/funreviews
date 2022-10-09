@@ -1,24 +1,33 @@
 import type { FC } from 'react';
+import { useEffect } from 'react';
 import { Flex } from '@chakra-ui/react';
-
-import { Hero } from '@/components/Home/Hero';
-import { getMovieGenres, getTrending } from '_tmdb/movies/queries';
-
-import { Trending } from '@/components/Home/Trending';
-
+import dynamic from 'next/dynamic';
 import { useQuery } from 'react-query';
 
+import { getMovieGenres, getTrending } from '_tmdb/movies/queries';
+
 import { useShowsContext } from 'contexts/ShowsContext';
-import { useEffect } from 'react';
-
 import { Loading } from '@/components/common/Loading';
-import { PopularMovies } from './PopularMovies';
-import { TopRatedMovies } from './TopRatedMovies';
-
-import { TopRatedTv } from './TopRatedTv';
-import { PopularTv } from './PopularTv';
 
 const Home: FC = () => {
+    // Dynamic Imports
+    const Hero = dynamic(() => import('./Hero').then(module => module.Hero));
+    const Trending = dynamic(() =>
+        import('./Trending').then(module => module.Trending),
+    );
+    const PopularMovies = dynamic(() =>
+        import('./PopularMovies').then(module => module.PopularMovies),
+    );
+    const TopRatedMovies = dynamic(() =>
+        import('./TopRatedMovies').then(module => module.TopRatedMovies),
+    );
+    const PopularTv = dynamic(() =>
+        import('./PopularTv').then(module => module.PopularTv),
+    );
+    const TopRatedTv = dynamic(() =>
+        import('./TopRatedTv').then(module => module.TopRatedTv),
+    );
+
     const { setMovieGenres } = useShowsContext();
     const { data: movieResults, isSuccess: moviesSucess } = useQuery(
         'trendingMovie',

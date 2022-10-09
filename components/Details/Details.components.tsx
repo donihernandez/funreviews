@@ -43,15 +43,7 @@ interface IPosterProps {
 
 const Poster: FC<IPosterProps> = ({ title, image }) => {
     return (
-        <AspectRatio maxH="600px" maxW="90vw" ratio={1}>
-            <Image
-                alt={title}
-                h="full"
-                objectFit="cover"
-                src={image}
-                w="full"
-            />
-        </AspectRatio>
+        <Image alt={title} h="full" objectFit="cover" src={image} w="full" />
     );
 };
 
@@ -68,8 +60,8 @@ const Trailer: FC<ITrailerProps> = ({ video }) => {
             as="iframe"
             frameBorder="0"
             h="full"
-            minH={['300px', null, '500px']}
-            minW={['375px', null, '600px']}
+            minH={['300px', null, '400px']}
+            minW={['375px', null, '400px']}
             src={`https://www.youtube.com/embed/${video}`}
             w="full"
         />
@@ -208,7 +200,11 @@ const ProductionCompany: FC<IProductionCompanyProps> = ({ company }) => {
 };
 
 const AdditionalInfo: FC<IDetailsProps> = ({ children }) => {
-    return <Flex w="full">{children}</Flex>;
+    return (
+        <Flex mt="40px" w="full">
+            {children}
+        </Flex>
+    );
 };
 
 interface IReviewsListProps {

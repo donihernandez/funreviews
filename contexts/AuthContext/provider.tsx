@@ -8,13 +8,13 @@ import {
     signOut,
     User,
 } from 'firebase/auth';
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
 
 import { useRouter } from 'next/router';
 import { AuthContext } from './context';
-import { auth } from '@/utils/firebase';
+import { auth, db } from '@/utils/firebase';
 import Swal from 'sweetalert2';
 import { COLORS } from '@/styles/theme';
-import { NOT_LAYOUT_ROUTES } from '@/utils/notLayoutRoutes';
 
 interface IAuthProviderProps {
     children: React.ReactNode;
@@ -45,24 +45,60 @@ const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
         [auth],
     );
 
-    const signUp = async (email: string, password: string) => {
-        setLoading(true);
+    const getCurrentUser = async () => {
+        const usersCollectionRef = collection(db, 'users');
+        let userData = null;
+        if (user) {
+            const userQuery = query(
+                usersCollectionRef,
+                where('email', '==', user.email),
+            );
+            const querySnapshot = await getDocs(userQuery);
+            querySnapshot.forEach(doc => {
+                userData = doc.data();
+            });
+        }
 
-        await createUserWithEmailAndPassword(auth, email, password)
-            .then(userCredential => {
-                setUser(userCredential.user);
-                router.push('/');
-                setLoading(false);
-            })
-            .catch(error =>
-                Swal.fire({
-                    cancelButtonColor: COLORS.primary,
-                    icon: 'error',
-                    text: error.message,
-                    title: 'Oops...',
-                }),
-            )
-            .finally(() => setLoading(false));
+        return userData;
+    };
+
+    const signUp = async (
+        email: string,
+        password: string,
+        username: string,
+    ) => {
+        setLoading(true);
+        const usersCollectionRef = collection(db, 'users');
+
+        const userCredential: any = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password,
+        ).catch(error =>
+            Swal.fire({
+                cancelButtonColor: COLORS.primary,
+                icon: 'error',
+                text: error.message,
+                title: 'Oops...',
+            }),
+        );
+        setUser(userCredential.user);
+
+        await addDoc(usersCollectionRef, {
+            email,
+            username,
+        }).catch(error =>
+            Swal.fire({
+                cancelButtonColor: COLORS.primary,
+                icon: 'error',
+                text: error.message,
+                title: 'Oops...',
+            }),
+        );
+
+        router.push('/');
+
+        setLoading(false);
     };
 
     const signIn = async (email: string, password: string) => {
@@ -95,7 +131,15 @@ const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     };
 
     const memoedValue = useMemo(
-        () => ({ error, loading, logout, signIn, signUp, user }),
+        () => ({
+            error,
+            getCurrentUser,
+            loading,
+            logout,
+            signIn,
+            signUp,
+            user,
+        }),
         [user, loading, error],
     );
 

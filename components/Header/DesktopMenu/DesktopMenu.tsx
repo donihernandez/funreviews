@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import {
     Button,
     Link as ChakraLink,
@@ -31,10 +31,20 @@ const DesktopMenu: FC = () => {
         mr: '20px',
         textDecoration: 'none',
     };
+    const [username, setUsername] = useState('');
 
     const router = useRouter();
     const { updateShows } = useShowsContext();
-    const { user, logout } = useAuthContext();
+    const { user, getCurrentUser, logout } = useAuthContext();
+
+    const showUsername = async () => {
+        const usernameData = await getCurrentUser();
+        setUsername(usernameData.username);
+    };
+
+    useEffect(() => {
+        showUsername();
+    }, [user]);
 
     return (
         <Flex alignItems="center" justifyContent="space-between" w="full">
@@ -97,7 +107,7 @@ const DesktopMenu: FC = () => {
                             color={COLORS.white}
                             rightIcon={<ChevronDownIcon />}
                         >
-                            My Account
+                            {username}
                         </MenuButton>
                         <MenuList
                             bg="transparent"

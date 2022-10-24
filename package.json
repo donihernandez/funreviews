@@ -9,7 +9,8 @@
         "lint": "next lint",
         "prepare": "husky install",
         "test:dev": "jest --watch",
-        "test": "jest --ci"
+        "test": "jest --ci",
+        "cypress": "cypress open"
     },
     "dependencies": {
         "@ajna/pagination": "^1.4.19",
@@ -46,6 +47,7 @@
         "@types/react-dom": "18.0.4",
         "@typescript-eslint/eslint-plugin": "^5.26.0",
         "@typescript-eslint/parser": "^5.26.0",
+        "cypress": "^10.9.0",
         "cz-conventional-changelog": "^3.3.0",
         "eslint": "^8.15.0",
         "eslint-config-next": "^12.1.6",

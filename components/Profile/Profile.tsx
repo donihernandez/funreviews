@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Intro } from '../common/Intro';
 import { Wrapper } from '../common/Wrapper';
 import { ChangePassword } from './ChangePassword';
-import { ProfileDetails } from './ProfileDetails';
+// import { ProfileDetails } from './ProfileDetails';
 import { ProfileSidebar } from './ProfileSidebar';
 
 const Profile = () => {
@@ -24,9 +24,9 @@ const Profile = () => {
     const renderLink = () => {
         let renderComponent = null;
         switch (activeLink) {
-            case 'profile_details':
-                renderComponent = <ProfileDetails />;
-                break;
+            // case 'profile_details':
+            //     renderComponent = <ProfileDetails />;
+            //     break;
             case 'change_password':
                 renderComponent = <ChangePassword />;
                 break;

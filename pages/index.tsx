@@ -14,11 +14,15 @@ const HomePage: NextPage = () => {
 export async function getStaticProps() {
     const queryClient = new QueryClient();
 
-    await queryClient.prefetchQuery(['movieGenres'], getMovieGenres);
-    await queryClient.prefetchQuery(['tvGenres'], getTvGenres);
-    await queryClient.prefetchQuery(['popular_tv'], () => getPopular());
-    await queryClient.prefetchQuery('topRatedMovies', () => getTopRated());
-    await queryClient.prefetchQuery('topRatedTv', () => getTvTopRated());
+    try {
+        await queryClient.prefetchQuery(['movieGenres'], getMovieGenres);
+        await queryClient.prefetchQuery(['tvGenres'], getTvGenres);
+        await queryClient.prefetchQuery(['popular_tv'], () => getPopular());
+        await queryClient.prefetchQuery('topRatedMovies', () => getTopRated());
+        await queryClient.prefetchQuery('topRatedTv', () => getTvTopRated());
+    } catch (error) {
+        return error;
+    }
 
     return {
         props: {

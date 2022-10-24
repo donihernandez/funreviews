@@ -8,7 +8,15 @@ import {
     signOut,
     User,
 } from 'firebase/auth';
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
+import {
+    addDoc,
+    collection,
+    doc,
+    getDocs,
+    query,
+    setDoc,
+    where,
+} from 'firebase/firestore';
 
 import { useRouter } from 'next/router';
 import { AuthContext } from './context';
@@ -120,14 +128,29 @@ const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
             .finally(() => setLoading(false));
     };
 
-    const logout = async () => {
+    const logout = () => {
         setLoading(true);
-        await signOut(auth)
+        signOut(auth)
             .then(() => {
                 setUser(null);
             })
             .catch(error => alert(error.message))
             .finally(() => setLoading(false));
+    };
+
+    const updateUser = async userData => {
+        const usersCollectionRef = collection(db, 'users');
+
+        const userQuery = query(
+            usersCollectionRef,
+            where('email', '==', user.email),
+        );
+        const querySnapshot = await getDocs(userQuery);
+        querySnapshot.forEach(document => {
+            setDoc(doc(db, 'users', document.id), userData).catch(e => e);
+        });
+
+        return 'Your profile has been updated successfully!';
     };
 
     const memoedValue = useMemo(
@@ -138,6 +161,7 @@ const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
             logout,
             signIn,
             signUp,
+            updateUser,
             user,
         }),
         [user, loading, error],

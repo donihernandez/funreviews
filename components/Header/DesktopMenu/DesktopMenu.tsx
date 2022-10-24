@@ -43,7 +43,9 @@ const DesktopMenu: FC = () => {
     };
 
     useEffect(() => {
-        showUsername();
+        if (user) {
+            showUsername();
+        }
     }, [user]);
 
     return (

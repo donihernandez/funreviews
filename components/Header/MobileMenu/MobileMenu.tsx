@@ -1,7 +1,8 @@
-import { FC, useEffect, useState } from 'react';
-import { useRef } from 'react';
+import { FC, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import {
+    Avatar,
     Button,
     Link as ChakraLink,
     Drawer,
@@ -11,6 +12,7 @@ import {
     DrawerHeader,
     DrawerOverlay,
     Flex,
+    Text,
     useDisclosure,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
@@ -21,11 +23,13 @@ import { COLORS } from '../../../styles/theme';
 import { HamburguerButton } from './HamburgerButton';
 import { useShowsContext } from 'contexts/ShowsContext';
 import { useAuthContext } from 'contexts/AuthContext';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '@/utils/firebase';
 
 const MobileMenu: FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const btnRef = useRef<HTMLButtonElement>(null);
-    const [username, setUsername] = useState('');
+    const [currentUser, setCurrentUser] = useState(null);
 
     const linkStyles = {
         _hover: {
@@ -60,6 +64,17 @@ const MobileMenu: FC = () => {
         router.push(href);
     };
 
+    useEffect(() => {
+        if (user) {
+            const userDocRef = doc(db, 'users', user.uid);
+            const unsubscribe = onSnapshot(userDocRef, doc => {
+                setCurrentUser(doc.data());
+            });
+
+            return () => unsubscribe();
+        }
+    }, [user]);
+
     return (
         <>
             <HamburguerButton onClick={onOpen} ref={btnRef} />
@@ -76,12 +91,22 @@ const MobileMenu: FC = () => {
                         padding="20px"
                         size="30px"
                     />
-                    <DrawerHeader
-                        color={COLORS.white}
-                        fontFamily="Lato"
-                        fontSize="20px"
-                    >
-                        {username}
+                    <DrawerHeader>
+                        <Flex alignItems="center" justifyContent="flex-start">
+                            {currentUser && (
+                                <>
+                                    <Avatar
+                                        h="50px"
+                                        name={currentUser.username || ''}
+                                        src={currentUser.avatar || ''}
+                                        w="50px"
+                                    />
+                                    <Text color={COLORS.white} ml="15px">
+                                        {currentUser?.username}
+                                    </Text>
+                                </>
+                            )}
+                        </Flex>
                     </DrawerHeader>
                     <DrawerBody>
                         <Flex

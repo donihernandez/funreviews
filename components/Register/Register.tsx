@@ -143,7 +143,7 @@ const Register: FC = () => {
                         >
                             <FormLabel color={COLORS.white}>Password</FormLabel>
                             <Input
-                                autoComplete="current-password"
+                                autoComplete="new-password"
                                 color={COLORS.white}
                                 type="password"
                                 variant="flushed"

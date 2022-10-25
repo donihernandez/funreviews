@@ -1,12 +1,15 @@
 import { FC, useEffect, useState } from 'react';
 import {
+    Avatar,
     Button,
     Link as ChakraLink,
     Flex,
+    Image,
     Menu,
     MenuButton,
     MenuItem,
     MenuList,
+    Text,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -17,6 +20,8 @@ import { COLORS } from '@/styles/theme';
 import { useShowsContext } from 'contexts/ShowsContext';
 import { useAuthContext } from 'contexts/AuthContext';
 import { ChevronDownIcon } from '@chakra-ui/icons';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '@/utils/firebase';
 
 const DesktopMenu: FC = () => {
     const linkStyles = {
@@ -31,20 +36,20 @@ const DesktopMenu: FC = () => {
         mr: '20px',
         textDecoration: 'none',
     };
-    const [username, setUsername] = useState('');
+    const [currentUser, setCurrentUser] = useState(null);
 
     const router = useRouter();
     const { updateShows } = useShowsContext();
     const { user, getCurrentUser, logout } = useAuthContext();
 
-    const showUsername = async () => {
-        const usernameData = await getCurrentUser();
-        setUsername(usernameData.username);
-    };
-
     useEffect(() => {
         if (user) {
-            showUsername();
+            const userDocRef = doc(db, 'users', user.uid);
+            const unsubscribe = onSnapshot(userDocRef, doc => {
+                setCurrentUser(doc.data());
+            });
+
+            return () => unsubscribe();
         }
     }, [user]);
 
@@ -109,7 +114,21 @@ const DesktopMenu: FC = () => {
                             color={COLORS.white}
                             rightIcon={<ChevronDownIcon />}
                         >
-                            {username}
+                            <Flex alignItems="center" justifyContent="center">
+                                {currentUser && (
+                                    <>
+                                        <Avatar
+                                            h="50px"
+                                            name={currentUser.username || ''}
+                                            src={currentUser.avatar || ''}
+                                            w="50px"
+                                        />
+                                        <Text ml="15px">
+                                            {currentUser?.username}
+                                        </Text>
+                                    </>
+                                )}
+                            </Flex>
                         </MenuButton>
                         <MenuList
                             bg="transparent"

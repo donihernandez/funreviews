@@ -46,18 +46,7 @@ const MobileMenu: FC = () => {
 
     const router = useRouter();
     const { updateShows } = useShowsContext();
-    const { user, getCurrentUser, logout } = useAuthContext();
-
-    const showUsername = async () => {
-        const usernameData = await getCurrentUser();
-        setUsername(usernameData.username);
-    };
-
-    useEffect(() => {
-        if (user) {
-            showUsername();
-        }
-    }, [user]);
+    const { user, logout } = useAuthContext();
 
     const navigate = (href: string) => {
         updateShows([]);

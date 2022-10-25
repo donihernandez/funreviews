@@ -42,9 +42,9 @@ const Profile = () => {
                 hasSearch={false}
                 title="Profile"
             />
-            <Flex flexDirection={['column', 'row']}>
+            <Flex flexDirection={['column', 'row']} justifyContent="flex-start">
                 <ProfileSidebar setActiveLink={setActiveLink} />
-                {renderLink()}
+                <ChangePassword />
             </Flex>
         </Wrapper>
     );

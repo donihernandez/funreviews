@@ -33,6 +33,7 @@ const Register: FC = () => {
             confirmPassword: yup.string().required(),
             email: yup.string().required(),
             password: yup.string().required(),
+            username: yup.string().required(),
         })
         .required();
 
@@ -48,9 +49,10 @@ const Register: FC = () => {
         email: string;
         password: string;
         confirmPassword: string;
+        username: string;
     }) => {
         if (formData.password === formData.confirmPassword) {
-            await signUp(formData.email, formData.password);
+            await signUp(formData.email, formData.password, formData.username);
         } else {
             Swal.fire({
                 confirmButtonColor: COLORS.primary,
@@ -108,6 +110,21 @@ const Register: FC = () => {
                             isInvalid={errors.email as unknown as boolean}
                             mb="20px"
                         >
+                            <FormLabel color={COLORS.white}>Username</FormLabel>
+                            <Input
+                                color={COLORS.white}
+                                type="text"
+                                variant="flushed"
+                                {...register('username')}
+                            />
+                            <FormErrorMessage>
+                                {errors.username && 'Username is required'}
+                            </FormErrorMessage>
+                        </FormControl>
+                        <FormControl
+                            isInvalid={errors.email as unknown as boolean}
+                            mb="20px"
+                        >
                             <FormLabel color={COLORS.white}>Email</FormLabel>
                             <Input
                                 autoComplete="username"
@@ -126,7 +143,7 @@ const Register: FC = () => {
                         >
                             <FormLabel color={COLORS.white}>Password</FormLabel>
                             <Input
-                                autoComplete="current-password"
+                                autoComplete="new-password"
                                 color={COLORS.white}
                                 type="password"
                                 variant="flushed"

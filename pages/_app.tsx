@@ -1,6 +1,11 @@
 import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
-import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
+import {
+    DehydratedState,
+    Hydrate,
+    QueryClient,
+    QueryClientProvider,
+} from 'react-query';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -12,7 +17,10 @@ import { ShowsProvider } from 'contexts/ShowsContext';
 import { AuthProvider } from 'contexts/AuthContext';
 import { Transition } from '@/components/common/Transition';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({
+    Component,
+    pageProps,
+}: AppProps<{ dehydratedState: DehydratedState }>) {
     const [queryClient] = useState(() => new QueryClient());
 
     const router = useRouter();

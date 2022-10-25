@@ -1,7 +1,8 @@
-import type { FC } from 'react';
-import { useRef } from 'react';
+import { FC, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import {
+    Avatar,
     Button,
     Link as ChakraLink,
     Drawer,
@@ -11,20 +12,24 @@ import {
     DrawerHeader,
     DrawerOverlay,
     Flex,
+    Text,
     useDisclosure,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 
 import links from '../links';
 import { COLORS } from '../../../styles/theme';
 
 import { HamburguerButton } from './HamburgerButton';
-import { useRouter } from 'next/router';
 import { useShowsContext } from 'contexts/ShowsContext';
 import { useAuthContext } from 'contexts/AuthContext';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '@/utils/firebase';
 
 const MobileMenu: FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const btnRef = useRef<HTMLButtonElement>(null);
+    const [currentUser, setCurrentUser] = useState(null);
 
     const linkStyles = {
         _hover: {
@@ -35,6 +40,7 @@ const MobileMenu: FC = () => {
         fontFamily: 'Nunito',
         fontSize: '25px',
         fontWeight: '600',
+        marginBottom: '10px',
         textDecoration: 'none',
     };
 
@@ -46,6 +52,17 @@ const MobileMenu: FC = () => {
         updateShows([]);
         router.push(href);
     };
+
+    useEffect(() => {
+        if (user) {
+            const userDocRef = doc(db, 'users', user.uid);
+            const unsubscribe = onSnapshot(userDocRef, doc => {
+                setCurrentUser(doc.data());
+            });
+
+            return () => unsubscribe();
+        }
+    }, [user]);
 
     return (
         <>
@@ -63,7 +80,23 @@ const MobileMenu: FC = () => {
                         padding="20px"
                         size="30px"
                     />
-                    <DrawerHeader></DrawerHeader>
+                    <DrawerHeader>
+                        <Flex alignItems="center" justifyContent="flex-start">
+                            {currentUser && (
+                                <>
+                                    <Avatar
+                                        h="50px"
+                                        name={currentUser.username || ''}
+                                        src={currentUser.avatar || ''}
+                                        w="50px"
+                                    />
+                                    <Text color={COLORS.white} ml="15px">
+                                        {currentUser?.username}
+                                    </Text>
+                                </>
+                            )}
+                        </Flex>
+                    </DrawerHeader>
                     <DrawerBody>
                         <Flex
                             direction="column"
@@ -79,7 +112,6 @@ const MobileMenu: FC = () => {
                                 {links.map(link => (
                                     <Button
                                         key={link.name}
-                                        mb="20px"
                                         onClick={() => navigate(link.href)}
                                         textTransform="uppercase"
                                         variant="link"
@@ -88,7 +120,6 @@ const MobileMenu: FC = () => {
                                         {link.name}
                                     </Button>
                                 ))}
-
                                 {!user ? (
                                     <>
                                         <Link href="/login" passHref>
@@ -115,15 +146,29 @@ const MobileMenu: FC = () => {
                                         </Link>
                                     </>
                                 ) : (
-                                    <Button
-                                        mb="20px"
-                                        onClick={() => logout()}
-                                        textTransform="uppercase"
-                                        variant="link"
-                                        {...linkStyles}
-                                    >
-                                        Logout
-                                    </Button>
+                                    <>
+                                        <Link href="/profile" passHref>
+                                            <Button
+                                                as={ChakraLink}
+                                                mb="20px"
+                                                textTransform="uppercase"
+                                                variant="link"
+                                                {...linkStyles}
+                                            >
+                                                Profile
+                                            </Button>
+                                        </Link>
+
+                                        <Button
+                                            mb="20px"
+                                            onClick={() => logout()}
+                                            textTransform="uppercase"
+                                            variant="link"
+                                            {...linkStyles}
+                                        >
+                                            Logout
+                                        </Button>
+                                    </>
                                 )}
                             </Flex>
                         </Flex>

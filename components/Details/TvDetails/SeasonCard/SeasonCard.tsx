@@ -13,7 +13,6 @@ import {
     Text,
 } from '@chakra-ui/react';
 import { COLORS } from '@/styles/theme';
-import Link from 'next/link';
 
 interface ISeasonCardProps {
     season: Season;

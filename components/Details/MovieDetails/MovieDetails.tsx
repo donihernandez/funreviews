@@ -36,7 +36,6 @@ import { VideoBox } from '../../common/VideoBox';
 import { useBreakpoints } from 'hooks';
 import { ShowsContainer } from '../../common/Shows/ShowsContainer';
 import { GenresList } from '../../common/GenreList';
-import { Loading } from '../../common/Loading';
 import {
     AdditionalInfo,
     CastContainer,

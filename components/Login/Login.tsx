@@ -24,7 +24,6 @@ import { COLORS } from '@/styles/theme';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useAuthContext } from 'contexts/AuthContext';
 import { useBreakpoints } from 'hooks';
-import { FullPageLoader } from '../common/FullPageLoader';
 
 const Login: FC = () => {
     const { signIn } = useAuthContext();

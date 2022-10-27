@@ -4,7 +4,6 @@ import {
     Button,
     Link as ChakraLink,
     Flex,
-    Image,
     Menu,
     MenuButton,
     MenuItem,
@@ -40,7 +39,7 @@ const DesktopMenu: FC = () => {
 
     const router = useRouter();
     const { updateShows } = useShowsContext();
-    const { user, getCurrentUser, logout } = useAuthContext();
+    const { user, logout } = useAuthContext();
 
     useEffect(() => {
         if (user) {

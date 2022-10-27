@@ -47,7 +47,6 @@ import {
     Title,
     Trailer,
 } from '../Details.components';
-import { Loading } from '@/components/common/Loading';
 import { getTvVideos } from '_tmdb/tv/queries/getTvVideos';
 import { getTrailer } from '@/utils/getTrailer';
 import { COLORS } from '@/styles/theme';

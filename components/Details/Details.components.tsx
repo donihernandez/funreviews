@@ -1,6 +1,5 @@
 import type { FC, ReactNode } from 'react';
 import {
-    AspectRatio,
     Avatar,
     Box,
     Center,

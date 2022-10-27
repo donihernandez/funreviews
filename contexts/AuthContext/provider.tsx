@@ -39,6 +39,8 @@ const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
             onAuthStateChanged(auth, user => {
                 if (user) {
                     // Logged in...
+                    console.log(user);
+                    console.log(user);
                     setUser(user);
                     setLoading(false);
                 } else if (PROTECTED_ROUTES.includes(router.pathname)) {

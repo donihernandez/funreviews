@@ -19,6 +19,7 @@ import { AuthContext } from './context';
 import { auth, db, storage } from '@/utils/firebase';
 
 import { COLORS } from '@/styles/theme';
+import { FullPageLoader } from '@/components/common/FullPageLoader';
 
 interface IAuthProviderProps {
     children: React.ReactNode;
@@ -39,8 +40,7 @@ const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
             onAuthStateChanged(auth, user => {
                 if (user) {
                     // Logged in...
-                    console.log(user);
-                    console.log(user);
+                    setLoading(true);
                     setUser(user);
                     setLoading(false);
                 } else if (PROTECTED_ROUTES.includes(router.pathname)) {
@@ -203,7 +203,7 @@ const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 
     return (
         <AuthContext.Provider value={memoedValue}>
-            {children}
+            {user ? children : <FullPageLoader />}
         </AuthContext.Provider>
     );
 };

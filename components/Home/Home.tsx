@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { useEffect } from 'react';
 import { Flex } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { getMovieGenres, getTrending } from '_tmdb/movies/queries';
 
@@ -30,12 +30,12 @@ const Home: FC = () => {
 
     const { setMovieGenres } = useShowsContext();
     const { data: movieResults, isSuccess: moviesSucess } = useQuery(
-        'trendingMovie',
+        ['trendingMovie'],
         () => getTrending(),
     );
 
     const { data: genres, isSuccess: genresSucess } = useQuery(
-        'movieGenres',
+        ['movieGenres'],
         getMovieGenres,
     );
 

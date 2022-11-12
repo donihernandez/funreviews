@@ -3,7 +3,7 @@ import { FC, useEffect } from 'react';
 import { useMemo, useState } from 'react';
 
 import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
     Breadcrumb,
     BreadcrumbItem,

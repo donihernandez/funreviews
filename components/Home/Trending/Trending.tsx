@@ -23,7 +23,7 @@ import { VideoBox } from '@/components/common/VideoBox';
 import { useShowsContext } from 'contexts/ShowsContext';
 
 import { GenresList } from '@/components/common/GenreList';
-import { PrimaryButton, SecondaryButton } from '@/components/common/Buttons';
+import { PrimaryButton, ReviewButton } from '@/components/common/Buttons';
 
 interface ITrendingProps {
     movie: Movie;
@@ -124,7 +124,11 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                             icon={<Search2Icon />}
                             link={`/movies/${movie.id}`}
                         />
-                        <SecondaryButton icon={<StarIcon />} link="" />
+                        <ReviewButton
+                            icon={<StarIcon />}
+                            showId={movie.id}
+                            showTitle={movie.title}
+                        />
                     </Flex>
                 </Flex>
             </Flex>

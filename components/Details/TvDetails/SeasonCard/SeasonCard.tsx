@@ -25,7 +25,6 @@ const SeasonCard: FC<ISeasonCardProps> = ({
     height = '500px',
     width = '250px',
     season,
-    link,
 }) => {
     const size = IMAGE_CONFIG.poster_sizes.find(s => s === 'w342');
 

@@ -3,7 +3,11 @@ import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 
-import { getMovieGenres, getPopular } from '_tmdb/movies/queries';
+import {
+    getMovieGenres,
+    getPopular,
+    searchMovieByName,
+} from '_tmdb/movies/queries';
 
 import { Wrapper } from '@/components/common/Wrapper';
 import { Intro } from '@/components/common/Intro';
@@ -13,6 +17,7 @@ import { useShowsContext } from 'contexts/ShowsContext';
 import { Sidebar } from '@/components/common/Sidebar';
 
 import { Loading } from '../common/Loading';
+import { useRouter } from 'next/router';
 
 const Movies: FC = () => {
     const breadcrumbs = [
@@ -30,6 +35,9 @@ const Movies: FC = () => {
     const { setType, setGenres, setTotalPages, setShows } = useShowsContext();
     const [isLoading, setIsLoading] = useState(false);
 
+    const router = useRouter();
+    const [searchText] = useState(router.query.search);
+
     const getMovies = async () => {
         setShows([]);
         const movies = await getPopular();
@@ -43,11 +51,29 @@ const Movies: FC = () => {
         setGenres(genres.genres);
     };
 
+    const handleSearchMovieByName = async () => {
+        const response = await searchMovieByName(searchText as string);
+        updateShows(response);
+    };
+
+    const updateShows = showsData => {
+        if (showsData) {
+            setShows(() => showsData.results);
+            setTotalPages(showsData.total_pages);
+        }
+    };
+
     useEffect(() => {
-        setIsLoading(true);
-        getMovies();
-        getGenres();
-        setIsLoading(false);
+        if (searchText) {
+            setIsLoading(true);
+            handleSearchMovieByName();
+            setIsLoading(false);
+        } else {
+            setIsLoading(true);
+            getMovies();
+            getGenres();
+            setIsLoading(false);
+        }
     }, []);
 
     return (
@@ -59,7 +85,7 @@ const Movies: FC = () => {
                 ) : (
                     <>
                         <ShowsList />
-                        <Sidebar />
+                        {/* <Sidebar /> */}
                     </>
                 )}
             </Flex>

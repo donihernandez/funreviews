@@ -1,6 +1,6 @@
 import { Movies } from '@/components/Movies';
 import { NextPage } from 'next';
-import { dehydrate, QueryClient } from 'react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 
 import { getMovieGenres, getPopular } from '_tmdb/movies/queries';
 

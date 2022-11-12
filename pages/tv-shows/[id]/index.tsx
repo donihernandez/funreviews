@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { dehydrate, QueryClient } from 'react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 
 import { TvDetails } from '@/components/Details/TvDetails';
 

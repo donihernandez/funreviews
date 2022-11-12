@@ -16,7 +16,7 @@ import {
     ShowRating,
     ShowTitle,
 } from './Show.components';
-import { PrimaryButton, SecondaryButton } from '../../Buttons';
+import { PrimaryButton, ReviewButton } from '../../Buttons';
 
 interface IShow {
     show: any;
@@ -71,7 +71,11 @@ const Show: FC<IShow> = ({ show }) => {
                             icon={<Search2Icon />}
                             link={`/${pathMedia}/${show.id}`}
                         />
-                        <SecondaryButton icon={<StarIcon />} link="" />
+                        <ReviewButton
+                            icon={<StarIcon />}
+                            showId={show.id}
+                            showTitle={show.title}
+                        />
                     </Flex>
                 </ShowDetailsContainer>
             </ShowContainer>

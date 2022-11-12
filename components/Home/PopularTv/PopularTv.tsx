@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { Container } from '@chakra-ui/react';
 
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { COLORS } from '../../../styles/theme';
 

@@ -9,9 +9,9 @@ import {
     User,
 } from 'firebase/auth';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 import dayjs from 'dayjs';
 
@@ -201,9 +201,17 @@ const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
         [user, loading, error],
     );
 
+    const render = () => {
+        if (PROTECTED_ROUTES.includes(router.pathname) && !user) {
+            return <FullPageLoader />;
+        }
+
+        return children;
+    };
+
     return (
         <AuthContext.Provider value={memoedValue}>
-            {user ? children : <FullPageLoader />}
+            {render()}
         </AuthContext.Provider>
     );
 };

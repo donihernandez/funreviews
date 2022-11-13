@@ -29,7 +29,9 @@ const SearchInput: FC = () => {
                 h="70px"
                 w="full"
                 {...commonStyles}
-                onChange={e => setSearchTerm(e.target.value)}
+                onChange={e => {
+                    setSearchTerm(e.target.value);
+                }}
                 placeholder="Search movies, tv shows...."
                 value={searchTerm}
             />

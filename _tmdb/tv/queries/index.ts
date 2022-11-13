@@ -8,3 +8,4 @@ export * from './getTvReviews';
 export * from './getTvVideos';
 export * from './getEpisodeVideos';
 export * from './getTvRecommendations';
+export * from './getAllTv';

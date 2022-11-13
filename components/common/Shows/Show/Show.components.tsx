@@ -1,8 +1,10 @@
 import type { FC } from 'react';
 import { ReactNode } from 'react';
-import { Flex, Heading, Image, Text } from '@chakra-ui/react';
+import { Flex, Heading, Text } from '@chakra-ui/react';
 import { COLORS } from '../../../../styles/theme';
 import { StarIcon } from '@chakra-ui/icons';
+import Image from 'next/image';
+import { useBreakpoints } from 'hooks';
 
 interface IChildrenProps {
     children: ReactNode;
@@ -23,8 +25,13 @@ interface IShowImageProps {
 }
 
 const ShowImage: FC<IShowImageProps> = ({ image, title, name }) => {
+    const { isSmallerThanDesktop } = useBreakpoints();
     return (
-        <Image alt={title || name} h={['full', null, '260px']} src={image} />
+        <Image
+            alt={title || name}
+            height={isSmallerThanDesktop ? '100%' : '260px'}
+            src={image}
+        />
     );
 };
 

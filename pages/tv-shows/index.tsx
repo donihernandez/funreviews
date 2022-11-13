@@ -1,11 +1,30 @@
+/* eslint-disable max-len */
 import { NextPage } from 'next';
-import { dehydrate, QueryClient } from 'react-query';
-
-import { Tv } from '@/components/Tv';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { getTvGenres, getTvPopular } from '_tmdb/tv/queries';
 
+import { NextSeo } from 'next-seo';
+
+import { Tv } from '@/components/Tv';
+
 const TVShowsPage: NextPage = () => {
-    return <Tv />;
+    return (
+        <>
+            <NextSeo
+                additionalMetaTags={[
+                    {
+                        content:
+                            'review tv show, tv show reviews, from tv show review ',
+                        name: 'keywords',
+                    },
+                ]}
+                canonical="https://funreviews.org/tv"
+                description="Watch popular TV Shows and create a fun review of it."
+                title="TV Shows | FunReviews"
+            />
+            <Tv />
+        </>
+    );
 };
 
 export async function getStaticProps() {

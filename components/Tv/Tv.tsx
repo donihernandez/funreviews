@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 import { Intro } from '../common/Intro';
 import { ShowsList } from '../common/Shows/ShowsList';
@@ -11,6 +12,7 @@ import { Flex } from '@chakra-ui/react';
 import { Sidebar } from '../common/Sidebar';
 import { getTvGenres, getTvPopular } from '_tmdb/tv/queries';
 import { Loading } from '../common/Loading';
+import { searchTvByName } from '_tmdb/tv/queries/searchTvByName';
 
 const Tv: FC = () => {
     const breadcrumbs = [
@@ -28,6 +30,9 @@ const Tv: FC = () => {
     const { setGenres, setTotalPages, setType, setShows } = useShowsContext();
     const [isLoading, setIsLoading] = useState(false);
 
+    const router = useRouter();
+    const [searchText] = useState(router.query.search);
+
     const getTv = async () => {
         setShows([]);
         const tv = await getTvPopular();
@@ -41,11 +46,29 @@ const Tv: FC = () => {
         setGenres(genres.genres);
     };
 
+    const handleSearchTvByName = async () => {
+        const response = await searchTvByName(searchText as string);
+        updateShows(response);
+    };
+
+    const updateShows = showsData => {
+        if (showsData) {
+            setShows(() => showsData.results);
+            setTotalPages(showsData.total_pages);
+        }
+    };
+
     useEffect(() => {
-        setIsLoading(true);
-        getTv();
-        getGenres();
-        setIsLoading(false);
+        if (searchText) {
+            setIsLoading(true);
+            handleSearchTvByName();
+            setIsLoading(false);
+        } else {
+            setIsLoading(true);
+            getTv();
+            getGenres();
+            setIsLoading(false);
+        }
     }, []);
 
     return (
@@ -57,7 +80,7 @@ const Tv: FC = () => {
                 ) : (
                     <>
                         <ShowsList />
-                        <Sidebar />
+                        {/* <Sidebar /> */}
                     </>
                 )}
             </Flex>

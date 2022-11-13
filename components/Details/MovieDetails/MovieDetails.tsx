@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useMemo } from 'react';
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -13,20 +13,9 @@ import {
     TabPanels,
     Tabs,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
 import { Wrapper } from '../../common/Wrapper';
-import {
-    getMovieCredits,
-    getMovieDetails,
-    getMovieReviews,
-    getRecommendations,
-    getVideos,
-} from '_tmdb/movies/queries';
 import { IMAGE_URL } from '@/utils/images';
 import { COLORS } from '@/styles/theme';
-
-import { getTrailer } from '@/utils/getTrailer';
 
 import { MovieBudgetAndReleaseDate } from './MovieDetails.components';
 
@@ -42,6 +31,7 @@ import {
     CrewContainer,
     Description,
     DetailsContainer,
+    FunReviewsList,
     InfoContainer,
     Poster,
     ProductionCompaniesContainer,
@@ -50,7 +40,6 @@ import {
     Title,
     Trailer,
 } from '../Details.components';
-import { FullPageLoader } from '@/components/common/FullPageLoader';
 
 interface IBreadcrumb {
     link: string;
@@ -58,65 +47,35 @@ interface IBreadcrumb {
     isCurrentPage?: boolean;
 }
 
-const MovieDetails: FC = () => {
-    const router = useRouter();
-    const [credits, setCredits] = useState<any>();
-    const [reviews, setReviews] = useState<any>();
-    const [videos, setVideos] = useState<any>();
+interface IMovieDetailsProps {
+    breadcrumbs: IBreadcrumb[];
+    date: string;
+    funReviews: any;
+    movieCredits: any;
+    movieDetails: any;
+    movieRecommendations: any;
+    movieReviews: any;
+    movieVideos: any;
+    trailer: string;
+}
 
+const MovieDetails: FC<IMovieDetailsProps> = ({
+    breadcrumbs,
+    date,
+    funReviews,
+    movieCredits,
+    movieDetails,
+    movieRecommendations,
+    movieReviews,
+    movieVideos,
+    trailer,
+}) => {
     const { isSmallerThanDesktop } = useBreakpoints();
 
     const wrapperStyles = {
         minH: '200vh',
         paddingBottom: '100px',
     };
-
-    const [movieTrailer, setMovieTrailer] = useState('');
-
-    const { id } = router.query;
-
-    const { data: movieDetails, isSuccess: movieDetailsSuccess } = useQuery(
-        ['movieDetails', id],
-        () => getMovieDetails(id as string),
-    );
-
-    const breadcrumbs = [
-        {
-            link: '/',
-            name: 'Home',
-        },
-        {
-            link: '/movies',
-            name: 'Movies',
-        },
-        {
-            isCurrentPage: true,
-            link: '#',
-            name: movieDetails?.title,
-        },
-    ];
-
-    const date = new Date(movieDetails.release_date).toDateString();
-
-    const { data: movieCredits, isSuccess: movieCreditsSuccess } = useQuery(
-        ['movieCredits', id],
-        () => getMovieCredits(id as string),
-    );
-
-    const { data: movieReviews, isSuccess: movieReviewsSuccess } = useQuery(
-        ['movieReviews', id],
-        () => getMovieReviews(id as string),
-    );
-
-    const { data: movieVideos, isSuccess: movieVideosSuccess } = useQuery(
-        ['movieVideos', id],
-        () => getVideos(id as string),
-    );
-
-    const { data: movieRecommendations } = useQuery(
-        ['movieRecommendations', id],
-        () => getRecommendations(id as string),
-    );
 
     const getImagePath = useMemo(() => {
         let imagePath = '';
@@ -133,7 +92,7 @@ const MovieDetails: FC = () => {
         }
 
         return '';
-    }, [movieDetailsSuccess]);
+    }, []);
 
     const tabListStyles = {
         _active: {
@@ -149,34 +108,9 @@ const MovieDetails: FC = () => {
         fontWeight: 'bold',
     };
 
-    const handleGetVideo = useCallback(async () => {
-        const trailer = getTrailer(movieVideos?.results);
-        setMovieTrailer(trailer);
-    }, [movieVideosSuccess]);
-
     const getGenres = (): string[] => {
         return movieDetails.genres.map(genre => genre.name);
     };
-
-    useEffect(() => {
-        if (movieCreditsSuccess) {
-            setCredits(movieCredits);
-        }
-        if (movieReviewsSuccess) {
-            setReviews(movieReviews);
-        }
-        if (movieVideosSuccess) {
-            setVideos(movieVideos);
-        }
-    }, [movieCreditsSuccess, movieReviewsSuccess, movieVideosSuccess]);
-
-    useEffect(() => {
-        handleGetVideo();
-    }, [movieVideosSuccess]);
-
-    if (!movieDetailsSuccess) {
-        return <FullPageLoader />;
-    }
 
     return (
         <Wrapper {...wrapperStyles}>
@@ -205,14 +139,14 @@ const MovieDetails: FC = () => {
                     </Breadcrumb>
                 </Flex>
 
-                <Poster
-                    image={getImagePath}
-                    title={movieDetails.original_title}
-                />
+                <Trailer video={trailer} />
 
                 <DetailsContainer>
                     <Flex>
-                        <Trailer video={movieTrailer} />
+                        <Poster
+                            image={getImagePath}
+                            title={movieDetails.original_title}
+                        />
                     </Flex>
 
                     <InfoContainer>
@@ -263,13 +197,17 @@ const MovieDetails: FC = () => {
 
                     <TabPanels>
                         <TabPanel>
-                            <ReviewsList reviews={reviews?.results} />
+                            {funReviews && (
+                                <FunReviewsList funReviews={funReviews} />
+                            )}
+
+                            <ReviewsList reviews={movieReviews.results} />
                         </TabPanel>
                         <TabPanel>
                             <Flex direction="column">
-                                <CastContainer castList={credits?.cast} />
+                                <CastContainer castList={movieCredits.cast} />
                                 <Divider color={COLORS.white} my="30px" />
-                                <CrewContainer crewList={credits?.crew} />
+                                <CrewContainer crewList={movieCredits.crew} />
                             </Flex>
                         </TabPanel>
                         <TabPanel>
@@ -278,7 +216,7 @@ const MovieDetails: FC = () => {
                                 mt="20px"
                                 spacingX="20px"
                             >
-                                {videos?.results.map(video => (
+                                {movieVideos.results.map(video => (
                                     <VideoBox
                                         key={video.id}
                                         video={video.key}

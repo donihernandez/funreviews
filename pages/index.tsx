@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import type { NextPage } from 'next';
 
 import {
@@ -7,13 +8,29 @@ import {
     getTrending,
 } from '_tmdb/movies/queries';
 import { getTvGenres, getTvPopular, getTvTopRated } from '_tmdb/tv/queries';
-
+import { NextSeo } from 'next-seo';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 
 import { Home } from '@/components/Home';
 
 const HomePage: NextPage = () => {
-    return <Home />;
+    return (
+        <>
+            <NextSeo
+                additionalMetaTags={[
+                    {
+                        content:
+                            'fun review, making fun reviews, reviews, review, movie reviews, old movie review',
+                        name: 'keywords',
+                    },
+                ]}
+                canonical="https://funreviews.org/"
+                description="Creating reviews can also be fun. Dare to make your favorite movie or show more than just entertainment."
+                title="FunReviews: Create fun reviews about your favorite movies and shows."
+            />
+            <Home />
+        </>
+    );
 };
 
 export async function getStaticProps() {

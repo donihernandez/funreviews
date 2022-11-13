@@ -2,6 +2,7 @@ import { NextPage } from 'next';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import { MovieDetails } from '@/components/Details/MovieDetails';
 import { useRouter } from 'next/router';
+import { NextSeo } from 'next-seo';
 
 import {
     getAllMovies,
@@ -97,17 +98,24 @@ const MovieDetailsPage: NextPage = () => {
         movieCreditsSuccess &&
         movieReviewsSuccess &&
         funReviews ? (
-        <MovieDetails
-            breadcrumbs={breadcrumbs}
-            date={date}
-            funReviews={funReviews}
-            movieCredits={movieCredits}
-            movieDetails={movieDetails}
-            movieRecommendations={movieRecommendations}
-            movieReviews={movieReviews}
-            movieVideos={movieVideos}
-            trailer={movieTrailer}
-        />
+        <>
+            <NextSeo
+                canonical={`https://funreviews.org/movies/${id}`}
+                description={movieDetails.overview}
+                title={`${movieDetails.title} | FunReviews`}
+            />
+            <MovieDetails
+                breadcrumbs={breadcrumbs}
+                date={date}
+                funReviews={funReviews}
+                movieCredits={movieCredits}
+                movieDetails={movieDetails}
+                movieRecommendations={movieRecommendations}
+                movieReviews={movieReviews}
+                movieVideos={movieVideos}
+                trailer={movieTrailer}
+            />
+        </>
     ) : (
         <FullPageLoader />
     );

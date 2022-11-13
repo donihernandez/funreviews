@@ -1,5 +1,7 @@
+/* eslint-disable max-len */
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { NextSeo } from 'next-seo';
 
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 
@@ -49,13 +51,21 @@ const TVShowsDetailsPage: NextPage = () => {
         tvVideosSuccess &&
         tvReviewsSuccess &&
         tvCreditsSuccess ? (
-        <TvDetails
-            tvCredits={tvCredits}
-            tvDetails={tvDetails}
-            tvRecommendations={tvRecommendations}
-            tvReviews={tvReviews}
-            tvVideos={tvVideos}
-        />
+        <>
+            <NextSeo
+                canonical={`https://funreviews.org/tv/${id}`}
+                description={tvDetails.overview}
+                title={`${tvDetails.name} | FunReviews`}
+            />
+
+            <TvDetails
+                tvCredits={tvCredits}
+                tvDetails={tvDetails}
+                tvRecommendations={tvRecommendations}
+                tvReviews={tvReviews}
+                tvVideos={tvVideos}
+            />
+        </>
     ) : (
         <FullPageLoader />
     );

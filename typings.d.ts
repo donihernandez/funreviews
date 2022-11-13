@@ -58,6 +58,10 @@ interface Season {
 }
 
 interface IReview {
+    avatar: string?;
+    username: string?;
+    rating: number?;
+    review: string?;
     author: string;
     author_details: {
         name: string;

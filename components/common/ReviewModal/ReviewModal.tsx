@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import {
     Button,
@@ -18,7 +18,6 @@ import {
 } from '@chakra-ui/react';
 import ReactStars from 'react-rating-stars-component';
 import { COLORS } from '@/styles/theme';
-import Swal from 'sweetalert2';
 import { useShowsContext } from 'contexts/ShowsContext';
 
 interface IReviewModalProps {

@@ -39,6 +39,7 @@ const InfoCard: FC<IInfoCardProps> = ({
 
     const primaryButtonStyle = {
         mb: '10px',
+        w: 'full',
     };
 
     return (

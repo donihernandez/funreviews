@@ -27,8 +27,7 @@ const Tv: FC = () => {
         },
     ];
 
-    const { setGenres, type, setTotalPages, setType, setShows } =
-        useShowsContext();
+    const { setGenres, setTotalPages, setType, setShows } = useShowsContext();
     const [isLoading, setIsLoading] = useState(false);
 
     const router = useRouter();
@@ -58,8 +57,6 @@ const Tv: FC = () => {
             setTotalPages(showsData.total_pages);
         }
     };
-
-    console.log(type);
 
     useEffect(() => {
         if (searchText) {

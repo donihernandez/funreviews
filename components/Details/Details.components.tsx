@@ -17,6 +17,8 @@ import { StarIcon } from '@chakra-ui/icons';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 import { Review } from '../common/Review';
 import { IReview } from 'typings';
+import { Loading } from '../common/Loading';
+import FunReview from '../common/Review/FunReview';
 
 interface IDetailsProps {
     children: ReactNode;
@@ -51,7 +53,7 @@ interface ITrailerProps {
 }
 
 const Trailer: FC<ITrailerProps> = ({ video }) => {
-    return (
+    return video ? (
         <Box
             // eslint-disable-next-line max-len
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -64,6 +66,8 @@ const Trailer: FC<ITrailerProps> = ({ video }) => {
             src={`https://www.youtube.com/embed/${video}`}
             w="full"
         />
+    ) : (
+        <Loading />
     );
 };
 
@@ -202,6 +206,20 @@ const AdditionalInfo: FC<IDetailsProps> = ({ children }) => {
     return (
         <Flex mt="40px" w="full">
             {children}
+        </Flex>
+    );
+};
+
+interface IFunReviewsListProps {
+    funReviews: any;
+}
+
+const FunReviewsList: FC<IFunReviewsListProps> = ({ funReviews }) => {
+    return (
+        <Flex direction="column">
+            {funReviews.reviews.map(review => (
+                <FunReview key={review.id} review={review} />
+            ))}
         </Flex>
     );
 };
@@ -432,4 +450,5 @@ export {
     Cast,
     CrewContainer,
     CastContainer,
+    FunReviewsList,
 };

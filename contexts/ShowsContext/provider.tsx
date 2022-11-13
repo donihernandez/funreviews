@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { ShowsContext } from './context';
 import { db } from '@/utils/firebase';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import Swal from 'sweetalert2';
 
 interface IShowsProviderProps {
@@ -40,18 +40,28 @@ const ShowsProvider: FC<IShowsProviderProps> = ({ children }) => {
 
         let userData = null;
         const userDocRef = doc(db, 'users', user.uid);
+
         const userSnapShot = await getDoc(userDocRef);
         if (userSnapShot.exists()) {
             userData = userSnapShot.data();
 
             const newReviews = userData.reviews ?? [];
             newReviews.push({
+                avatar: userData?.avatar,
+                date: new Date().toDateString(),
                 rating,
                 review,
                 showId,
                 showTitle,
+                userId: userData.id,
+                username: userData.username,
             });
             await updateDoc(userDocRef, {
+                reviews: newReviews,
+            });
+
+            const reviewDocRef = doc(db, 'reviews', showId.toString());
+            await setDoc(reviewDocRef, {
                 reviews: newReviews,
             });
 
@@ -65,8 +75,20 @@ const ShowsProvider: FC<IShowsProviderProps> = ({ children }) => {
         }
     };
 
+    const getReviewsById = async (id: number) => {
+        const reviewDocRef = doc(db, 'reviews', id.toString());
+        const reviewSnap = await getDoc(reviewDocRef);
+        let reviewsList = null;
+        if (reviewSnap.exists()) {
+            reviewsList = reviewSnap.data();
+        }
+
+        return reviewsList ?? [];
+    };
+
     const value = {
         genres,
+        getReviewsById,
         isSearching,
         isVideo,
         loading,

@@ -31,42 +31,46 @@ const SeasonCard: FC<ISeasonCardProps> = ({
     const image = `${IMAGE_URL}${size}${season.poster_path}`;
 
     return (
-        <Box
-            color={COLORS.white}
-            h={height}
-            minW={width}
-            mr="15px"
-            position="relative"
-            w="full"
-        >
-            <Flex
-                direction="column"
-                h="full"
-                justifyContent="flex-end"
+        season.poster_path && (
+            <Box
+                color={COLORS.white}
+                h={height}
+                minW={width}
+                mr="15px"
+                position="relative"
                 w="full"
             >
-                <AspectRatio h="full" minH="383px" ratio={1}>
-                    <Image alt={season.name} src={image} />
-                </AspectRatio>
+                <Flex
+                    direction="column"
+                    h="full"
+                    justifyContent="flex-end"
+                    w="full"
+                >
+                    <AspectRatio h="full" minH="383px" ratio={1}>
+                        <Image alt={season.name} src={image} />
+                    </AspectRatio>
 
-                <Box p={2}>
-                    <Heading
-                        as="h6"
-                        fontFamily="Lato"
-                        fontSize="20px"
-                        fontWeight="black"
-                        pt="15px"
-                        textTransform="uppercase"
-                    >
-                        {season.name}
-                    </Heading>
-                    <Text fontFamily="Lato">
-                        <chakra.span fontWeight="bold">Episodes:</chakra.span>{' '}
-                        {season.episode_count}
-                    </Text>
-                </Box>
-            </Flex>
-        </Box>
+                    <Box p={2}>
+                        <Heading
+                            as="h6"
+                            fontFamily="Lato"
+                            fontSize="20px"
+                            fontWeight="black"
+                            pt="15px"
+                            textTransform="uppercase"
+                        >
+                            {season.name}
+                        </Heading>
+                        <Text fontFamily="Lato">
+                            <chakra.span fontWeight="bold">
+                                Episodes:
+                            </chakra.span>{' '}
+                            {season.episode_count}
+                        </Text>
+                    </Box>
+                </Flex>
+            </Box>
+        )
     );
 };
 

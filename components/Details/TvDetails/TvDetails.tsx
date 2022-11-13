@@ -2,8 +2,6 @@
 import { FC, useEffect } from 'react';
 import { useMemo, useState } from 'react';
 
-import { useRouter } from 'next/router';
-import { useQuery } from '@tanstack/react-query';
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -24,12 +22,6 @@ import {
     WrapItem,
 } from '@chakra-ui/react';
 
-import {
-    getTvCredits,
-    getTvDetails,
-    getTvRecommendations,
-    getTvReviews,
-} from '_tmdb/tv/queries';
 import { useBreakpoints } from 'hooks';
 import { Wrapper } from '@/components/common/Wrapper';
 import { IMAGE_URL } from '@/utils/images';
@@ -47,7 +39,6 @@ import {
     Title,
     Trailer,
 } from '../Details.components';
-import { getTvVideos } from '_tmdb/tv/queries/getTvVideos';
 import { getTrailer } from '@/utils/getTrailer';
 import { COLORS } from '@/styles/theme';
 import { GenresList } from '@/components/common/GenreList';
@@ -61,9 +52,21 @@ interface IBreadcrumb {
     isCurrentPage?: boolean;
 }
 
-const TvDetails: FC = () => {
-    const router = useRouter();
-    const { id } = router.query;
+interface ITvDetailsProps {
+    tvCredits: any;
+    tvDetails: any;
+    tvRecommendations: any;
+    tvReviews: any;
+    tvVideos: any;
+}
+
+const TvDetails: FC<ITvDetailsProps> = ({
+    tvCredits,
+    tvDetails,
+    tvRecommendations,
+    tvReviews,
+    tvVideos,
+}) => {
     const { isSmallerThanDesktop } = useBreakpoints();
 
     const [trailer, setTrailer] = useState('');
@@ -86,11 +89,6 @@ const TvDetails: FC = () => {
         fontWeight: 'bold',
     };
 
-    const { data: tvDetails, isSuccess: tvDetailsSuccess } = useQuery(
-        ['tvDetails', id],
-        () => getTvDetails(id as string),
-    );
-
     const breadcrumbs = [
         {
             link: '/',
@@ -107,23 +105,6 @@ const TvDetails: FC = () => {
         },
     ];
 
-    const { data: tvCredits } = useQuery(['tvCredits', id], () =>
-        getTvCredits(id as string),
-    );
-
-    const { data: tvReviews } = useQuery(['tvReviews', id], () =>
-        getTvReviews(id as string),
-    );
-
-    const { data: tvVideos } = useQuery(['tvVideos', id], () =>
-        getTvVideos(id as string),
-    );
-
-    const { data: tvRecommendations } = useQuery(
-        ['tvRecommendations', id],
-        () => getTvRecommendations(id as string),
-    );
-
     const getImagePath = useMemo(() => {
         let imagePath = '';
         if (!isSmallerThanDesktop) {
@@ -139,7 +120,7 @@ const TvDetails: FC = () => {
         }
 
         return '';
-    }, [tvDetailsSuccess]);
+    }, []);
 
     const date = new Date(tvDetails?.first_air_date).toDateString();
 
@@ -183,10 +164,16 @@ const TvDetails: FC = () => {
                     </Breadcrumb>
                 </Flex>
 
-                <Poster image={getImagePath} title={tvDetails?.original_name} />
+                <Trailer video={trailer} />
 
                 <DetailsContainer>
-                    <Trailer video={trailer} />
+                    <Flex>
+                        <Poster
+                            image={getImagePath}
+                            title={tvDetails?.original_name}
+                        />
+                    </Flex>
+
                     <InfoContainer>
                         <Title title={tvDetails?.name} />
                         <Rate vote_average={tvDetails?.vote_average} />

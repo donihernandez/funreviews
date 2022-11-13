@@ -2,8 +2,6 @@
 import { FC, useEffect } from 'react';
 import { useMemo, useState } from 'react';
 
-import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -23,32 +21,11 @@ import {
     Wrap,
     WrapItem,
 } from '@chakra-ui/react';
+import dynamic from 'next/dynamic';
 
-import {
-    getTvCredits,
-    getTvDetails,
-    getTvRecommendations,
-    getTvReviews,
-} from '_tmdb/tv/queries';
 import { useBreakpoints } from 'hooks';
 import { Wrapper } from '@/components/common/Wrapper';
 import { IMAGE_URL } from '@/utils/images';
-import {
-    AdditionalInfo,
-    CastContainer,
-    CrewContainer,
-    Description,
-    DetailsContainer,
-    InfoContainer,
-    Poster,
-    ProductionCompaniesContainer,
-    Rate,
-    ReviewsList,
-    Title,
-    Trailer,
-} from '../Details.components';
-import { Loading } from '@/components/common/Loading';
-import { getTvVideos } from '_tmdb/tv/queries/getTvVideos';
 import { getTrailer } from '@/utils/getTrailer';
 import { COLORS } from '@/styles/theme';
 import { GenresList } from '@/components/common/GenreList';
@@ -62,9 +39,66 @@ interface IBreadcrumb {
     isCurrentPage?: boolean;
 }
 
-const TvDetails: FC = () => {
-    const router = useRouter();
-    const { id } = router.query;
+interface ITvDetailsProps {
+    tvCredits: any;
+    tvDetails: any;
+    tvRecommendations: any;
+    tvReviews: any;
+    tvVideos: any;
+}
+
+const TvDetails: FC<ITvDetailsProps> = ({
+    tvCredits,
+    tvDetails,
+    tvRecommendations,
+    tvReviews,
+    tvVideos,
+}) => {
+    const Trailer = dynamic(() =>
+        import('../Details.components').then(module => module.Trailer),
+    );
+
+    const AdditionalInfo = dynamic(() =>
+        import('../Details.components').then(module => module.AdditionalInfo),
+    );
+
+    const CastContainer = dynamic(() =>
+        import('../Details.components').then(module => module.CastContainer),
+    );
+
+    const CrewContainer = dynamic(() =>
+        import('../Details.components').then(module => module.CrewContainer),
+    );
+
+    const Description = dynamic(() =>
+        import('../Details.components').then(module => module.Description),
+    );
+
+    const ReviewsList = dynamic(() =>
+        import('../Details.components').then(module => module.ReviewsList),
+    );
+    const InfoContainer = dynamic(() =>
+        import('../Details.components').then(module => module.InfoContainer),
+    );
+    const Title = dynamic(() =>
+        import('../Details.components').then(module => module.Title),
+    );
+    const DetailsContainer = dynamic(() =>
+        import('../Details.components').then(module => module.DetailsContainer),
+    );
+    const ProductionCompaniesContainer = dynamic(() =>
+        import('../Details.components').then(
+            module => module.ProductionCompaniesContainer,
+        ),
+    );
+    const Rate = dynamic(() =>
+        import('../Details.components').then(module => module.Rate),
+    );
+
+    const Poster = dynamic(() =>
+        import('../Details.components').then(module => module.Poster),
+    );
+
     const { isSmallerThanDesktop } = useBreakpoints();
 
     const [trailer, setTrailer] = useState('');
@@ -87,11 +121,6 @@ const TvDetails: FC = () => {
         fontWeight: 'bold',
     };
 
-    const { data: tvDetails, isSuccess: tvDetailsSuccess } = useQuery(
-        ['tvDetails', id],
-        () => getTvDetails(id as string),
-    );
-
     const breadcrumbs = [
         {
             link: '/',
@@ -108,39 +137,15 @@ const TvDetails: FC = () => {
         },
     ];
 
-    const { data: tvCredits } = useQuery(['tvCredits', id], () =>
-        getTvCredits(id as string),
-    );
-
-    const { data: tvReviews } = useQuery(['tvReviews', id], () =>
-        getTvReviews(id as string),
-    );
-
-    const { data: tvVideos } = useQuery(['tvVideos', id], () =>
-        getTvVideos(id as string),
-    );
-
-    const { data: tvRecommendations } = useQuery(
-        ['tvRecommendations', id],
-        () => getTvRecommendations(id as string),
-    );
-
     const getImagePath = useMemo(() => {
-        let imagePath = '';
-        if (!isSmallerThanDesktop) {
-            imagePath = tvDetails?.backdrop_path
-                ? tvDetails?.backdrop_path
-                : tvDetails?.poster_path;
-        } else {
-            imagePath = tvDetails?.poster_path;
-        }
+        const imagePath = tvDetails?.poster_path;
 
         if (imagePath !== '') {
-            return `${IMAGE_URL}original${imagePath}`;
+            return `${IMAGE_URL}w780${imagePath}`;
         }
 
         return '';
-    }, [tvDetailsSuccess]);
+    }, []);
 
     const date = new Date(tvDetails?.first_air_date).toDateString();
 
@@ -184,10 +189,18 @@ const TvDetails: FC = () => {
                     </Breadcrumb>
                 </Flex>
 
-                <Poster image={getImagePath} title={tvDetails?.original_name} />
+                <Flex h="full" w="full">
+                    <Trailer video={trailer} />
+                </Flex>
 
                 <DetailsContainer>
-                    <Trailer video={trailer} />
+                    <Flex>
+                        <Poster
+                            image={getImagePath}
+                            title={tvDetails?.original_name}
+                        />
+                    </Flex>
+
                     <InfoContainer>
                         <Title title={tvDetails?.name} />
                         <Rate vote_average={tvDetails?.vote_average} />
@@ -231,10 +244,11 @@ const TvDetails: FC = () => {
                     fontFamily="Nunito"
                     fontSize="30px"
                     mb="20px"
+                    textAlign={['center', null, 'initial']}
                 >
                     Seasons
                 </Heading>
-                <Wrap>
+                <Wrap justify="center">
                     {tvDetails?.seasons?.map(season => (
                         <WrapItem key={season.id}>
                             <SeasonCard
@@ -271,6 +285,7 @@ const TvDetails: FC = () => {
                                 columns={[1, 1, 2, 2]}
                                 mt="20px"
                                 spacingX="20px"
+                                spacingY="20px"
                             >
                                 {tvVideos?.results.map(video => (
                                     <VideoBox

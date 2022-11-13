@@ -12,3 +12,4 @@ export * from './getRecommendations';
 export * from './getWatchProviders';
 export * from './getLatest';
 export * from './getTopRated';
+export * from './getAllMovies';

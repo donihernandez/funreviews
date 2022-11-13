@@ -9,9 +9,9 @@ import {
     User,
 } from 'firebase/auth';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 import dayjs from 'dayjs';
 
@@ -19,6 +19,7 @@ import { AuthContext } from './context';
 import { auth, db, storage } from '@/utils/firebase';
 
 import { COLORS } from '@/styles/theme';
+import { FullPageLoader } from '@/components/common/FullPageLoader';
 
 interface IAuthProviderProps {
     children: React.ReactNode;
@@ -39,6 +40,7 @@ const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
             onAuthStateChanged(auth, user => {
                 if (user) {
                     // Logged in...
+                    setLoading(true);
                     setUser(user);
                     setLoading(false);
                 } else if (PROTECTED_ROUTES.includes(router.pathname)) {
@@ -199,9 +201,17 @@ const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
         [user, loading, error],
     );
 
+    const render = () => {
+        if (PROTECTED_ROUTES.includes(router.pathname) && !user) {
+            return <FullPageLoader />;
+        }
+
+        return children;
+    };
+
     return (
         <AuthContext.Provider value={memoedValue}>
-            {children}
+            {render()}
         </AuthContext.Provider>
     );
 };

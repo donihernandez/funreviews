@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { FC, useState } from 'react';
 import { SetStateAction, useEffect } from 'react';
 import { Search2Icon } from '@chakra-ui/icons';
 import {
@@ -14,6 +14,7 @@ import { useDebounce } from 'hooks';
 import { searchTvByName } from '_tmdb/tv/queries/searchTvByName';
 import { getTvPopular } from '_tmdb/tv/queries';
 import { useShowsContext } from 'contexts/ShowsContext';
+import { useRouter } from 'next/router';
 
 const SearchBar: FC = () => {
     const commonStyles = {
@@ -25,10 +26,12 @@ const SearchBar: FC = () => {
         fontSize: '18px',
     };
 
-    const { type, setTotalPages, searchTerm, setSearchTerm, setShows } =
-        useShowsContext();
+    const router = useRouter();
+    const [searchText, setSearchText] = useState(router.query?.search ?? '');
 
-    const debouncedText = useDebounce(searchTerm, 500);
+    const { type, setTotalPages, setShows } = useShowsContext();
+
+    const debouncedText = useDebounce(searchText as string, 500);
 
     const handleSearchMovieByName = async () => {
         const response = await searchMovieByName(debouncedText);
@@ -91,9 +94,9 @@ const SearchBar: FC = () => {
                         {...commonStyles}
                         onChange={(e: {
                             target: { value: SetStateAction<string> };
-                        }) => setSearchTerm(e.target.value)}
+                        }) => setSearchText(e.target.value)}
                         placeholder="Search by name...."
-                        value={searchTerm}
+                        value={searchText}
                     />
                     <InputRightElement color={COLORS.white} h="50px">
                         <Search2Icon />

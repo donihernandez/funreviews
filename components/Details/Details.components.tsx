@@ -1,6 +1,5 @@
 import type { FC, ReactNode } from 'react';
 import {
-    AspectRatio,
     Avatar,
     Box,
     Center,
@@ -8,7 +7,6 @@ import {
     Divider,
     Flex,
     Heading,
-    Image,
     Text,
     Wrap,
     WrapItem,
@@ -18,6 +16,9 @@ import { StarIcon } from '@chakra-ui/icons';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 import { Review } from '../common/Review';
 import { IReview } from 'typings';
+import { Loading } from '../common/Loading';
+import FunReview from '../common/Review/FunReview';
+import Image from 'next/image';
 
 interface IDetailsProps {
     children: ReactNode;
@@ -43,7 +44,13 @@ interface IPosterProps {
 
 const Poster: FC<IPosterProps> = ({ title, image }) => {
     return (
-        <Image alt={title} h="full" objectFit="cover" src={image} w="full" />
+        <Image
+            alt={title}
+            height={700}
+            objectFit="contain"
+            src={image}
+            width={500}
+        />
     );
 };
 
@@ -52,7 +59,7 @@ interface ITrailerProps {
 }
 
 const Trailer: FC<ITrailerProps> = ({ video }) => {
-    return (
+    return video ? (
         <Box
             // eslint-disable-next-line max-len
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -61,16 +68,18 @@ const Trailer: FC<ITrailerProps> = ({ video }) => {
             frameBorder="0"
             h="full"
             minH={['300px', null, '400px']}
-            minW={['375px', null, '400px']}
+            minW={['300px', null, 'full']}
             src={`https://www.youtube.com/embed/${video}`}
             w="full"
         />
+    ) : (
+        <Loading />
     );
 };
 
 const InfoContainer: FC<IDetailsProps> = ({ children }) => {
     return (
-        <Flex direction="column" ml={['0', null, '30px']}>
+        <Flex direction="column" ml={['0', null, '30px']} w="full">
             {children}
         </Flex>
     );
@@ -188,7 +197,16 @@ const ProductionCompany: FC<IProductionCompanyProps> = ({ company }) => {
         >
             <Center>
                 {company.logo_path ? (
-                    <Image alt={company.name} h="20px" mr="5px" src={image} />
+                    <Image
+                        alt={company.name}
+                        height="20px"
+                        objectFit="contain"
+                        src={image}
+                        style={{
+                            marginRight: '5px',
+                        }}
+                        width="50px"
+                    />
                 ) : (
                     <Text fontSize="20px" fontWeight="bold">
                         {company.name}
@@ -203,6 +221,20 @@ const AdditionalInfo: FC<IDetailsProps> = ({ children }) => {
     return (
         <Flex mt="40px" w="full">
             {children}
+        </Flex>
+    );
+};
+
+interface IFunReviewsListProps {
+    funReviews: any;
+}
+
+const FunReviewsList: FC<IFunReviewsListProps> = ({ funReviews }) => {
+    return (
+        <Flex direction="column">
+            {funReviews.reviews.map(review => (
+                <FunReview key={review.id} review={review} />
+            ))}
         </Flex>
     );
 };
@@ -433,4 +465,5 @@ export {
     Cast,
     CrewContainer,
     CastContainer,
+    FunReviewsList,
 };

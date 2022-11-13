@@ -1,25 +1,84 @@
+/* eslint-disable max-len */
 import type { NextPage } from 'next';
-import { dehydrate, QueryClient } from 'react-query';
+import { useRouter } from 'next/router';
+import { NextSeo } from 'next-seo';
+
+import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 
 import { TvDetails } from '@/components/Details/TvDetails';
 
 import {
+    getAllTv,
     getTvCredits,
     getTvDetails,
     getTvGenres,
-    getTvPopular,
     getTvRecommendations,
     getTvReviews,
+    getTvVideos,
 } from '_tmdb/tv/queries';
+import { FullPageLoader } from '@/components/common/FullPageLoader';
 
 const TVShowsDetailsPage: NextPage = () => {
-    return <TvDetails />;
+    const router = useRouter();
+    const { id } = router.query;
+    const { data: tvCredits, isSuccess: tvCreditsSuccess } = useQuery(
+        ['tvCredits', id],
+        () => getTvCredits(id as string),
+    );
+
+    const { data: tvReviews, isSuccess: tvReviewsSuccess } = useQuery(
+        ['tvReviews', id],
+        () => getTvReviews(id as string),
+    );
+
+    const { data: tvVideos, isSuccess: tvVideosSuccess } = useQuery(
+        ['tvVideos', id],
+        () => getTvVideos(id as string),
+    );
+
+    const { data: tvRecommendations, isSuccess: tvRecommendationsSuccess } =
+        useQuery(['tvRecommendations', id], () =>
+            getTvRecommendations(id as string),
+        );
+
+    const { data: tvDetails, isSuccess: tvDetailsSuccess } = useQuery(
+        ['tvDetails', id],
+        () => getTvDetails(id as string),
+    );
+
+    return tvDetailsSuccess &&
+        tvRecommendationsSuccess &&
+        tvVideosSuccess &&
+        tvReviewsSuccess &&
+        tvCreditsSuccess ? (
+        <>
+            <NextSeo
+                canonical={`https://funreviews.org/tv/${id}`}
+                description={tvDetails.overview}
+                title={`${tvDetails.name} | FunReviews`}
+            />
+
+            <TvDetails
+                tvCredits={tvCredits}
+                tvDetails={tvDetails}
+                tvRecommendations={tvRecommendations}
+                tvReviews={tvReviews}
+                tvVideos={tvVideos}
+            />
+        </>
+    ) : (
+        <FullPageLoader />
+    );
 };
 
 export async function getStaticProps({ params }) {
     const queryClient = new QueryClient();
 
     queryClient.prefetchQuery(['tvGenres'], () => getTvGenres());
+
+    queryClient.prefetchQuery(['tvVideos', params.id], () =>
+        getTvVideos(params.id),
+    );
 
     queryClient.prefetchQuery(['tvDetails', params.id], () =>
         getTvDetails(params.id),
@@ -40,13 +99,14 @@ export async function getStaticProps({ params }) {
     return {
         props: {
             dehydratedState: dehydrate(queryClient),
+            revalidate: 30 * 60,
         },
     };
 }
 
 export async function getStaticPaths() {
-    const popularTvShows = await getTvPopular();
-    const paths = popularTvShows.results.map(tvShow => ({
+    const allTv = await getAllTv();
+    const paths = allTv.map(tvShow => ({
         params: { id: tvShow.id.toString() },
     }));
 

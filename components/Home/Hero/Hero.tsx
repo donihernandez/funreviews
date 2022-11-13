@@ -1,4 +1,3 @@
-import { COLORS } from '@/styles/theme';
 import { Box, Container, Flex } from '@chakra-ui/react';
 
 import { Search } from '../Search';

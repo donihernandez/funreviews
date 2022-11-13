@@ -21,19 +21,19 @@ const Profile = () => {
         },
     ];
 
-    const renderLink = () => {
-        let renderComponent = null;
-        switch (activeLink) {
-            // case 'profile_details':
-            //     renderComponent = <ProfileDetails />;
-            //     break;
-            case 'change_password':
-                renderComponent = <ChangePassword />;
-                break;
-        }
+    // const renderLink = () => {
+    //     let renderComponent = null;
+    //     switch (activeLink) {
+    //         // case 'profile_details':
+    //         //     renderComponent = <ProfileDetails />;
+    //         //     break;
+    //         case 'change_password':
+    //             renderComponent = <ChangePassword />;
+    //             break;
+    //     }
 
-        return renderComponent;
-    };
+    //     return renderComponent;
+    // };
 
     return (
         <Wrapper>

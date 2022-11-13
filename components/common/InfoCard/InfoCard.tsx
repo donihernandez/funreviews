@@ -16,7 +16,7 @@ import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 import { motion } from 'framer-motion';
 import { FaPlay } from 'react-icons/fa';
 
-import { PrimaryButton, SecondaryButton } from '../Buttons';
+import { PrimaryButton, ReviewButton } from '../Buttons';
 
 interface IInfoCardProps {
     height?: string;
@@ -39,6 +39,7 @@ const InfoCard: FC<IInfoCardProps> = ({
 
     const primaryButtonStyle = {
         mb: '10px',
+        w: 'full',
     };
 
     return (
@@ -97,7 +98,11 @@ const InfoCard: FC<IInfoCardProps> = ({
                         text="Watch Now"
                         {...primaryButtonStyle}
                     />
-                    <SecondaryButton icon={<StarIcon />} link="" />
+                    <ReviewButton
+                        icon={<StarIcon />}
+                        showId={show.id}
+                        showTitle={show.title}
+                    />
                 </Flex>
             </Flex>
         </Box>

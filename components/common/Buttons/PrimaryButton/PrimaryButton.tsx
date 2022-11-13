@@ -33,7 +33,6 @@ const PrimaryButton: FC<IPrimaryButtonProps> = ({
                 mr={4}
                 transition="all 0.5s ease-in-out"
                 variant="ghost"
-                w="full"
                 {...props}
             >
                 {text}

@@ -20,8 +20,13 @@ const Review: FC<IReviewProps> = ({ review }) => {
                 ? review.author_details.avatar_path.slice(1)
                 : review.author_details.avatar_path;
         }
+
+        if (review.avatar) {
+            return review.avatar;
+        }
+
         const size = IMAGE_CONFIG.profile_sizes.find(s => s === 'w185');
-        return `${IMAGE_URL}${size}${review.author_details.avatar_path}`;
+        return `${IMAGE_URL}${size}${review.author_details?.avatar_path}`;
     };
 
     return (
@@ -51,11 +56,13 @@ const Review: FC<IReviewProps> = ({ review }) => {
                     fontWeight="bold"
                     mb="10px"
                 >
-                    {review.author_details.name || review.author} |{' '}
-                    {new Date(review.created_at).toDateString()}
+                    {review.author_details?.name ||
+                        review.author ||
+                        review.username}{' '}
+                    | {new Date(review.created_at).toDateString()}
                 </Heading>
                 <Text fontFamily="Lato" fontSize="18px" fontWeight="bold">
-                    {review.content}
+                    {review.content || review.review}
                 </Text>
             </Flex>
         </Flex>

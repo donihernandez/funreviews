@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { chakra, Flex, Heading, Image, Text } from '@chakra-ui/react';
+import { chakra, Flex, Heading, Text } from '@chakra-ui/react';
 
 import { COLORS } from '../../../../styles/theme';
 

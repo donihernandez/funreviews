@@ -9,10 +9,10 @@ import {
     chakra,
     Flex,
     Heading,
-    Image,
     Text,
 } from '@chakra-ui/react';
 import { COLORS } from '@/styles/theme';
+import Image from 'next/image';
 
 interface ISeasonCardProps {
     season: Season;
@@ -47,7 +47,12 @@ const SeasonCard: FC<ISeasonCardProps> = ({
                     w="full"
                 >
                     <AspectRatio h="full" minH="383px" ratio={1}>
-                        <Image alt={season.name} src={image} />
+                        <Image
+                            alt={season.name}
+                            layout="fill"
+                            objectFit="cover"
+                            src={image}
+                        />
                     </AspectRatio>
 
                     <Box p={2}>

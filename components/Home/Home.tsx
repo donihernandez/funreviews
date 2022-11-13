@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getMovieGenres, getTrending } from '_tmdb/movies/queries';
 
 import { useShowsContext } from 'contexts/ShowsContext';
-import { Loading } from '@/components/common/Loading';
+import { FullPageLoader } from '../common/FullPageLoader';
 
 const Home: FC = () => {
     // Dynamic Imports
@@ -29,26 +29,26 @@ const Home: FC = () => {
     );
 
     const { setMovieGenres } = useShowsContext();
-    const { data: movieResults, isSuccess: moviesSucess } = useQuery(
+    const { data: movieResults, isSuccess: moviesSuccess } = useQuery(
         ['trendingMovie'],
         () => getTrending(),
     );
 
-    const { data: genres, isSuccess: genresSucess } = useQuery(
+    const { data: genres, isSuccess: genresSuccess } = useQuery(
         ['movieGenres'],
         getMovieGenres,
     );
 
     useEffect(() => {
-        if (genresSucess) {
+        if (genresSuccess) {
             setMovieGenres(genres.genres);
         }
-    }, [genresSucess]);
+    }, [genresSuccess]);
 
     return (
         <Flex bg="#000" direction="column" w="full">
             <Hero />
-            {moviesSucess ? (
+            {moviesSuccess ? (
                 <>
                     <Trending movie={movieResults?.results[0]} />
                     <PopularMovies />
@@ -57,7 +57,7 @@ const Home: FC = () => {
                     <TopRatedTv />
                 </>
             ) : (
-                <Loading />
+                <FullPageLoader />
             )}
         </Flex>
     );

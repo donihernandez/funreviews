@@ -7,7 +7,6 @@ import {
     Divider,
     Flex,
     Heading,
-    Image,
     Text,
     Wrap,
     WrapItem,
@@ -19,6 +18,7 @@ import { Review } from '../common/Review';
 import { IReview } from 'typings';
 import { Loading } from '../common/Loading';
 import FunReview from '../common/Review/FunReview';
+import Image from 'next/image';
 
 interface IDetailsProps {
     children: ReactNode;
@@ -44,7 +44,13 @@ interface IPosterProps {
 
 const Poster: FC<IPosterProps> = ({ title, image }) => {
     return (
-        <Image alt={title} h="full" objectFit="cover" src={image} w="full" />
+        <Image
+            alt={title}
+            height={700}
+            objectFit="contain"
+            src={image}
+            width={500}
+        />
     );
 };
 
@@ -62,7 +68,7 @@ const Trailer: FC<ITrailerProps> = ({ video }) => {
             frameBorder="0"
             h="full"
             minH={['300px', null, '400px']}
-            minW={['375px', null, '400px']}
+            minW={['300px', null, 'full']}
             src={`https://www.youtube.com/embed/${video}`}
             w="full"
         />
@@ -73,7 +79,7 @@ const Trailer: FC<ITrailerProps> = ({ video }) => {
 
 const InfoContainer: FC<IDetailsProps> = ({ children }) => {
     return (
-        <Flex direction="column" ml={['0', null, '30px']}>
+        <Flex direction="column" ml={['0', null, '30px']} w="full">
             {children}
         </Flex>
     );
@@ -191,7 +197,16 @@ const ProductionCompany: FC<IProductionCompanyProps> = ({ company }) => {
         >
             <Center>
                 {company.logo_path ? (
-                    <Image alt={company.name} h="20px" mr="5px" src={image} />
+                    <Image
+                        alt={company.name}
+                        height="20px"
+                        objectFit="contain"
+                        src={image}
+                        style={{
+                            marginRight: '5px',
+                        }}
+                        width="50px"
+                    />
                 ) : (
                     <Text fontSize="20px" fontWeight="bold">
                         {company.name}

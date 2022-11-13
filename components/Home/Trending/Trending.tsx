@@ -34,7 +34,7 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
 
     const { movieGenres, isVideo } = useShowsContext();
 
-    const size = IMAGE_CONFIG.backdrop_sizes.find(s => s === 'original');
+    const size = IMAGE_CONFIG.backdrop_sizes.find(s => s === 'w1280');
 
     const image = `${IMAGE_URL}${size}${movie.backdrop_path}`;
 
@@ -81,7 +81,7 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
 
             <Flex
                 alignItems={['center', null, 'flex-start']}
-                direction={['column', null, 'row']}
+                direction="column"
                 justifyContent={['center', null, 'flex-start']}
             >
                 {!isVideo ? (

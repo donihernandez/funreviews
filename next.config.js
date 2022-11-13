@@ -8,4 +8,7 @@ module.exports = withBundleAnalyzer({
     reactStrictMode: false,
     swcMinify: true,
     staticPageGenerationTimeout: 60 * 60,
+    images: {
+        domains: ['image.tmdb.org'],
+    },
 });

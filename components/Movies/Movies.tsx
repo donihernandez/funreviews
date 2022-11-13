@@ -14,7 +14,6 @@ import { Intro } from '@/components/common/Intro';
 import { ShowsList } from '@/components/common/Shows/ShowsList';
 
 import { useShowsContext } from 'contexts/ShowsContext';
-import { Sidebar } from '@/components/common/Sidebar';
 
 import { Loading } from '../common/Loading';
 import { useRouter } from 'next/router';

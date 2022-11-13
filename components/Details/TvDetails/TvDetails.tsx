@@ -21,24 +21,11 @@ import {
     Wrap,
     WrapItem,
 } from '@chakra-ui/react';
+import dynamic from 'next/dynamic';
 
 import { useBreakpoints } from 'hooks';
 import { Wrapper } from '@/components/common/Wrapper';
 import { IMAGE_URL } from '@/utils/images';
-import {
-    AdditionalInfo,
-    CastContainer,
-    CrewContainer,
-    Description,
-    DetailsContainer,
-    InfoContainer,
-    Poster,
-    ProductionCompaniesContainer,
-    Rate,
-    ReviewsList,
-    Title,
-    Trailer,
-} from '../Details.components';
 import { getTrailer } from '@/utils/getTrailer';
 import { COLORS } from '@/styles/theme';
 import { GenresList } from '@/components/common/GenreList';
@@ -67,6 +54,51 @@ const TvDetails: FC<ITvDetailsProps> = ({
     tvReviews,
     tvVideos,
 }) => {
+    const Trailer = dynamic(() =>
+        import('../Details.components').then(module => module.Trailer),
+    );
+
+    const AdditionalInfo = dynamic(() =>
+        import('../Details.components').then(module => module.AdditionalInfo),
+    );
+
+    const CastContainer = dynamic(() =>
+        import('../Details.components').then(module => module.CastContainer),
+    );
+
+    const CrewContainer = dynamic(() =>
+        import('../Details.components').then(module => module.CrewContainer),
+    );
+
+    const Description = dynamic(() =>
+        import('../Details.components').then(module => module.Description),
+    );
+
+    const ReviewsList = dynamic(() =>
+        import('../Details.components').then(module => module.ReviewsList),
+    );
+    const InfoContainer = dynamic(() =>
+        import('../Details.components').then(module => module.InfoContainer),
+    );
+    const Title = dynamic(() =>
+        import('../Details.components').then(module => module.Title),
+    );
+    const DetailsContainer = dynamic(() =>
+        import('../Details.components').then(module => module.DetailsContainer),
+    );
+    const ProductionCompaniesContainer = dynamic(() =>
+        import('../Details.components').then(
+            module => module.ProductionCompaniesContainer,
+        ),
+    );
+    const Rate = dynamic(() =>
+        import('../Details.components').then(module => module.Rate),
+    );
+
+    const Poster = dynamic(() =>
+        import('../Details.components').then(module => module.Poster),
+    );
+
     const { isSmallerThanDesktop } = useBreakpoints();
 
     const [trailer, setTrailer] = useState('');
@@ -106,17 +138,10 @@ const TvDetails: FC<ITvDetailsProps> = ({
     ];
 
     const getImagePath = useMemo(() => {
-        let imagePath = '';
-        if (!isSmallerThanDesktop) {
-            imagePath = tvDetails?.backdrop_path
-                ? tvDetails?.backdrop_path
-                : tvDetails?.poster_path;
-        } else {
-            imagePath = tvDetails?.poster_path;
-        }
+        const imagePath = tvDetails?.poster_path;
 
         if (imagePath !== '') {
-            return `${IMAGE_URL}original${imagePath}`;
+            return `${IMAGE_URL}w780${imagePath}`;
         }
 
         return '';
@@ -164,7 +189,9 @@ const TvDetails: FC<ITvDetailsProps> = ({
                     </Breadcrumb>
                 </Flex>
 
-                <Trailer video={trailer} />
+                <Flex h="full" w="full">
+                    <Trailer video={trailer} />
+                </Flex>
 
                 <DetailsContainer>
                     <Flex>
@@ -217,10 +244,11 @@ const TvDetails: FC<ITvDetailsProps> = ({
                     fontFamily="Nunito"
                     fontSize="30px"
                     mb="20px"
+                    textAlign={['center', null, 'initial']}
                 >
                     Seasons
                 </Heading>
-                <Wrap>
+                <Wrap justify="center">
                     {tvDetails?.seasons?.map(season => (
                         <WrapItem key={season.id}>
                             <SeasonCard
@@ -257,6 +285,7 @@ const TvDetails: FC<ITvDetailsProps> = ({
                                 columns={[1, 1, 2, 2]}
                                 mt="20px"
                                 spacingX="20px"
+                                spacingY="20px"
                             >
                                 {tvVideos?.results.map(video => (
                                     <VideoBox

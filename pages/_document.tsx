@@ -26,6 +26,7 @@ class MyDocument extends Document {
                         async
                         id="GA4"
                         src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID}`}
+                        strategy="afterInteractive"
                     />
                     <Script
                         dangerouslySetInnerHTML={{
@@ -39,11 +40,13 @@ class MyDocument extends Document {
           `,
                         }}
                         id="GA4_TAG"
+                        strategy="afterInteractive"
                     />
                     <Script
                         async
                         crossOrigin="anonymous"
                         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE}`}
+                        strategy="afterInteractive"
                     ></Script>
                 </Head>
                 <body>

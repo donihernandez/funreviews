@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { Analytics } from '@vercel/analytics/react';
 
 import { Layout } from '@/components/Layout';
 
@@ -35,11 +36,17 @@ function MyApp({
                                 {!NOT_LAYOUT_ROUTES.includes(
                                     router.pathname,
                                 ) ? (
-                                    <Layout>
-                                        <Component {...pageProps} />
-                                    </Layout>
+                                    <>
+                                        <Layout>
+                                            <Component {...pageProps} />
+                                        </Layout>
+                                        <Analytics />
+                                    </>
                                 ) : (
-                                    <Component {...pageProps} />
+                                    <>
+                                        <Component {...pageProps} />
+                                        <Analytics />
+                                    </>
                                 )}
                             </AuthProvider>
                         </ShowsProvider>

@@ -29,8 +29,9 @@ const ShowImage: FC<IShowImageProps> = ({ image, title, name }) => {
     return (
         <Image
             alt={title || name}
-            height={isSmallerThanDesktop ? '100%' : '260px'}
+            height={isSmallerThanDesktop ? '300px' : '460px'}
             src={image}
+            width={isSmallerThanDesktop ? '500px' : '300px'}
         />
     );
 };

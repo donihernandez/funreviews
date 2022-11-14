@@ -9,8 +9,6 @@ import { Wrapper } from '../common/Wrapper';
 
 import { useShowsContext } from 'contexts/ShowsContext';
 import { Flex } from '@chakra-ui/react';
-import { Sidebar } from '../common/Sidebar';
-import { getTvGenres, getTvPopular } from '_tmdb/tv/queries';
 import { Loading } from '../common/Loading';
 import { searchTvByName } from '_tmdb/tv/queries/searchTvByName';
 
@@ -27,24 +25,11 @@ const Tv: FC = () => {
         },
     ];
 
-    const { setGenres, setTotalPages, setType, setShows } = useShowsContext();
+    const { setTotalPages, setShows } = useShowsContext();
     const [isLoading, setIsLoading] = useState(false);
 
     const router = useRouter();
     const [searchText] = useState(router.query.search);
-
-    const getTv = async () => {
-        setShows([]);
-        const tv = await getTvPopular();
-        setShows(tv.results);
-        setTotalPages(tv.total_pages);
-        setType('tv');
-    };
-
-    const getGenres = async () => {
-        const genres = await getTvGenres();
-        setGenres(genres.genres);
-    };
 
     const handleSearchTvByName = async () => {
         const response = await searchTvByName(searchText as string);
@@ -63,11 +48,6 @@ const Tv: FC = () => {
             setIsLoading(true);
             handleSearchTvByName();
             setIsLoading(false);
-        } else {
-            setIsLoading(true);
-            getTv();
-            getGenres();
-            setIsLoading(false);
         }
     }, []);
 
@@ -79,7 +59,7 @@ const Tv: FC = () => {
                     <Loading />
                 ) : (
                     <>
-                        <ShowsList />
+                        <ShowsList type="tv" />
                         {/* <Sidebar /> */}
                     </>
                 )}

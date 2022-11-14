@@ -12,6 +12,7 @@ import {
     Heading,
     Image,
     Input,
+    Skeleton,
     Text,
 } from '@chakra-ui/react';
 import Link from 'next/link';
@@ -65,21 +66,23 @@ const Register: FC = () => {
     };
 
     return (
-        <Flex bg="black" h="100vh" w="full">
+        <Flex bg="black" minH="100vh" w="full">
             {!isSmallerThanDesktop && (
-                <Box h="100vh">
+                <Flex alignItems="center" h="100vh" justifyContent="center">
                     <Image
                         alt="movies camera"
+                        fallback={<Skeleton />}
                         h="full"
-                        objectFit="contain"
-                        src="/register.webp"
+                        loading="lazy"
+                        objectFit="cover"
+                        src="/register.avif"
                     />
-                </Box>
+                </Flex>
             )}
 
-            <Container h="100vh" px="50px" w="full">
-                <Flex direction="column" h="full" justifyContent="center">
-                    <Box mb="60px">
+            <Container h="full" px="50px" py={50}>
+                <Flex direction="column" h="full" justifyContent="start">
+                    <Box mb="30px">
                         <Link href="/" passHref>
                             <ChakraLink>
                                 <Text
@@ -100,7 +103,7 @@ const Register: FC = () => {
                         as="h1"
                         color={COLORS.white}
                         fontSize="60px"
-                        pb="100px"
+                        pb="40px"
                     >
                         Register
                     </Heading>

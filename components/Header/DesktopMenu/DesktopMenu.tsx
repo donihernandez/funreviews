@@ -16,7 +16,6 @@ import Link from 'next/link';
 import links from '../links';
 
 import { COLORS } from '@/styles/theme';
-import { useShowsContext } from 'contexts/ShowsContext';
 import { useAuthContext } from 'contexts/AuthContext';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { doc, onSnapshot } from 'firebase/firestore';
@@ -38,7 +37,7 @@ const DesktopMenu: FC = () => {
     const [currentUser, setCurrentUser] = useState(null);
 
     const router = useRouter();
-    const { updateShows } = useShowsContext();
+
     const { user, logout } = useAuthContext();
 
     useEffect(() => {
@@ -56,17 +55,11 @@ const DesktopMenu: FC = () => {
         <Flex alignItems="center" justifyContent="space-between" w="full">
             <Flex>
                 {links.map(link => (
-                    <Button
-                        key={link.name}
-                        onClick={() => {
-                            updateShows([]);
-                            router.push(link.href);
-                        }}
-                        variant="link"
-                        {...linkStyles}
-                    >
-                        {link.name}
-                    </Button>
+                    <Link href={link.href} key={link.name} passHref>
+                        <ChakraLink variant="link" {...linkStyles}>
+                            {link.name}
+                        </ChakraLink>
+                    </Link>
                 ))}
             </Flex>
             <Flex alignItems="center">

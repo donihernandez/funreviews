@@ -23,7 +23,7 @@ class MyDocument extends Document {
                     />
 
                     <Script
-                        async
+                        defer
                         id="GA4"
                         src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID}`}
                         strategy="afterInteractive"
@@ -39,12 +39,13 @@ class MyDocument extends Document {
             });
           `,
                         }}
+                        defer
                         id="GA4_TAG"
                         strategy="afterInteractive"
                     />
                     <Script
-                        async
                         crossOrigin="anonymous"
+                        defer
                         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE}`}
                         strategy="afterInteractive"
                     ></Script>

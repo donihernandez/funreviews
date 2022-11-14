@@ -33,7 +33,7 @@ const Show: FC<IShow> = ({ show }) => {
 
     const size = isSmallerThanDesktop
         ? IMAGE_CONFIG.poster_sizes.find(s => s === 'w342')
-        : IMAGE_CONFIG.backdrop_sizes.find(s => s === 'original');
+        : IMAGE_CONFIG.backdrop_sizes.find(s => s === 'w780');
 
     const image = `${IMAGE_URL}${size}${path}`;
 

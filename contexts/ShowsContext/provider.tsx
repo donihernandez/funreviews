@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { ShowsContext } from './context';
@@ -13,7 +13,7 @@ interface IShowsProviderProps {
 const ShowsProvider: FC<IShowsProviderProps> = ({ children }) => {
     const [genres, setGenres] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
-    const [type, setType] = useState('movie');
+
     const [isSearching, setIsSearching] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [movieGenres, setMovieGenres] = useState([]);
@@ -86,34 +86,37 @@ const ShowsProvider: FC<IShowsProviderProps> = ({ children }) => {
         return reviewsList ?? [];
     };
 
-    const value = {
-        genres,
-        getReviewsById,
-        isSearching,
-        isVideo,
-        loading,
-        movieGenres,
-        searchTerm,
-        setGenres,
-        setIsSearching,
-        setIsVideo,
-        setLoading,
-        setMovieGenres,
-        setSearchTerm,
-        setShows,
-        setTotalPages,
-        setTvGenres,
-        setType,
-        shows,
-        storeReview,
-        totalPages,
-        tvGenres,
-        type,
-        updateShows,
-    };
+    const memoedValue = useMemo(
+        () => ({
+            genres,
+            getReviewsById,
+            isSearching,
+            isVideo,
+            loading,
+            movieGenres,
+            searchTerm,
+            setGenres,
+            setIsSearching,
+            setIsVideo,
+            setLoading,
+            setMovieGenres,
+            setSearchTerm,
+            setShows,
+            setTotalPages,
+            setTvGenres,
+            shows,
+            storeReview,
+            totalPages,
+            tvGenres,
+            updateShows,
+        }),
+        [shows, setShows, genres, setGenres, setTotalPages, totalPages],
+    );
 
     return (
-        <ShowsContext.Provider value={value}>{children}</ShowsContext.Provider>
+        <ShowsContext.Provider value={memoedValue}>
+            {children}
+        </ShowsContext.Provider>
     );
 };
 

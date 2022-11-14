@@ -6,7 +6,7 @@ import { Welcome } from './Welcome';
 
 const Hero = () => {
     return (
-        <Flex bgImage="/hero-bg.webp" w="full">
+        <Flex bgImage="/hero-bg.avif" w="full">
             <Box
                 backdropFilter={'blur(2px)'}
                 background="blackAlpha.800"

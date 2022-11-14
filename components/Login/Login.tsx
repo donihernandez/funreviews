@@ -12,6 +12,7 @@ import {
     Heading,
     Image,
     Input,
+    Skeleton,
     Text,
 } from '@chakra-ui/react';
 
@@ -50,17 +51,19 @@ const Login: FC = () => {
     return (
         <Flex bg="black" h="100vh" w="full">
             {!isSmallerThanDesktop && (
-                <Box h="100vh">
+                <Box h="100vh" w="full">
                     <Image
                         alt="movies camera"
+                        fallback={<Skeleton />}
                         h="full"
+                        loading="lazy"
                         objectFit="contain"
-                        src="/login.webp"
+                        src="/login.avif"
                     />
                 </Box>
             )}
 
-            <Container h="100vh" px="50px" w="full">
+            <Container h="100vh" px="30px" w="full">
                 <Flex direction="column" h="full" justifyContent="center">
                     <Box mb="60px">
                         <Link href="/" passHref>

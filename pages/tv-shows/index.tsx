@@ -1,13 +1,42 @@
 /* eslint-disable max-len */
 import { NextPage } from 'next';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { getTvGenres, getTvPopular } from '_tmdb/tv/queries';
-
+import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { NextSeo } from 'next-seo';
 
 import { Tv } from '@/components/Tv';
+import { FullPageLoader } from '@/components/common/FullPageLoader';
+import { getTvGenres, getTvPopular } from '_tmdb/tv/queries';
+
+import { useShowsContext } from 'contexts/ShowsContext';
 
 const TVShowsPage: NextPage = () => {
+    const [loading, setLoading] = useState(false);
+    const { setShows, setGenres, setTotalPages } = useShowsContext();
+
+    const { data: tvGenres, isSuccess: tvGenresSuccess } = useQuery(
+        ['tvGenres'],
+        () => getTvPopular(),
+    );
+
+    const { data: popularTv, isSuccess: popularTVSuccess } = useQuery(
+        ['popularTv'],
+        () => getTvPopular(),
+    );
+
+    useEffect(() => {
+        setShows([]);
+        setLoading(true);
+        if (popularTVSuccess) {
+            setShows(popularTv.results);
+            setTotalPages(popularTv.total_pages);
+        }
+        if (tvGenresSuccess) {
+            setGenres(tvGenres.genres);
+        }
+        setLoading(false);
+    }, [tvGenresSuccess, popularTVSuccess]);
+
     return (
         <>
             <NextSeo
@@ -22,7 +51,7 @@ const TVShowsPage: NextPage = () => {
                 description="Watch popular TV Shows and create a fun review of it."
                 title="TV Shows | FunReviews"
             />
-            <Tv />
+            {!loading ? <Tv /> : <FullPageLoader />}
         </>
     );
 };

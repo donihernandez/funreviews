@@ -5,7 +5,6 @@ import {
     chakra,
     Flex,
     Heading,
-    Image,
     Text,
 } from '@chakra-ui/react';
 
@@ -17,6 +16,7 @@ import { motion } from 'framer-motion';
 import { FaPlay } from 'react-icons/fa';
 
 import { PrimaryButton, ReviewButton } from '../Buttons';
+import Image from 'next/image';
 
 interface IInfoCardProps {
     height?: string;
@@ -32,8 +32,10 @@ const InfoCard: FC<IInfoCardProps> = ({
     type,
 }) => {
     const size = IMAGE_CONFIG.poster_sizes.find(s => s === 'w342');
+    const lazyLoadSize = IMAGE_CONFIG.poster_sizes.find(s => s === 'w92');
 
     const image = `${IMAGE_URL}${size}${show.poster_path}`;
+    const lazyLoadImage = `${IMAGE_URL}${lazyLoadSize}${show.poster_path}`;
 
     const pathType = type === 'movie' ? 'movies' : 'tv-shows';
 
@@ -62,8 +64,10 @@ const InfoCard: FC<IInfoCardProps> = ({
                 <AspectRatio h="full" minH="383px" ratio={1}>
                     <Image
                         alt={show.original_title || show.original_name}
-                        as={motion.img}
                         draggable={false}
+                        layout="fill"
+                        loading="lazy"
+                        quality={75}
                         src={image}
                     />
                 </AspectRatio>

@@ -30,6 +30,7 @@ const ShowImage: FC<IShowImageProps> = ({ image, title, name }) => {
         <Image
             alt={title || name}
             height={isSmallerThanDesktop ? '300px' : '460px'}
+            loading="lazy"
             src={image}
             width={isSmallerThanDesktop ? '500px' : '300px'}
         />

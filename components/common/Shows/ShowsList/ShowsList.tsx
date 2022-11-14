@@ -12,14 +12,20 @@ import { Show } from '../Show';
 
 import { List, ShowsListContainer } from './ShowsList.components';
 import { getPopular } from '_tmdb/movies/queries';
+import { getTvPopular } from '_tmdb/tv/queries';
+
 import { COLORS } from '@/styles/theme';
 import { useState } from 'react';
 import { Loading } from '../../Loading';
 
 import { useShowsContext } from 'contexts/ShowsContext';
 
-const ShowsList: FC = () => {
-    const { totalPages, type, shows, setShows } = useShowsContext();
+interface IShowsListProps {
+    type: string;
+}
+
+const ShowsList: FC<IShowsListProps> = ({ type }) => {
+    const { totalPages, shows, setShows } = useShowsContext();
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -44,6 +50,12 @@ const ShowsList: FC = () => {
         setIsLoading(true);
         if (type === 'movie') {
             res = await getPopular(page);
+            if (res) {
+                setShows(() => res.results);
+                setCurrentPage(page);
+            }
+        } else if (type === 'tv') {
+            res = await getTvPopular(page);
             if (res) {
                 setShows(() => res.results);
                 setCurrentPage(page);
@@ -82,7 +94,7 @@ const ShowsList: FC = () => {
 
             {shows.length > 0 ? (
                 <List>
-                    {shows?.map((show: Movie | Tv) => {
+                    {shows.map((show: Movie | Tv) => {
                         return !isLoading ? (
                             <Show key={show.id} show={show} />
                         ) : (

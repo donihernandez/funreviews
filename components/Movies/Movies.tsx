@@ -3,11 +3,7 @@ import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 
-import {
-    getMovieGenres,
-    getPopular,
-    searchMovieByName,
-} from '_tmdb/movies/queries';
+import { searchMovieByName } from '_tmdb/movies/queries';
 
 import { Wrapper } from '@/components/common/Wrapper';
 import { Intro } from '@/components/common/Intro';
@@ -31,24 +27,11 @@ const Movies: FC = () => {
         },
     ];
 
-    const { setType, setGenres, setTotalPages, setShows } = useShowsContext();
+    const { setTotalPages, setShows } = useShowsContext();
     const [isLoading, setIsLoading] = useState(false);
 
     const router = useRouter();
     const [searchText] = useState(router.query.search);
-
-    const getMovies = async () => {
-        setShows([]);
-        const movies = await getPopular();
-        setShows(movies.results);
-        setTotalPages(movies.total_pages);
-        setType('movie');
-    };
-
-    const getGenres = async () => {
-        const genres = await getMovieGenres();
-        setGenres(genres.genres);
-    };
 
     const handleSearchMovieByName = async () => {
         const response = await searchMovieByName(searchText as string);
@@ -67,11 +50,6 @@ const Movies: FC = () => {
             setIsLoading(true);
             handleSearchMovieByName();
             setIsLoading(false);
-        } else {
-            setIsLoading(true);
-            getMovies();
-            getGenres();
-            setIsLoading(false);
         }
     }, []);
 
@@ -83,7 +61,7 @@ const Movies: FC = () => {
                     <Loading />
                 ) : (
                     <>
-                        <ShowsList />
+                        <ShowsList type="movie" />
                         {/* <Sidebar /> */}
                     </>
                 )}

@@ -40,6 +40,11 @@ class MyDocument extends Document {
                         }}
                         id="GA4_TAG"
                     />
+                    <Script
+                        async
+                        crossOrigin="anonymous"
+                        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE}`}
+                    ></Script>
                 </Head>
                 <body>
                     <Main />

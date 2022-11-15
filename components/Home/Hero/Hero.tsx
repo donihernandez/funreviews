@@ -1,6 +1,6 @@
 import { Box, Container, Flex } from '@chakra-ui/react';
 
-import { Search } from '../Search';
+import Search from '../Search/Search';
 
 import { Welcome } from './Welcome';
 
@@ -44,4 +44,4 @@ const Hero = () => {
     );
 };
 
-export { Hero };
+export default Hero;

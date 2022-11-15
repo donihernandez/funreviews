@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { FC, Suspense } from 'react';
 import {
     AspectRatio,
     Box,
@@ -17,6 +17,7 @@ import { FaPlay } from 'react-icons/fa';
 
 import { PrimaryButton, ReviewButton } from '../Buttons';
 import Image from 'next/image';
+import { Loading } from '../Loading';
 
 interface IInfoCardProps {
     height?: string;
@@ -32,10 +33,8 @@ const InfoCard: FC<IInfoCardProps> = ({
     type,
 }) => {
     const size = IMAGE_CONFIG.poster_sizes.find(s => s === 'w342');
-    const lazyLoadSize = IMAGE_CONFIG.poster_sizes.find(s => s === 'w92');
 
     const image = `${IMAGE_URL}${size}${show.poster_path}`;
-    const lazyLoadImage = `${IMAGE_URL}${lazyLoadSize}${show.poster_path}`;
 
     const pathType = type === 'movie' ? 'movies' : 'tv-shows';
 
@@ -45,71 +44,74 @@ const InfoCard: FC<IInfoCardProps> = ({
     };
 
     return (
-        <Box
-            as={motion.div}
-            cursor="pointer"
-            h={height}
-            minW={width}
-            mr="15px"
-            overflow="hidden"
-            position="relative"
-        >
-            <Flex
-                bg="rgba(0,0,0,0.5)"
-                direction="column"
-                h="full"
-                justifyContent="flex-end"
-                w="full"
+        <Suspense fallback={<Loading />}>
+            <Box
+                as={motion.div}
+                cursor="pointer"
+                h={height}
+                minW={width}
+                mr="15px"
+                overflow="hidden"
+                position="relative"
             >
-                <AspectRatio h="full" minH="383px" ratio={1}>
-                    <Image
-                        alt={show.original_title || show.original_name}
-                        draggable={false}
-                        layout="fill"
-                        loading="lazy"
-                        quality={75}
-                        src={image}
-                    />
-                </AspectRatio>
-
-                <Heading
-                    as="h6"
-                    color={COLORS.white}
-                    fontFamily="Lato"
-                    fontSize="15px"
-                    pt="15px"
-                    textTransform="uppercase"
+                <Flex
+                    bg="rgba(0,0,0,0.5)"
+                    direction="column"
+                    h="full"
+                    justifyContent="flex-end"
+                    w="full"
                 >
-                    {show.original_title || show.original_name}
-                </Heading>
-                <Flex alignItems="center" mt="5px">
-                    <StarIcon color="yellow.400" mr="5px" />
-                    <Text
+                    <AspectRatio h="full" minH="383px" ratio={1}>
+                        <Image
+                            alt={show.original_title || show.original_name}
+                            draggable={false}
+                            layout="fill"
+                            loading="lazy"
+                            objectFit="cover"
+                            quality={75}
+                            src={image}
+                        />
+                    </AspectRatio>
+
+                    <Heading
+                        as="h6"
                         color={COLORS.white}
-                        fontFamily="Nunito"
-                        fontSize="12px"
+                        fontFamily="Lato"
+                        fontSize="15px"
+                        pt="15px"
+                        textTransform="uppercase"
                     >
-                        <chakra.span fontSize="16px" fontWeight="800">
-                            {show.vote_average}
-                        </chakra.span>
-                        /10
-                    </Text>
+                        {show.original_title || show.original_name}
+                    </Heading>
+                    <Flex alignItems="center" mt="5px">
+                        <StarIcon color="yellow.400" mr="5px" />
+                        <Text
+                            color={COLORS.white}
+                            fontFamily="Nunito"
+                            fontSize="12px"
+                        >
+                            <chakra.span fontSize="16px" fontWeight="800">
+                                {show.vote_average}
+                            </chakra.span>
+                            /10
+                        </Text>
+                    </Flex>
+                    <Flex direction="column" mt={5}>
+                        <PrimaryButton
+                            icon={<FaPlay />}
+                            link={`/${pathType}/${show.id}`}
+                            text="Watch Now"
+                            {...primaryButtonStyle}
+                        />
+                        <ReviewButton
+                            icon={<StarIcon />}
+                            showId={show.id}
+                            showTitle={show.title}
+                        />
+                    </Flex>
                 </Flex>
-                <Flex direction="column" mt={5}>
-                    <PrimaryButton
-                        icon={<FaPlay />}
-                        link={`/${pathType}/${show.id}`}
-                        text="Watch Now"
-                        {...primaryButtonStyle}
-                    />
-                    <ReviewButton
-                        icon={<StarIcon />}
-                        showId={show.id}
-                        showTitle={show.title}
-                    />
-                </Flex>
-            </Flex>
-        </Box>
+            </Box>
+        </Suspense>
     );
 };
 

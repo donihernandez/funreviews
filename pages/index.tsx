@@ -5,36 +5,26 @@ import { getPopular, getTopRated, getTrending } from '_tmdb/movies/queries';
 import { getTvPopular, getTvTopRated } from '_tmdb/tv/queries';
 import { BreadcrumbJsonLd, NextSeo, WebPageJsonLd } from 'next-seo';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
-import { FullPageLoader } from '@/components/common/FullPageLoader';
 
 const HomePage: NextPage = () => {
-    const Home = dynamic(() =>
-        import('../components/Home').then(module => module.Home),
+    const Home = dynamic(() => import('../components/Home/Home'));
+
+    const { data: trendingMovies } = useQuery(['trendingMovie'], () =>
+        getTrending(),
     );
 
-    const { data: trendingMovies, isSuccess: moviesSuccess } = useQuery(
-        ['trendingMovie'],
-        () => getTrending(),
+    const { data: popularMovies } = useQuery(['popularMovies'], () =>
+        getPopular(),
     );
 
-    const { data: popularMovies, isSuccess: popularMoviesSuccess } = useQuery(
-        ['popularMovies'],
-        () => getPopular(),
+    const { data: topRatedMovies } = useQuery(['topRatedMovies'], () =>
+        getTopRated(),
     );
 
-    const { data: topRatedMovies, isSuccess: topRatedMoviesSuccess } = useQuery(
-        ['topRatedMovies'],
-        () => getTopRated(),
-    );
+    const { data: popularTv } = useQuery(['popularTv'], () => getTvPopular());
 
-    const { data: popularTv, isSuccess: popularTvSuccess } = useQuery(
-        ['popularTv'],
-        () => getTvPopular(),
-    );
-
-    const { data: topRatedTv, isSuccess: topRatedTvSuccess } = useQuery(
-        ['topRatedTv'],
-        () => getTvTopRated(),
+    const { data: topRatedTv } = useQuery(['topRatedTv'], () =>
+        getTvTopRated(),
     );
 
     return (
@@ -74,21 +64,14 @@ const HomePage: NextPage = () => {
                     },
                 ]}
             />
-            {topRatedMoviesSuccess &&
-            topRatedTvSuccess &&
-            moviesSuccess &&
-            popularTvSuccess &&
-            popularMoviesSuccess ? (
-                <Home
-                    popularMovies={popularMovies}
-                    popularTv={popularTv}
-                    topRatedMovies={topRatedMovies}
-                    topRatedTv={topRatedTv}
-                    trendingMovies={trendingMovies}
-                />
-            ) : (
-                <FullPageLoader />
-            )}
+
+            <Home
+                popularMovies={popularMovies}
+                popularTv={popularTv}
+                topRatedMovies={topRatedMovies}
+                topRatedTv={topRatedTv}
+                trendingMovies={trendingMovies}
+            />
         </>
     );
 };

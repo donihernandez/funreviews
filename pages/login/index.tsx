@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 
-import { Login } from '@/components/Login';
+import Login from '@/components/Login/Login';
 
 const LoginPage: NextPage = () => {
     return (

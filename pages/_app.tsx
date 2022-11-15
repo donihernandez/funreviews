@@ -16,7 +16,6 @@ import '@/styles/globals.css';
 import { NOT_LAYOUT_ROUTES } from '../utils';
 import { ShowsProvider } from 'contexts/ShowsContext';
 import { AuthProvider } from 'contexts/AuthContext';
-import { Transition } from '@/components/common/Transition';
 
 function MyApp({
     Component,
@@ -30,27 +29,23 @@ function MyApp({
         <QueryClientProvider client={queryClient}>
             <Hydrate state={pageProps.dehydratedState}>
                 <ChakraProvider>
-                    <Transition>
-                        <ShowsProvider>
-                            <AuthProvider>
-                                {!NOT_LAYOUT_ROUTES.includes(
-                                    router.pathname,
-                                ) ? (
-                                    <>
-                                        <Layout>
-                                            <Component {...pageProps} />
-                                        </Layout>
-                                        <Analytics />
-                                    </>
-                                ) : (
-                                    <>
+                    <ShowsProvider>
+                        <AuthProvider>
+                            {!NOT_LAYOUT_ROUTES.includes(router.pathname) ? (
+                                <>
+                                    <Layout>
                                         <Component {...pageProps} />
-                                        <Analytics />
-                                    </>
-                                )}
-                            </AuthProvider>
-                        </ShowsProvider>
-                    </Transition>
+                                    </Layout>
+                                    <Analytics />
+                                </>
+                            ) : (
+                                <>
+                                    <Component {...pageProps} />
+                                    <Analytics />
+                                </>
+                            )}
+                        </AuthProvider>
+                    </ShowsProvider>
                 </ChakraProvider>
             </Hydrate>
         </QueryClientProvider>

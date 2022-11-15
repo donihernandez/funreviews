@@ -5,15 +5,12 @@ import { HiOutlinePlay } from 'react-icons/hi';
 import { MotionBox } from '../MotionBox';
 import { Box } from '@chakra-ui/react';
 
-import { useShowsContext } from 'contexts/ShowsContext';
-
 interface IImageBoxProps {
     image: string;
+    setIsVideo: (value: boolean) => void;
 }
 
-const ImageBox: FC<IImageBoxProps> = ({ image }) => {
-    const { setIsVideo } = useShowsContext();
-
+const ImageBox: FC<IImageBoxProps> = ({ image, setIsVideo }) => {
     return (
         <Box h="full" onClick={() => setIsVideo(true)} w="full">
             <MotionBox
@@ -23,10 +20,11 @@ const ImageBox: FC<IImageBoxProps> = ({ image }) => {
                 backgroundSize="cover"
                 cursor="pointer"
                 h="600px"
-                maxW={['375px', null, '600px', 'full']}
+                maxW={['375px', null, 'full', 'full']}
                 mb="15px"
                 overflow="hidden"
                 position="relative"
+                px={['30px', null, null]}
                 w="full"
             >
                 <MotionBox

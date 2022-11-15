@@ -229,4 +229,4 @@ const Register: FC = () => {
     );
 };
 
-export { Register };
+export default Register;

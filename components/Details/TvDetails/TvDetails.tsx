@@ -99,8 +99,6 @@ const TvDetails: FC<ITvDetailsProps> = ({
         import('../Details.components').then(module => module.Poster),
     );
 
-    const { isSmallerThanDesktop } = useBreakpoints();
-
     const [trailer, setTrailer] = useState('');
 
     const wrapperStyles = {

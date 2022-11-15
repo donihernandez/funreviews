@@ -31,8 +31,8 @@ interface ITrendingProps {
 
 const Trending: FC<ITrendingProps> = ({ movie }) => {
     const [movieTrailer, setMovieTrailer] = useState('');
-
-    const { movieGenres, isVideo } = useShowsContext();
+    const [isVideo, setIsVideo] = useState(false);
+    const { movieGenres } = useShowsContext();
 
     const size = IMAGE_CONFIG.backdrop_sizes.find(s => s === 'w1280');
 
@@ -58,8 +58,10 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
     }, [movieGenres]);
 
     useEffect(() => {
-        handleGetVideo(movie.id);
-    }, []);
+        if (isVideo) {
+            handleGetVideo(movie.id);
+        }
+    }, [isVideo]);
 
     return (
         <Container
@@ -85,7 +87,7 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                 justifyContent={['center', null, 'flex-start']}
             >
                 {!isVideo ? (
-                    <ImageBox image={image} />
+                    <ImageBox image={image} setIsVideo={setIsVideo} />
                 ) : (
                     <VideoBox video={movieTrailer} />
                 )}
@@ -136,4 +138,4 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
     );
 };
 
-export { Trending };
+export default Trending;

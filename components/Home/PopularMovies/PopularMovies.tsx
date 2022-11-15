@@ -30,4 +30,4 @@ const PopularMovies: FC<IPopularMovies> = ({ popularMovies }) => {
     );
 };
 
-export { PopularMovies };
+export default PopularMovies;

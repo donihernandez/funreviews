@@ -1,50 +1,51 @@
-import type { FC } from 'react';
+import { Suspense } from 'react';
 import { Flex } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
+import { FullPageLoader } from '../common/FullPageLoader';
 
-interface IHomeProps {
-    popularMovies: any;
-    popularTv: any;
-    topRatedMovies: any;
-    topRatedTv: any;
-    trendingMovies: any;
-}
-
-const Home: FC<IHomeProps> = ({
+export default function Home({
     popularMovies,
     popularTv,
     topRatedMovies,
     topRatedTv,
     trendingMovies,
-}) => {
+}) {
     // Dynamic Imports
-    const Hero = dynamic(() => import('./Hero').then(module => module.Hero));
-    const Trending = dynamic(() =>
-        import('./Trending').then(module => module.Trending),
+    const Hero = dynamic(() => import('./Hero/Hero'), {
+        suspense: true,
+    });
+    const Trending = dynamic(() => import('./Trending/Trending'), {
+        suspense: true,
+    });
+    const PopularMovies = dynamic(
+        () => import('./PopularMovies/PopularMovies'),
+        {
+            suspense: true,
+        },
     );
-    const PopularMovies = dynamic(() =>
-        import('./PopularMovies').then(module => module.PopularMovies),
+    const TopRatedMovies = dynamic(
+        () => import('./TopRatedMovies/TopRatedMovies'),
+        {
+            suspense: true,
+        },
     );
-    const TopRatedMovies = dynamic(() =>
-        import('./TopRatedMovies').then(module => module.TopRatedMovies),
-    );
-    const PopularTv = dynamic(() =>
-        import('./PopularTv').then(module => module.PopularTv),
-    );
-    const TopRatedTv = dynamic(() =>
-        import('./TopRatedTv').then(module => module.TopRatedTv),
-    );
+    const PopularTv = dynamic(() => import('./PopularTv/PopularTv'), {
+        suspense: true,
+    });
+    const TopRatedTv = dynamic(() => import('./TopRatedTv/TopRatedTv'), {
+        suspense: true,
+    });
 
     return (
         <Flex bg="#000" direction="column" w="full">
-            <Hero />
-            <Trending movie={trendingMovies?.results[0]} />
-            <PopularMovies popularMovies={popularMovies} />
-            <TopRatedMovies topRated={topRatedMovies} />
-            <PopularTv popularTv={popularTv} />
-            <TopRatedTv topRated={topRatedTv} />
+            <Suspense fallback={<FullPageLoader />}>
+                <Hero />
+                <Trending movie={trendingMovies?.results[0]} />
+                <PopularMovies popularMovies={popularMovies} />
+                <TopRatedMovies topRated={topRatedMovies} />
+                <PopularTv popularTv={popularTv} />
+                <TopRatedTv topRated={topRatedTv} />
+            </Suspense>
         </Flex>
     );
-};
-
-export { Home };
+}

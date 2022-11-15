@@ -64,4 +64,4 @@ const Header: FC = () => {
     );
 };
 
-export { Header };
+export default Header;

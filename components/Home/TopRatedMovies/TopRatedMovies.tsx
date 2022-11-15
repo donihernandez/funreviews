@@ -30,4 +30,4 @@ const TopRatedMovies: FC<ITopRatedMovies> = ({ topRated }) => {
     );
 };
 
-export { TopRatedMovies };
+export default TopRatedMovies;

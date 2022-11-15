@@ -36,8 +36,6 @@ const DesktopMenu: FC = () => {
     };
     const [currentUser, setCurrentUser] = useState(null);
 
-    const router = useRouter();
-
     const { user, logout } = useAuthContext();
 
     useEffect(() => {

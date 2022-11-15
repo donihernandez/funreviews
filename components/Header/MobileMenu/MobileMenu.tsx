@@ -133,7 +133,7 @@ const MobileMenu: FC = () => {
                                                 Login
                                             </Button>
                                         </Link>
-                                        <Link href="/login" passHref>
+                                        <Link href="/register" passHref>
                                             <Button
                                                 as={ChakraLink}
                                                 mb="20px"

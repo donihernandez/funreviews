@@ -6,12 +6,18 @@ import { Welcome } from './Welcome';
 
 const Hero = () => {
     return (
-        <Flex bgImage="/hero-bg.avif" w="full">
+        <Flex
+            bgAttachment="fixed"
+            bgImage="/hero-bg.avif"
+            bgRepeat="no-repeat"
+            bgSize="cover"
+            w="full"
+        >
             <Box
                 backdropFilter={'blur(2px)'}
                 background="blackAlpha.800"
                 h="full"
-                maxH="100vh"
+                maxH={['130vh', null, '105vh']}
                 position="absolute"
                 w="full"
                 zIndex={0}
@@ -20,6 +26,7 @@ const Hero = () => {
                 h="full"
                 maxW={{ base: '300vw', lg: '80vw' }}
                 minH="100vh"
+                pb={55}
                 zIndex={555}
             >
                 <Flex

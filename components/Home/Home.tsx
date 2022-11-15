@@ -1,15 +1,22 @@
 import type { FC } from 'react';
-import { useEffect } from 'react';
 import { Flex } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
-import { useQuery } from '@tanstack/react-query';
 
-import { getMovieGenres, getTrending } from '_tmdb/movies/queries';
+interface IHomeProps {
+    popularMovies: any;
+    popularTv: any;
+    topRatedMovies: any;
+    topRatedTv: any;
+    trendingMovies: any;
+}
 
-import { useShowsContext } from 'contexts/ShowsContext';
-import { FullPageLoader } from '../common/FullPageLoader';
-
-const Home: FC = () => {
+const Home: FC<IHomeProps> = ({
+    popularMovies,
+    popularTv,
+    topRatedMovies,
+    topRatedTv,
+    trendingMovies,
+}) => {
     // Dynamic Imports
     const Hero = dynamic(() => import('./Hero').then(module => module.Hero));
     const Trending = dynamic(() =>
@@ -28,37 +35,14 @@ const Home: FC = () => {
         import('./TopRatedTv').then(module => module.TopRatedTv),
     );
 
-    const { setMovieGenres } = useShowsContext();
-    const { data: movieResults, isSuccess: moviesSuccess } = useQuery(
-        ['trendingMovie'],
-        () => getTrending(),
-    );
-
-    const { data: genres, isSuccess: genresSuccess } = useQuery(
-        ['movieGenres'],
-        getMovieGenres,
-    );
-
-    useEffect(() => {
-        if (genresSuccess) {
-            setMovieGenres(genres.genres);
-        }
-    }, [genresSuccess]);
-
     return (
         <Flex bg="#000" direction="column" w="full">
             <Hero />
-            {moviesSuccess ? (
-                <>
-                    <Trending movie={movieResults?.results[0]} />
-                    <PopularMovies />
-                    <TopRatedMovies />
-                    <PopularTv />
-                    <TopRatedTv />
-                </>
-            ) : (
-                <FullPageLoader />
-            )}
+            <Trending movie={trendingMovies?.results[0]} />
+            <PopularMovies popularMovies={popularMovies} />
+            <TopRatedMovies topRated={topRatedMovies} />
+            <PopularTv popularTv={popularTv} />
+            <TopRatedTv topRated={topRatedTv} />
         </Flex>
     );
 };

@@ -3,7 +3,7 @@ import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import { getPopular, getTopRated, getTrending } from '_tmdb/movies/queries';
 import { getTvPopular, getTvTopRated } from '_tmdb/tv/queries';
-import { NextSeo } from 'next-seo';
+import { BreadcrumbJsonLd, NextSeo, WebPageJsonLd } from 'next-seo';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import { FullPageLoader } from '@/components/common/FullPageLoader';
 
@@ -50,6 +50,29 @@ const HomePage: NextPage = () => {
                 canonical="https://funreviews.org/"
                 description="Creating reviews can also be fun. Dare to make your favorite movie or show more than just entertainment."
                 title="FunReviews: Create fun reviews about your favorite movies and shows."
+            />
+            <WebPageJsonLd
+                description="Creating reviews can also be fun. Dare to make your favorite movie or show more than just entertainment."
+                id={process.env.SITE_URL}
+                lastReviewed={new Date().toISOString()}
+                reviewedBy={{
+                    name: 'Adonai Dominguez',
+                    type: 'Person',
+                }}
+            />
+            <BreadcrumbJsonLd
+                itemListElements={[
+                    {
+                        item: 'https://funreviews.org/movies',
+                        name: 'Movies',
+                        position: 1,
+                    },
+                    {
+                        item: 'https://funreviews.org/tv',
+                        name: 'Tv Shows',
+                        position: 2,
+                    },
+                ]}
             />
             {topRatedMoviesSuccess &&
             topRatedTvSuccess &&

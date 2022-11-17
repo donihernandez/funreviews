@@ -1,13 +1,12 @@
 /* eslint-disable max-len */
 import { FC, useEffect } from 'react';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 import {
     Breadcrumb,
     BreadcrumbItem,
     BreadcrumbLink,
-    Button,
-    chakra,
     Divider,
     Flex,
     Heading,
@@ -17,22 +16,24 @@ import {
     TabPanel,
     TabPanels,
     Tabs,
-    Text,
-    Wrap,
-    WrapItem,
 } from '@chakra-ui/react';
-import dynamic from 'next/dynamic';
+import { useQuery } from '@tanstack/react-query';
 
-import { useBreakpoints } from 'hooks';
 import { Wrapper } from '@/components/common/Wrapper';
-import { IMAGE_URL } from '@/utils/images';
 import { getTrailer } from '@/utils/getTrailer';
 import { COLORS } from '@/styles/theme';
-import { GenresList } from '@/components/common/GenreList';
-import { FaPlay } from 'react-icons/fa';
 import { SeasonCard } from './SeasonCard';
-import { VideoBox } from '@/components/common/VideoBox';
 import { ShowsContainer } from '@/components/common/Shows/ShowsContainer';
+import Trailer from '../Trailer';
+import Details from './Details';
+import { getTvVideos } from '_tmdb/tv/queries';
+import {
+    AdditionalInfo,
+    CastContainer,
+    CrewContainer,
+    ReviewsList,
+} from '../Details.components';
+
 interface IBreadcrumb {
     link: string;
     name: string;
@@ -44,7 +45,6 @@ interface ITvDetailsProps {
     tvDetails: any;
     tvRecommendations: any;
     tvReviews: any;
-    tvVideos: any;
 }
 
 const TvDetails: FC<ITvDetailsProps> = ({
@@ -52,54 +52,11 @@ const TvDetails: FC<ITvDetailsProps> = ({
     tvDetails,
     tvRecommendations,
     tvReviews,
-    tvVideos,
 }) => {
-    const Trailer = dynamic(() =>
-        import('../Details.components').then(module => module.Trailer),
-    );
+    const router = useRouter();
+    const { id } = router.query;
 
-    const AdditionalInfo = dynamic(() =>
-        import('../Details.components').then(module => module.AdditionalInfo),
-    );
-
-    const CastContainer = dynamic(() =>
-        import('../Details.components').then(module => module.CastContainer),
-    );
-
-    const CrewContainer = dynamic(() =>
-        import('../Details.components').then(module => module.CrewContainer),
-    );
-
-    const Description = dynamic(() =>
-        import('../Details.components').then(module => module.Description),
-    );
-
-    const ReviewsList = dynamic(() =>
-        import('../Details.components').then(module => module.ReviewsList),
-    );
-    const InfoContainer = dynamic(() =>
-        import('../Details.components').then(module => module.InfoContainer),
-    );
-    const Title = dynamic(() =>
-        import('../Details.components').then(module => module.Title),
-    );
-    const DetailsContainer = dynamic(() =>
-        import('../Details.components').then(module => module.DetailsContainer),
-    );
-    const ProductionCompaniesContainer = dynamic(() =>
-        import('../Details.components').then(
-            module => module.ProductionCompaniesContainer,
-        ),
-    );
-    const Rate = dynamic(() =>
-        import('../Details.components').then(module => module.Rate),
-    );
-
-    const Poster = dynamic(() =>
-        import('../Details.components').then(module => module.Poster),
-    );
-
-    const [trailer, setTrailer] = useState('');
+    const [trailer, setTrailer] = useState(null);
 
     const wrapperStyles = {
         minH: '200vh',
@@ -135,29 +92,19 @@ const TvDetails: FC<ITvDetailsProps> = ({
         },
     ];
 
-    const getImagePath = useMemo(() => {
-        const imagePath = tvDetails?.poster_path;
-
-        if (imagePath !== '') {
-            return `${IMAGE_URL}w780${imagePath}`;
-        }
-
-        return '';
-    }, []);
-
-    const date = new Date(tvDetails?.first_air_date).toDateString();
+    const { data: tvVideos, isSuccess } = useQuery(['tvVideos', id], () =>
+        getTvVideos(id as string),
+    );
 
     const handleGetVideo = async () => {
         const trailer = getTrailer(tvVideos?.results);
         setTrailer(trailer);
     };
 
-    const getGenres = (): string[] => {
-        return tvDetails?.genres.map(genre => genre.name);
-    };
-
     useEffect(() => {
-        handleGetVideo();
+        if (isSuccess && tvVideos.results.length > 0) {
+            handleGetVideo();
+        }
     }, [tvVideos]);
 
     return (
@@ -187,52 +134,9 @@ const TvDetails: FC<ITvDetailsProps> = ({
                     </Breadcrumb>
                 </Flex>
 
-                <Flex h="full" w="full">
-                    <Trailer video={trailer} />
-                </Flex>
+                {trailer && <Trailer video={trailer} />}
 
-                <DetailsContainer>
-                    <Flex>
-                        <Poster
-                            image={getImagePath}
-                            title={tvDetails?.original_name}
-                        />
-                    </Flex>
-
-                    <InfoContainer>
-                        <Title title={tvDetails?.name} />
-                        <Rate vote_average={tvDetails?.vote_average} />
-                        <Description overview={tvDetails?.overview} />
-                        <Divider color={COLORS.white} my="15px" />
-                        <Text color={COLORS.white} fontWeight="extrabold">
-                            First Air Date:{' '}
-                            <chakra.span fontWeight="light">{date}</chakra.span>
-                        </Text>
-                        <Divider color={COLORS.white} my="15px" />
-                        <GenresList getGenres={getGenres()} />
-                        <Divider color={COLORS.white} my="15px" />
-                        <ProductionCompaniesContainer
-                            companies={tvDetails?.production_companies}
-                        />
-                        <Button
-                            _hover={{
-                                bg: COLORS.primary,
-                            }}
-                            as="a"
-                            bg={COLORS.orange}
-                            borderRadius="0"
-                            color={COLORS.white}
-                            cursor="pointer"
-                            href={tvDetails?.homepage}
-                            leftIcon={<FaPlay />}
-                            mt="15px"
-                            target="_blank"
-                            transition="all 0.5s ease-in-out"
-                        >
-                            Watch Now
-                        </Button>
-                    </InfoContainer>
-                </DetailsContainer>
+                <Details />
             </Flex>
 
             <Flex direction="column" mb="50px" w="full">
@@ -246,18 +150,17 @@ const TvDetails: FC<ITvDetailsProps> = ({
                 >
                     Seasons
                 </Heading>
-                <Wrap justify="center">
+                <SimpleGrid columns={[1, 2, 3, 4]} gap={5}>
                     {tvDetails?.seasons?.map(season => (
-                        <WrapItem key={season.id}>
-                            <SeasonCard
-                                link={`
+                        <SeasonCard
+                            key={season.id}
+                            link={`
                                 /tv-shows/${tvDetails.id}/season/${season.season_number}
                                 `}
-                                season={season}
-                            />
-                        </WrapItem>
+                            season={season}
+                        />
                     ))}
-                </Wrap>
+                </SimpleGrid>
             </Flex>
 
             <AdditionalInfo>
@@ -265,7 +168,6 @@ const TvDetails: FC<ITvDetailsProps> = ({
                     <TabList>
                         <Tab {...tabListStyles}>Reviews</Tab>
                         <Tab {...tabListStyles}>Cast & Crew</Tab>
-                        <Tab {...tabListStyles}>Videos</Tab>
                     </TabList>
                     <TabPanels>
                         <TabPanel>
@@ -277,21 +179,6 @@ const TvDetails: FC<ITvDetailsProps> = ({
                                 <Divider color={COLORS.white} my="30px" />
                                 <CrewContainer crewList={tvCredits?.crew} />
                             </Flex>
-                        </TabPanel>
-                        <TabPanel>
-                            <SimpleGrid
-                                columns={[1, 1, 2, 2]}
-                                mt="20px"
-                                spacingX="20px"
-                                spacingY="20px"
-                            >
-                                {tvVideos?.results.map(video => (
-                                    <VideoBox
-                                        key={video.id}
-                                        video={video.key}
-                                    />
-                                ))}
-                            </SimpleGrid>
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

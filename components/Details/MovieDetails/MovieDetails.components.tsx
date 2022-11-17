@@ -12,10 +12,18 @@ const MovieBudgetAndReleaseDate: FC<IMovieBudgetAndReleaseDateProps> = ({
     budget,
     date,
 }) => {
+    const formatter = new Intl.NumberFormat('en-US', {
+        currency: 'USD',
+        style: 'currency',
+    });
+
     return (
         <Flex>
             <Text color={COLORS.white} fontWeight="extrabold">
-                Budget: <chakra.span fontWeight="light">${budget}</chakra.span>
+                Budget:{' '}
+                <chakra.span fontWeight="light">
+                    {formatter.format(budget)}
+                </chakra.span>
             </Text>
             <Divider color={COLORS.white} mx="10px" orientation="vertical" />
             <Text color={COLORS.white} fontWeight="extrabold">

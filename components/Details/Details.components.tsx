@@ -54,35 +54,8 @@ const Poster: FC<IPosterProps> = ({ title, image }) => {
     );
 };
 
-interface ITrailerProps {
-    video: string;
-}
-
-const Trailer: FC<ITrailerProps> = ({ video }) => {
-    return video ? (
-        <Box
-            // eslint-disable-next-line max-len
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            as="iframe"
-            frameBorder="0"
-            h="full"
-            minH={['300px', null, '400px']}
-            minW={['300px', null, 'full']}
-            src={`https://www.youtube.com/embed/${video}`}
-            w="full"
-        />
-    ) : (
-        <Loading />
-    );
-};
-
 const InfoContainer: FC<IDetailsProps> = ({ children }) => {
-    return (
-        <Flex direction="column" ml={['0', null, '30px']} w="full">
-            {children}
-        </Flex>
-    );
+    return <Flex direction="column">{children}</Flex>;
 };
 
 interface ITitleProps {
@@ -452,7 +425,6 @@ const Crew: FC<ICrewProps> = ({ crew }) => {
 export {
     Poster,
     DetailsContainer,
-    Trailer,
     InfoContainer,
     Title,
     Rate,

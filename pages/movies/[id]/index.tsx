@@ -1,44 +1,35 @@
 import { NextPage } from 'next';
+
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import { MovieDetails } from '@/components/Details/MovieDetails';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
 
 import {
-    getAllMovies,
     getMovieCredits,
     getMovieDetails,
     getMovieReviews,
+    getPopular,
     getRecommendations,
     getVideos,
 } from '_tmdb/movies/queries';
 import { FullPageLoader } from '@/components/common/FullPageLoader';
-import { useCallback, useEffect, useState } from 'react';
-import { getTrailer } from '@/utils/getTrailer';
-import { useShowsContext } from 'contexts/ShowsContext';
 
 const MovieDetailsPage: NextPage = () => {
     const router = useRouter();
     const { id } = router.query;
-    const [funReviews, setFunReviews] = useState();
-    const { getReviewsById } = useShowsContext();
-    const [date, setDate] = useState('');
 
-    const [movieTrailer, setMovieTrailer] = useState('');
+    const { data: movieDetails } = useQuery(['movieDetails', id], () =>
+        getMovieDetails(id as string),
+    );
 
     const { data: movieCredits, isSuccess: movieCreditsSuccess } = useQuery(
         ['movieCredits', id],
         () => getMovieCredits(id as string),
     );
-
     const { data: movieReviews, isSuccess: movieReviewsSuccess } = useQuery(
         ['movieReviews', id],
         () => getMovieReviews(id as string),
-    );
-
-    const { data: movieVideos, isSuccess: movieVideosSuccess } = useQuery(
-        ['movieVideos', id],
-        () => getVideos(id as string),
     );
 
     const {
@@ -48,56 +39,9 @@ const MovieDetailsPage: NextPage = () => {
         getRecommendations(id as string),
     );
 
-    const { data: movieDetails, isSuccess: movieDetailsSuccess } = useQuery(
-        ['movieDetails', id],
-        () => getMovieDetails(id as string),
-    );
-    const breadcrumbs = [
-        {
-            link: '/',
-            name: 'Home',
-        },
-        {
-            link: '/movies',
-            name: 'Movies',
-        },
-        {
-            isCurrentPage: true,
-            link: '#',
-            name: movieDetails?.title,
-        },
-    ];
-
-    const handleGetVideo = useCallback(async () => {
-        const trailer = getTrailer(movieVideos?.results);
-        setMovieTrailer(trailer);
-    }, [movieVideos]);
-
-    const getFunReviews = async () => {
-        const reviews = await getReviewsById(id);
-        setFunReviews(reviews);
-    };
-
-    useEffect(() => {
-        getFunReviews();
-    }, []);
-
-    useEffect(() => {
-        if (movieDetailsSuccess) {
-            setDate(new Date(movieDetails.release_date).toDateString());
-        }
-    }, [movieDetailsSuccess]);
-
-    useEffect(() => {
-        handleGetVideo();
-    }, [movieVideosSuccess]);
-
-    return movieDetailsSuccess &&
-        movieVideosSuccess &&
-        movieRecommendationsSuccess &&
+    return movieRecommendationsSuccess &&
         movieCreditsSuccess &&
-        movieReviewsSuccess &&
-        funReviews ? (
+        movieReviewsSuccess ? (
         <>
             <NextSeo
                 canonical={`https://funreviews.org/movies/${id}`}
@@ -105,15 +49,10 @@ const MovieDetailsPage: NextPage = () => {
                 title={`${movieDetails.title} | FunReviews`}
             />
             <MovieDetails
-                breadcrumbs={breadcrumbs}
-                date={date}
-                funReviews={funReviews}
                 movieCredits={movieCredits}
                 movieDetails={movieDetails}
                 movieRecommendations={movieRecommendations}
                 movieReviews={movieReviews}
-                movieVideos={movieVideos}
-                trailer={movieTrailer}
             />
         </>
     ) : (
@@ -151,8 +90,8 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-    const allMovies = await getAllMovies();
-    const paths = allMovies.map(movie => ({
+    const movies = await getPopular();
+    const paths = movies.results.map(movie => ({
         params: { id: movie.id.toString() },
     }));
 

@@ -12,6 +12,7 @@ import {
     getTvCredits,
     getTvDetails,
     getTvGenres,
+    getTvPopular,
     getTvRecommendations,
     getTvReviews,
     getTvVideos,
@@ -31,11 +32,6 @@ const TVShowsDetailsPage: NextPage = () => {
         () => getTvReviews(id as string),
     );
 
-    const { data: tvVideos, isSuccess: tvVideosSuccess } = useQuery(
-        ['tvVideos', id],
-        () => getTvVideos(id as string),
-    );
-
     const { data: tvRecommendations, isSuccess: tvRecommendationsSuccess } =
         useQuery(['tvRecommendations', id], () =>
             getTvRecommendations(id as string),
@@ -48,7 +44,6 @@ const TVShowsDetailsPage: NextPage = () => {
 
     return tvDetailsSuccess &&
         tvRecommendationsSuccess &&
-        tvVideosSuccess &&
         tvReviewsSuccess &&
         tvCreditsSuccess ? (
         <>
@@ -63,7 +58,6 @@ const TVShowsDetailsPage: NextPage = () => {
                 tvDetails={tvDetails}
                 tvRecommendations={tvRecommendations}
                 tvReviews={tvReviews}
-                tvVideos={tvVideos}
             />
         </>
     ) : (
@@ -105,8 +99,8 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-    const allTv = await getAllTv();
-    const paths = allTv.map(tvShow => ({
+    const popularTv = await getTvPopular();
+    const paths = popularTv.results.map(tvShow => ({
         params: { id: tvShow.id.toString() },
     }));
 

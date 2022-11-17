@@ -6,11 +6,11 @@ const getVideos = async (movie_id: number | string) => {
         `/movie/${movie_id}/videos?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`,
     );
 
-    if (res?.data) {
+    if (res.data) {
         return res.data;
     }
 
-    return null;
+    return [];
 };
 
 export { getVideos };

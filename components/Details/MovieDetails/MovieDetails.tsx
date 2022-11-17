@@ -1,12 +1,10 @@
-import { FC, useMemo } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import {
     Breadcrumb,
     BreadcrumbItem,
     BreadcrumbLink,
-    Button,
     Divider,
     Flex,
-    SimpleGrid,
     Tab,
     TabList,
     TabPanel,
@@ -14,32 +12,21 @@ import {
     Tabs,
 } from '@chakra-ui/react';
 import { Wrapper } from '../../common/Wrapper';
-import { IMAGE_URL } from '@/utils/images';
 import { COLORS } from '@/styles/theme';
 
-import { MovieBudgetAndReleaseDate } from './MovieDetails.components';
-
-import { FaPlay } from 'react-icons/fa';
-
-import { VideoBox } from '../../common/VideoBox';
-import { useBreakpoints } from 'hooks';
 import { ShowsContainer } from '../../common/Shows/ShowsContainer';
-import { GenresList } from '../../common/GenreList';
 import {
     AdditionalInfo,
     CastContainer,
     CrewContainer,
-    Description,
-    DetailsContainer,
-    FunReviewsList,
-    InfoContainer,
-    Poster,
-    ProductionCompaniesContainer,
-    Rate,
     ReviewsList,
-    Title,
-    Trailer,
 } from '../Details.components';
+import Details from './Details';
+import { useQuery } from '@tanstack/react-query';
+import { getVideos } from '_tmdb/movies/queries';
+import { getTrailer } from '@/utils/getTrailer';
+import { useRouter } from 'next/router';
+import Trailer from '../Trailer';
 
 interface IBreadcrumb {
     link: string;
@@ -48,51 +35,47 @@ interface IBreadcrumb {
 }
 
 interface IMovieDetailsProps {
-    breadcrumbs: IBreadcrumb[];
-    date: string;
-    funReviews: any;
     movieCredits: any;
     movieDetails: any;
     movieRecommendations: any;
     movieReviews: any;
-    movieVideos: any;
-    trailer: string;
 }
 
 const MovieDetails: FC<IMovieDetailsProps> = ({
-    breadcrumbs,
-    date,
-    funReviews,
     movieCredits,
     movieDetails,
     movieRecommendations,
     movieReviews,
-    movieVideos,
-    trailer,
 }) => {
-    const { isSmallerThanDesktop } = useBreakpoints();
+    const router = useRouter();
+    const { id } = router.query;
+    const breadcrumbs = [
+        {
+            link: '/',
+            name: 'Home',
+        },
+        {
+            link: '/movies',
+            name: 'Movies',
+        },
+        {
+            isCurrentPage: true,
+            link: '#',
+            name: movieDetails?.title,
+        },
+    ];
+
+    const [movieTrailer, setMovieTrailer] = useState('');
+
+    const { data: movieVideos, isSuccess: movieVideosSuccess } = useQuery(
+        ['movieVideos', id],
+        () => getVideos(id as string),
+    );
 
     const wrapperStyles = {
         minH: '200vh',
         paddingBottom: '100px',
     };
-
-    const getImagePath = useMemo(() => {
-        let imagePath = '';
-        if (!isSmallerThanDesktop) {
-            imagePath = movieDetails.backdrop_path
-                ? movieDetails.backdrop_path
-                : movieDetails.poster_path;
-        } else {
-            imagePath = movieDetails.poster_path;
-        }
-
-        if (imagePath !== '') {
-            return `${IMAGE_URL}original${imagePath}`;
-        }
-
-        return '';
-    }, []);
 
     const tabListStyles = {
         _active: {
@@ -108,9 +91,16 @@ const MovieDetails: FC<IMovieDetailsProps> = ({
         fontWeight: 'bold',
     };
 
-    const getGenres = (): string[] => {
-        return movieDetails.genres.map(genre => genre.name);
-    };
+    const handleGetVideo = useCallback(async () => {
+        const trailer = getTrailer(movieVideos?.results);
+        setMovieTrailer(trailer);
+    }, [movieVideos]);
+
+    useEffect(() => {
+        if (movieVideosSuccess && movieVideos.results.length > 0) {
+            handleGetVideo();
+        }
+    }, [movieVideosSuccess, movieVideos]);
 
     return (
         <Wrapper {...wrapperStyles}>
@@ -139,52 +129,9 @@ const MovieDetails: FC<IMovieDetailsProps> = ({
                     </Breadcrumb>
                 </Flex>
 
-                <Trailer video={trailer} />
+                {movieTrailer && <Trailer video={movieTrailer} />}
 
-                <DetailsContainer>
-                    <Flex>
-                        <Poster
-                            image={getImagePath}
-                            title={movieDetails.original_title}
-                        />
-                    </Flex>
-
-                    <InfoContainer>
-                        <Title title={movieDetails.title} />
-                        <Rate vote_average={movieDetails.vote_average} />
-                        <Description overview={movieDetails.overview} />
-                        <Divider color={COLORS.white} my="15px" />
-
-                        <MovieBudgetAndReleaseDate
-                            budget={movieDetails.budget}
-                            date={date}
-                        />
-
-                        <Divider color={COLORS.white} my="15px" />
-                        <GenresList getGenres={getGenres()} />
-                        <ProductionCompaniesContainer
-                            companies={movieDetails.production_companies}
-                        />
-
-                        <Button
-                            _hover={{
-                                bg: COLORS.primary,
-                            }}
-                            as="a"
-                            bg={COLORS.orange}
-                            borderRadius="0"
-                            color={COLORS.white}
-                            cursor="pointer"
-                            href={movieDetails.homepage}
-                            leftIcon={<FaPlay />}
-                            mt="15px"
-                            target="_blank"
-                            transition="all 0.5s ease-in-out"
-                        >
-                            Watch Now
-                        </Button>
-                    </InfoContainer>
-                </DetailsContainer>
+                <Details />
             </Flex>
 
             <AdditionalInfo>
@@ -192,14 +139,13 @@ const MovieDetails: FC<IMovieDetailsProps> = ({
                     <TabList>
                         <Tab {...tabListStyles}>Reviews</Tab>
                         <Tab {...tabListStyles}>Cast & Crew</Tab>
-                        <Tab {...tabListStyles}>Videos</Tab>
                     </TabList>
 
                     <TabPanels>
                         <TabPanel>
-                            {funReviews && (
+                            {/* {funReviews && (
                                 <FunReviewsList funReviews={funReviews} />
-                            )}
+                            )} */}
 
                             <ReviewsList reviews={movieReviews.results} />
                         </TabPanel>
@@ -209,20 +155,6 @@ const MovieDetails: FC<IMovieDetailsProps> = ({
                                 <Divider color={COLORS.white} my="30px" />
                                 <CrewContainer crewList={movieCredits.crew} />
                             </Flex>
-                        </TabPanel>
-                        <TabPanel>
-                            <SimpleGrid
-                                columns={[1, 1, 2, 2]}
-                                mt="20px"
-                                spacingX="20px"
-                            >
-                                {movieVideos.results.map(video => (
-                                    <VideoBox
-                                        key={video.id}
-                                        video={video.key}
-                                    />
-                                ))}
-                            </SimpleGrid>
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

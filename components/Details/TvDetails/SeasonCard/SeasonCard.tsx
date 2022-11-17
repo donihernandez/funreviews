@@ -27,8 +27,10 @@ const SeasonCard: FC<ISeasonCardProps> = ({
     season,
 }) => {
     const size = IMAGE_CONFIG.poster_sizes.find(s => s === 'w342');
+    const lazySize = IMAGE_CONFIG.poster_sizes.find(s => s === 'w92');
 
     const image = `${IMAGE_URL}${size}${season.poster_path}`;
+    const lazyImage = `${IMAGE_URL}${lazySize}${season.poster_path}`;
 
     return (
         season.poster_path && (
@@ -49,8 +51,11 @@ const SeasonCard: FC<ISeasonCardProps> = ({
                     <AspectRatio h="full" minH="383px" ratio={1}>
                         <Image
                             alt={season.name}
+                            blurDataURL={lazyImage}
                             layout="fill"
+                            loading="lazy"
                             objectFit="cover"
+                            placeholder="blur"
                             src={image}
                         />
                     </AspectRatio>

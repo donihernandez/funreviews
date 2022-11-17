@@ -63,17 +63,19 @@ const InfoCard: FC<IInfoCardProps> = ({
                     justifyContent="flex-end"
                     w="full"
                 >
-                    <Image
-                        alt={show.original_title || show.original_name}
-                        blurDataURL={lazyImage}
-                        draggable={false}
-                        layout="fill"
-                        loading="lazy"
-                        objectFit="cover"
-                        placeholder="blur"
-                        quality={75}
-                        src={image}
-                    />
+                    <AspectRatio minH={342} ratio={1}>
+                        <Image
+                            alt={show.original_title || show.original_name}
+                            blurDataURL={lazyImage}
+                            draggable={false}
+                            layout="fill"
+                            loading="lazy"
+                            objectFit="cover"
+                            placeholder="blur"
+                            quality={75}
+                            src={image}
+                        />
+                    </AspectRatio>
 
                     <Heading
                         as="h6"

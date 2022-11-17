@@ -18,4 +18,4 @@ const Layout: FC<ILayoutProps> = ({ children }) => {
     );
 };
 
-export { Layout };
+export default Layout;

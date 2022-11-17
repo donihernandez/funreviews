@@ -33,8 +33,10 @@ const InfoCard: FC<IInfoCardProps> = ({
     type,
 }) => {
     const size = IMAGE_CONFIG.poster_sizes.find(s => s === 'w342');
+    const lazySize = IMAGE_CONFIG.poster_sizes.find(s => s === 'w92');
 
     const image = `${IMAGE_URL}${size}${show.poster_path}`;
+    const lazyImage = `${IMAGE_URL}${lazySize}${show.poster_path}`;
 
     const pathType = type === 'movie' ? 'movies' : 'tv-shows';
 
@@ -61,17 +63,17 @@ const InfoCard: FC<IInfoCardProps> = ({
                     justifyContent="flex-end"
                     w="full"
                 >
-                    <AspectRatio h="full" minH="383px" ratio={1}>
-                        <Image
-                            alt={show.original_title || show.original_name}
-                            draggable={false}
-                            layout="fill"
-                            loading="lazy"
-                            objectFit="cover"
-                            quality={75}
-                            src={image}
-                        />
-                    </AspectRatio>
+                    <Image
+                        alt={show.original_title || show.original_name}
+                        blurDataURL={lazyImage}
+                        draggable={false}
+                        layout="fill"
+                        loading="lazy"
+                        objectFit="cover"
+                        placeholder="blur"
+                        quality={75}
+                        src={image}
+                    />
 
                     <Heading
                         as="h6"

@@ -6,25 +6,34 @@ import { getTvPopular, getTvTopRated } from '_tmdb/tv/queries';
 import { BreadcrumbJsonLd, NextSeo, WebPageJsonLd } from 'next-seo';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 
+const LIMIT = 7;
+const PAGE = 1;
+const TRENDING_LIMIT = 2;
+
 const HomePage: NextPage = () => {
     const Home = dynamic(() => import('../components/Home/Home'));
 
-    const { data: trendingMovies } = useQuery(['trendingMovie'], () =>
-        getTrending(),
+    const { data: trendingMovies } = useQuery(
+        ['trendingMovie', TRENDING_LIMIT],
+        () => getTrending(TRENDING_LIMIT),
     );
 
-    const { data: popularMovies } = useQuery(['popularMovies'], () =>
-        getPopular(),
+    const { data: popularMovies } = useQuery(
+        ['popularMovies', PAGE, LIMIT],
+        () => getPopular(PAGE, LIMIT),
     );
 
-    const { data: topRatedMovies } = useQuery(['topRatedMovies'], () =>
-        getTopRated(),
+    const { data: topRatedMovies } = useQuery(
+        ['topRatedMovies', PAGE, LIMIT],
+        () => getTopRated(LIMIT),
     );
 
-    const { data: popularTv } = useQuery(['popularTv'], () => getTvPopular());
+    const { data: popularTv } = useQuery(['popularTv', PAGE, LIMIT], () =>
+        getTvPopular(PAGE, LIMIT),
+    );
 
-    const { data: topRatedTv } = useQuery(['topRatedTv'], () =>
-        getTvTopRated(),
+    const { data: topRatedTv } = useQuery(['topRatedTv', PAGE, LIMIT], () =>
+        getTvTopRated(PAGE, LIMIT),
     );
 
     return (
@@ -80,13 +89,21 @@ export async function getStaticProps() {
     const queryClient = new QueryClient();
 
     try {
-        await queryClient.prefetchQuery(['popularMovies'], () => getPopular());
-        await queryClient.prefetchQuery(['trendingMovie'], () => getTrending());
-        await queryClient.prefetchQuery(['popularTv'], () => getTvPopular());
-        await queryClient.prefetchQuery(['topRatedMovies'], () =>
-            getTopRated(),
+        await queryClient.prefetchQuery(['popularMovies', PAGE, LIMIT], () =>
+            getPopular(PAGE, LIMIT),
         );
-        await queryClient.prefetchQuery(['topRatedTv'], () => getTvTopRated());
+        await queryClient.prefetchQuery(['trendingMovie', TRENDING_LIMIT], () =>
+            getTrending(TRENDING_LIMIT),
+        );
+        await queryClient.prefetchQuery(['popularTv', PAGE, LIMIT], () =>
+            getTvPopular(PAGE, LIMIT),
+        );
+        await queryClient.prefetchQuery(['topRatedMovies', LIMIT], () =>
+            getTopRated(LIMIT),
+        );
+        await queryClient.prefetchQuery(['topRatedTv', PAGE, LIMIT], () =>
+            getTvTopRated(PAGE, LIMIT),
+        );
     } catch (error) {
         return error;
     }
@@ -95,7 +112,7 @@ export async function getStaticProps() {
         props: {
             dehydratedState: dehydrate(queryClient),
         },
-        revalidate: 30,
+        revalidate: 360,
     };
 }
 

@@ -10,12 +10,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Analytics } from '@vercel/analytics/react';
 
-import { Layout } from '@/components/Layout';
+import Layout from '@/components/Layout/Layout';
 
 import '@/styles/globals.css';
 import { NOT_LAYOUT_ROUTES } from '../utils';
 import { ShowsProvider } from 'contexts/ShowsContext';
 import { AuthProvider } from 'contexts/AuthContext';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 function MyApp({
     Component,
@@ -48,6 +49,7 @@ function MyApp({
                     </ShowsProvider>
                 </ChakraProvider>
             </Hydrate>
+            <ReactQueryDevtools initialIsOpen />
         </QueryClientProvider>
     );
 }

@@ -16,12 +16,12 @@ const MoviesPage: NextPage = () => {
     const { setShows, setGenres, setTotalPages } = useShowsContext();
 
     const { data: movieGenres, isSuccess: movieGenresSuccess } = useQuery(
-        ['movieGenres'],
+        ['fetchMovieGenres'],
         () => getMovieGenres(),
     );
 
     const { data: popularMovies, isSuccess: popularMoviesSuccess } = useQuery(
-        ['popularMovies'],
+        ['fetchPopularMovies'],
         () => getPopular(),
     );
 
@@ -58,8 +58,10 @@ const MoviesPage: NextPage = () => {
 
 export async function getStaticProps() {
     const queryClient = new QueryClient();
-    await queryClient.prefetchQuery(['movieGenres'], () => getMovieGenres());
-    await queryClient.prefetchQuery(['popularMovies'], () => getPopular());
+    await queryClient.prefetchQuery(['fetchMovieGenres'], () =>
+        getMovieGenres(),
+    );
+    await queryClient.prefetchQuery(['fetchPopularMovies'], () => getPopular());
 
     return {
         props: {

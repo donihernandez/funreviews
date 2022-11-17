@@ -42,8 +42,8 @@ class MyDocument extends Document {
                         strategy="afterInteractive"
                     />
                     <Script
+                        async
                         crossOrigin="anonymous"
-                        defer
                         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE}`}
                         strategy="afterInteractive"
                     ></Script>

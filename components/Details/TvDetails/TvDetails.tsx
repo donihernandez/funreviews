@@ -23,7 +23,6 @@ import {
 } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 
-import { useBreakpoints } from 'hooks';
 import { Wrapper } from '@/components/common/Wrapper';
 import { IMAGE_URL } from '@/utils/images';
 import { getTrailer } from '@/utils/getTrailer';

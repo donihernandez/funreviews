@@ -5,36 +5,10 @@ import { getPopular, getTopRated, getTrending } from '_tmdb/movies/queries';
 import { getTvPopular, getTvTopRated } from '_tmdb/tv/queries';
 import { BreadcrumbJsonLd, NextSeo, WebPageJsonLd } from 'next-seo';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
-
-const LIMIT = 7;
-const PAGE = 1;
-const TRENDING_LIMIT = 2;
+import { LIMIT, PAGE, TRENDING_LIMIT } from '@/utils/constants';
 
 const HomePage: NextPage = () => {
     const Home = dynamic(() => import('../components/Home/Home'));
-
-    const { data: trendingMovies } = useQuery(
-        ['trendingMovie', TRENDING_LIMIT],
-        () => getTrending(TRENDING_LIMIT),
-    );
-
-    const { data: popularMovies } = useQuery(
-        ['popularMovies', PAGE, LIMIT],
-        () => getPopular(PAGE, LIMIT),
-    );
-
-    const { data: topRatedMovies } = useQuery(
-        ['topRatedMovies', PAGE, LIMIT],
-        () => getTopRated(LIMIT),
-    );
-
-    const { data: popularTv } = useQuery(['popularTv', PAGE, LIMIT], () =>
-        getTvPopular(PAGE, LIMIT),
-    );
-
-    const { data: topRatedTv } = useQuery(['topRatedTv', PAGE, LIMIT], () =>
-        getTvTopRated(PAGE, LIMIT),
-    );
 
     return (
         <>
@@ -74,13 +48,7 @@ const HomePage: NextPage = () => {
                 ]}
             />
 
-            <Home
-                popularMovies={popularMovies}
-                popularTv={popularTv}
-                topRatedMovies={topRatedMovies}
-                topRatedTv={topRatedTv}
-                trendingMovies={trendingMovies}
-            />
+            <Home />
         </>
     );
 };

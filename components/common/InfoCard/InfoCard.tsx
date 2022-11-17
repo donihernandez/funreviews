@@ -1,4 +1,4 @@
-import { FC, Suspense } from 'react';
+import { FC } from 'react';
 import {
     AspectRatio,
     Box,
@@ -10,14 +10,13 @@ import {
 
 import { StarIcon } from '@chakra-ui/icons';
 
-import { COLORS } from '../../../styles/theme';
+import { COLORS } from '@/styles/theme';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 import { motion } from 'framer-motion';
 import { FaPlay } from 'react-icons/fa';
 
 import { PrimaryButton, ReviewButton } from '../Buttons';
 import Image from 'next/image';
-import { Loading } from '../Loading';
 
 interface IInfoCardProps {
     height?: string;
@@ -46,76 +45,74 @@ const InfoCard: FC<IInfoCardProps> = ({
     };
 
     return (
-        <Suspense fallback={<Loading />}>
-            <Box
-                as={motion.div}
-                cursor="pointer"
-                h={height}
-                minW={width}
-                mr="15px"
-                overflow="hidden"
-                position="relative"
+        <Box
+            as={motion.div}
+            cursor="pointer"
+            h={height}
+            minW={width}
+            mr="15px"
+            overflow="hidden"
+            position="relative"
+        >
+            <Flex
+                bg="rgba(0,0,0,0.5)"
+                direction="column"
+                h="full"
+                justifyContent="flex-end"
+                w="full"
             >
-                <Flex
-                    bg="rgba(0,0,0,0.5)"
-                    direction="column"
-                    h="full"
-                    justifyContent="flex-end"
-                    w="full"
-                >
-                    <AspectRatio minH={342} ratio={1}>
-                        <Image
-                            alt={show.original_title || show.original_name}
-                            blurDataURL={lazyImage}
-                            draggable={false}
-                            layout="fill"
-                            loading="lazy"
-                            objectFit="cover"
-                            placeholder="blur"
-                            quality={75}
-                            src={image}
-                        />
-                    </AspectRatio>
+                <AspectRatio minH={342} ratio={1}>
+                    <Image
+                        alt={show.original_title || show.original_name}
+                        blurDataURL={lazyImage}
+                        draggable={false}
+                        layout="fill"
+                        loading="lazy"
+                        objectFit="cover"
+                        placeholder="blur"
+                        quality={75}
+                        src={image}
+                    />
+                </AspectRatio>
 
-                    <Heading
-                        as="h6"
+                <Heading
+                    as="h6"
+                    color={COLORS.white}
+                    fontFamily="Lato"
+                    fontSize="15px"
+                    pt="15px"
+                    textTransform="uppercase"
+                >
+                    {show.original_title || show.original_name}
+                </Heading>
+                <Flex alignItems="center" mt="5px">
+                    <StarIcon color="yellow.400" mr="5px" />
+                    <Text
                         color={COLORS.white}
-                        fontFamily="Lato"
-                        fontSize="15px"
-                        pt="15px"
-                        textTransform="uppercase"
+                        fontFamily="Nunito"
+                        fontSize="12px"
                     >
-                        {show.original_title || show.original_name}
-                    </Heading>
-                    <Flex alignItems="center" mt="5px">
-                        <StarIcon color="yellow.400" mr="5px" />
-                        <Text
-                            color={COLORS.white}
-                            fontFamily="Nunito"
-                            fontSize="12px"
-                        >
-                            <chakra.span fontSize="16px" fontWeight="800">
-                                {show.vote_average}
-                            </chakra.span>
-                            /10
-                        </Text>
-                    </Flex>
-                    <Flex direction="column" mt={5}>
-                        <PrimaryButton
-                            icon={<FaPlay />}
-                            link={`/${pathType}/${show.id}`}
-                            text="Watch Now"
-                            {...primaryButtonStyle}
-                        />
-                        <ReviewButton
-                            icon={<StarIcon />}
-                            showId={show.id}
-                            showTitle={show.title}
-                        />
-                    </Flex>
+                        <chakra.span fontSize="16px" fontWeight="800">
+                            {show.vote_average}
+                        </chakra.span>
+                        /10
+                    </Text>
                 </Flex>
-            </Box>
-        </Suspense>
+                <Flex direction="column" mt={5}>
+                    <PrimaryButton
+                        icon={<FaPlay />}
+                        link={`/${pathType}/${show.id}`}
+                        text="Watch Now"
+                        {...primaryButtonStyle}
+                    />
+                    <ReviewButton
+                        icon={<StarIcon />}
+                        showId={show.id}
+                        showTitle={show.title}
+                    />
+                </Flex>
+            </Flex>
+        </Box>
     );
 };
 

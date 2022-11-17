@@ -16,7 +16,7 @@ const TVShowsPage: NextPage = () => {
 
     const { data: tvGenres, isSuccess: tvGenresSuccess } = useQuery(
         ['fetchtvGenres'],
-        () => getTvPopular(),
+        () => getTvGenres(),
     );
 
     const { data: popularTv, isSuccess: popularTVSuccess } = useQuery(
@@ -58,7 +58,7 @@ const TVShowsPage: NextPage = () => {
 
 export async function getStaticProps() {
     const queryClient = new QueryClient();
-    await queryClient.prefetchQuery(['fetchtvGenres'], () => getTvGenres);
+    await queryClient.prefetchQuery(['fetchtvGenres'], () => getTvGenres());
     await queryClient.prefetchQuery(['fetchPopularTv'], () => getTvPopular());
 
     return {

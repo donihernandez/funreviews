@@ -55,7 +55,11 @@ const Poster: FC<IPosterProps> = ({ title, image }) => {
 };
 
 const InfoContainer: FC<IDetailsProps> = ({ children }) => {
-    return <Flex direction="column">{children}</Flex>;
+    return (
+        <Flex direction="column" w="full">
+            {children}
+        </Flex>
+    );
 };
 
 interface ITitleProps {

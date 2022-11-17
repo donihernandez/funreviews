@@ -20,17 +20,20 @@ const ShowContainer: FC<IChildrenProps> = ({ children }) => {
 
 interface IShowImageProps {
     image: string;
+    lazyImage: string;
     title?: string;
     name?: string;
 }
 
-const ShowImage: FC<IShowImageProps> = ({ image, title, name }) => {
+const ShowImage: FC<IShowImageProps> = ({ image, lazyImage, title, name }) => {
     const { isSmallerThanDesktop } = useBreakpoints();
     return (
         <Image
             alt={title || name}
+            blurDataURL={lazyImage}
             height={isSmallerThanDesktop ? '300px' : '460px'}
             loading="lazy"
+            placeholder="blur"
             src={image}
             width={isSmallerThanDesktop ? '500px' : '300px'}
         />

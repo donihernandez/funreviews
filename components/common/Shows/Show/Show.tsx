@@ -35,7 +35,12 @@ const Show: FC<IShow> = ({ show }) => {
         ? IMAGE_CONFIG.poster_sizes.find(s => s === 'w342')
         : IMAGE_CONFIG.backdrop_sizes.find(s => s === 'w780');
 
+    const lazySize = isSmallerThanDesktop
+        ? IMAGE_CONFIG.poster_sizes.find(s => s === 'w92')
+        : IMAGE_CONFIG.backdrop_sizes.find(s => s === 'w300');
+
     const image = `${IMAGE_URL}${size}${path}`;
+    const lazyImage = `${IMAGE_URL}${lazySize}${path}`;
 
     const pathMedia = type === 'movie' ? 'movies' : 'tv-shows';
 
@@ -54,7 +59,12 @@ const Show: FC<IShow> = ({ show }) => {
     return (
         path && (
             <ShowContainer>
-                <ShowImage image={image} name={show.name} title={show.title} />
+                <ShowImage
+                    image={image}
+                    lazyImage={lazyImage}
+                    name={show.name}
+                    title={show.title}
+                />
                 <ShowDetailsContainer>
                     <ShowTitle
                         date={date}

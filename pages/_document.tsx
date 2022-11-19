@@ -47,6 +47,7 @@ class MyDocument extends Document {
                         async
                         crossOrigin="anonymous"
                         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4873328098096673"
+                        strategy="afterInteractive"
                     />
                 </Head>
                 <body>

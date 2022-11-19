@@ -44,9 +44,8 @@ class MyDocument extends Document {
                     <Script
                         async
                         crossOrigin="anonymous"
-                        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE}`}
-                        strategy="afterInteractive"
-                    ></Script>
+                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4873328098096673"
+                    />
                 </Head>
                 <body>
                     <Main />

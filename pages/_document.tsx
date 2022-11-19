@@ -25,7 +25,9 @@ class MyDocument extends Document {
                     <Script
                         async
                         id="GA4"
-                        src={`https://www.googletagmanager.com/gtag/js?id='${process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID}'`}
+                        src={
+                            "https://www.googletagmanager.com/gtag/js?id='G-ZLZTYT67F0'"
+                        }
                         strategy="afterInteractive"
                     />
                     <Script
@@ -35,7 +37,7 @@ class MyDocument extends Document {
                     function gtag(){dataLayer.push(arguments);}
                     gtag('js', new Date());
 
-                    gtag('config', '${process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID}');   
+                    gtag('config', 'G-ZLZTYT67F0');   
                     `,
                         }}
                         id="GA4_TAG"

@@ -10,5 +10,6 @@ module.exports = withBundleAnalyzer({
     staticPageGenerationTimeout: 60 * 60,
     images: {
         domains: ['image.tmdb.org'],
+        unoptimized: true,
     },
 });

@@ -11,7 +11,7 @@ const getTrending = async (limit = 0) => {
             return res.data;
         }
         const data = res.data;
-        const limitedResults = data.results.slice(0, limit);
+        const limitedResults = data.results[0];
         data.results = limitedResults;
         return data;
     }

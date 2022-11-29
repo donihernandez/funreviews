@@ -1,16 +1,21 @@
-import type { FC } from 'react';
+import { FC } from 'react';
 import { Container } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 
 import { COLORS } from '../../../styles/theme';
 
 import { ShowsContainer } from '@/components/common/Shows/ShowsContainer';
+import { LIMIT, PAGE } from '@/utils/constants';
+import { getPopular } from '_tmdb/movies/queries';
+import { Loading } from '@/components/common/Loading';
 
-interface IPopularMovies {
-    popularMovies: any;
-}
+const PopularMovies: FC = () => {
+    const { data: popularMovies, isSuccess } = useQuery(
+        ['popularMovies', PAGE, LIMIT],
+        () => getPopular(PAGE, LIMIT),
+    );
 
-const PopularMovies: FC<IPopularMovies> = ({ popularMovies }) => {
-    return (
+    return isSuccess ? (
         <Container
             h="full"
             maxW={{ base: '300vw', lg: '80vw' }}
@@ -27,6 +32,8 @@ const PopularMovies: FC<IPopularMovies> = ({ popularMovies }) => {
                 type="movie"
             />
         </Container>
+    ) : (
+        <Loading />
     );
 };
 

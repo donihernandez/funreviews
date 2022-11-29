@@ -9,11 +9,13 @@ import {
     Heading,
     Text,
 } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
+
 import { Movie } from 'typings';
 import { IMAGE_CONFIG, IMAGE_URL } from '@/utils/images';
 import { COLORS } from '@/styles/theme';
 import { Search2Icon, StarIcon } from '@chakra-ui/icons';
-import { getVideos } from '_tmdb/movies/queries';
+import { getTrending, getVideos } from '_tmdb/movies/queries';
 import { getTrailer } from '@/utils/getTrailer';
 
 import { ImageBox } from '@/components/common/ImageBox';
@@ -24,21 +26,25 @@ import { useShowsContext } from 'contexts/ShowsContext';
 
 import { GenresList } from '@/components/common/GenreList';
 import { PrimaryButton, ReviewButton } from '@/components/common/Buttons';
+import { TRENDING_LIMIT } from '@/utils/constants';
+import { Loading } from '@/components/common/Loading';
 
-interface ITrendingProps {
-    movie: Movie;
-}
-
-const Trending: FC<ITrendingProps> = ({ movie }) => {
+const Trending = () => {
     const [movieTrailer, setMovieTrailer] = useState('');
+    const [image, setImage] = useState('');
+    const [lazyImage, setLazyImage] = useState('');
+    const [movie, setMovie] = useState(null);
+    const [releaseDate, setReleaseDate] = useState('');
     const [isVideo, setIsVideo] = useState(false);
     const { movieGenres } = useShowsContext();
 
-    const size = IMAGE_CONFIG.backdrop_sizes.find(s => s === 'w1280');
+    const { data: trendingMovie, isSuccess } = useQuery(
+        ['trendingMovie', TRENDING_LIMIT],
+        () => getTrending(TRENDING_LIMIT),
+    );
 
-    const image = `${IMAGE_URL}${size}${movie.backdrop_path}`;
-
-    const release_date = new Date(movie.release_date).toDateString();
+    const size = IMAGE_CONFIG.backdrop_sizes.find(s => s === 'original');
+    const lazySize = IMAGE_CONFIG.backdrop_sizes.find(s => s === 'w780');
 
     const handleGetVideo = async (id: number) => {
         const data = await getVideos(id);
@@ -48,22 +54,36 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
 
     const getShowGenres = useMemo(() => {
         if (movieGenres?.length > 0) {
-            return movie.genre_ids.map(genre => {
+            return movie?.genre_ids.map(genre => {
                 const showGenre = movieGenres?.find(g => g.id === genre);
                 return showGenre?.name;
             });
         }
-
         return [];
     }, [movieGenres]);
 
     useEffect(() => {
+        if (isSuccess) {
+            setMovie(trendingMovie.results);
+            setImage(
+                `${IMAGE_URL}${size}${trendingMovie.results.backdrop_path}`,
+            );
+            setLazyImage(
+                `${IMAGE_URL}${lazySize}${trendingMovie.results.backdrop_path}`,
+            );
+            setReleaseDate(
+                new Date(trendingMovie.results.release_date).toDateString(),
+            );
+        }
+    }, [isSuccess]);
+
+    useEffect(() => {
         if (isVideo) {
-            handleGetVideo(movie.id);
+            handleGetVideo(movie?.id);
         }
     }, [isVideo]);
 
-    return (
+    return isSuccess ? (
         <Container
             h="full"
             maxW={{ base: '300vw', lg: '80vw' }}
@@ -87,20 +107,25 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                 justifyContent={['center', null, 'flex-start']}
             >
                 {!isVideo ? (
-                    <ImageBox image={image} setIsVideo={setIsVideo} />
+                    <ImageBox
+                        alt={movie?.title}
+                        image={image}
+                        lazyImage={lazyImage}
+                        setIsVideo={setIsVideo}
+                    />
                 ) : (
                     <VideoBox video={movieTrailer} />
                 )}
 
-                <Flex direction="column" ml={['0', null, '40px']}>
+                <Flex direction="column" mt="10px">
                     <Heading as="h2" color={COLORS.white} fontFamily="Nunito">
-                        {movie.original_title}
+                        {movie?.original_title}
                     </Heading>
                     <Text color={COLORS.white}>
                         <chakra.span fontWeight="bold">
                             Release Date:
                         </chakra.span>{' '}
-                        {release_date}
+                        {releaseDate}
                     </Text>
                     <Flex alignItems="center" my="10px">
                         <StarIcon color="yellow.400" mr="5px" />
@@ -110,7 +135,7 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                             fontSize="12px"
                         >
                             <chakra.span fontSize="16px" fontWeight="800">
-                                {movie.vote_average}
+                                {movie?.vote_average}
                             </chakra.span>
                             /10
                         </Text>
@@ -118,23 +143,25 @@ const Trending: FC<ITrendingProps> = ({ movie }) => {
                     <Divider my={4} />
                     <GenresList getGenres={getShowGenres} />
                     <Text color={COLORS.white} mt="10px">
-                        {movie.overview}
+                        {movie?.overview}
                     </Text>
 
                     <Flex mt={5}>
                         <PrimaryButton
                             icon={<Search2Icon />}
-                            link={`/movies/${movie.id}`}
+                            link={`/movies/${movie?.id}`}
                         />
                         <ReviewButton
                             icon={<StarIcon />}
-                            showId={movie.id}
-                            showTitle={movie.title}
+                            showId={trendingMovie?.id}
+                            showTitle={trendingMovie?.title}
                         />
                     </Flex>
                 </Flex>
             </Flex>
         </Container>
+    ) : (
+        <Loading />
     );
 };
 

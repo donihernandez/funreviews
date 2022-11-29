@@ -10,7 +10,6 @@ import {
     MenuList,
     Text,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 import links from '../links';
